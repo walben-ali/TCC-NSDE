@@ -1,0 +1,143 @@
+{
+  "index.qmd": {
+    "index.html": "9b25804f"
+  },
+  "Internal.qmd": {
+    "Internal.html": "bb424ef1"
+  },
+  "LinAlg.qmd": {
+    "LinAlg.html": "8e7d12f2"
+  },
+  "MatDeco.qmd": {
+    "MatDeco.html": "2bd62338"
+  },
+  "Root.qmd": {
+    "Root.html": "cfcad6ae"
+  },
+  "IVP.qmd": {
+    "IVP.html": "6410b819"
+  },
+  "BVP.qmd": {
+    "BVP.html": "690bd797"
+  },
+  "MVP.qmd": {
+    "MVP.html": "50ae5e23"
+  },
+  "PDE.qmd": {
+    "PDE.html": "c3fec941"
+  },
+  "App.qmd": {
+    "App.html": "452d92fa"
+  },
+  "AppB.qmd": {
+    "AppB.html": "1433a9c1"
+  },
+  "AppA.qmd": {
+    "AppA.html": "f5cd9352"
+  },
+  "AppC.qmd": {
+    "AppC.html": "ffd56acd"
+  },
+  "AppD.qmd": {
+    "AppD.html": "abff426c"
+  },
+  "AppE.qmd": {
+    "AppE.html": "ee994972"
+  },
+  "AppF.qmd": {
+    "AppF.html": "b8c7df82"
+  },
+  "01_Internal.qmd": {
+    "01_Internal.html": "96293722"
+  },
+  "90_AppA.qmd": {
+    "90_AppA.html": "2d1df4dd"
+  },
+  "91_AppA.qmd": {
+    "91_AppA.html": "12198ee4"
+  },
+  "92_AppB.qmd": {
+    "92_AppB.html": "70889e7d"
+  },
+  "93_AppC.qmd": {
+    "93_AppC.html": "12424f6f"
+  },
+  "94_AppD.qmd": {
+    "94_AppD.html": "ebb0eef5"
+  },
+  "95_AppE.qmd": {
+    "95_AppE.html": "78c82394"
+  },
+  "96_AppF.qmd": {
+    "96_AppF.html": "d5603310"
+  },
+  "02_LinAlg.qmd": {
+    "02_LinAlg.html": "c4bdf231"
+  },
+  "03_MatDeco.qmd": {
+    "03_MatDeco.html": "6930d649"
+  },
+  "04_DataFit.qmd": {
+    "04_DataFit.html": "6d481738"
+  },
+  "05_Eigen.qmd": {
+    "05_Eigen.html": "1e906e53"
+  },
+  "06_Root.qmd": {
+    "06_Root.html": "45290b76"
+  },
+  "07_IVP.qmd": {
+    "07_IVP.html": "d6dbe67e"
+  },
+  "08_BVP.qmd": {
+    "08_BVP.html": "19ee057b"
+  },
+  "09_MVP.qmd": {
+    "09_MVP.html": "ee60429c"
+  },
+  "10_PDE.qmd": {
+    "10_PDE.html": "66872ce3"
+  },
+  "07_IVP_Euler.qmd": {
+    "07_IVP_Euler.html": "f98142aa"
+  },
+  "08_IVP_ModEuler.qmd": {
+    "08_IVP_ModEuler.html": "e5edf5c5"
+  },
+  "09_IVP_RK4.qmd": {
+    "09_IVP_RK4.html": "b47f5f5b"
+  },
+  "10_IVP_InBuilt.qmd": {
+    "10_IVP_InBuilt.html": "e6387447"
+  },
+  "11_IVP_Implicit.qmd": {
+    "11_IVP_Implicit.html": "eb7112a7"
+  },
+  "12_BVP.qmd": {
+    "12_BVP.html": "1cd23411"
+  },
+  "13_SBVP.qmd": {
+    "13_SBVP.html": "11bf5d63"
+  },
+  "13_MVP.qmd": {
+    "13_MVP.html": "dd28ba1e"
+  },
+  "14_SBVP.qmd": {
+    "14_SBVP.html": "32fcff0d"
+  },
+  "Part_IVPs.qmd": {
+    "Part_IVPs.html": "9103e115"
+  },
+  "Part_LinAlg.qmd": {
+    "Part_LinAlg.html": "5495e3e3"
+  },
+  "Part_BVPs.qmd": {
+    "Part_BVPs.html": "2f6045bf"
+  },
+  "15_PDE.qmd": {
+    "15_PDE.html": "304a69f6"
+  },
+  "Part_PDEs.qmd": {
+    "Part_PDEs.html": "2997dba6"
+  }
+}

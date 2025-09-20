@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Numerical Solutions of Differential Equations – 3&nbsp; The Euler Method</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./08_IVP_ModEuler.html" rel="next">
+<link href="./Part_IVPs.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="custom.scss">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Part_IVPs.html">Solving Initial Value Problems</a></li><li class="breadcrumb-item"><a href="./07_IVP_Euler.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Euler Method</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Numerical Solutions of Differential Equations</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="Download" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Download"><i class="bi bi-download"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Numerical-Solutions-of-Differential-Equations.pdf">
+              <i class="bi bi-file-pdf pe-1"></i>
+            Download PDF
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Numerical-Solutions-of-Differential-Equations.docx">
+              <i class="bi bi-file-word pe-1"></i>
+            Download Docx
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Numerical-Solutions-of-Differential-Equations.epub">
+              <i class="bi bi-journal pe-1"></i>
+            Download ePub
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Internal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Internal Workings of MATLAB</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_LinAlg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Algebra</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_LinAlg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Linear Algebra</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_IVPs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solving Initial Value Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_IVP_Euler.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Euler Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_IVP_ModEuler.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Modified Euler Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_IVP_RK4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Runge-Kutta Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_IVP_InBuilt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">MATLAB’s In-Built Procedures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_IVP_Implicit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Implicit IVP Solvers</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_BVPs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solving Boundary Value Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_BVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boundary Value Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_MVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Mixed Value Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_SBVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Symmetric Boundary Conditions</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_PDEs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solving Partial Differential Equations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_PDE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#steps-of-the-euler-method" id="toc-steps-of-the-euler-method" class="nav-link active" data-scroll-target="#steps-of-the-euler-method"><span class="header-section-number">3.1</span> Steps of the Euler Method</a></li>
+  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy"><span class="header-section-number">3.2</span> Accuracy</a></li>
+  <li><a href="#sec-EulerSys" id="toc-sec-EulerSys" class="nav-link" data-scroll-target="#sec-EulerSys"><span class="header-section-number">3.3</span> Set of IVPs</a></li>
+  <li><a href="#higher-order-ivps" id="toc-higher-order-ivps" class="nav-link" data-scroll-target="#higher-order-ivps"><span class="header-section-number">3.4</span> Higher Order IVPs</a>
+  <ul class="collapse">
+  <li><a href="#sets-of-higher-order-ivps" id="toc-sets-of-higher-order-ivps" class="nav-link" data-scroll-target="#sets-of-higher-order-ivps"><span class="header-section-number">3.4.1</span> Sets of Higher Order IVPs</a></li>
+  <li><a href="#stability-of-a-set-of-odes" id="toc-stability-of-a-set-of-odes" class="nav-link" data-scroll-target="#stability-of-a-set-of-odes"><span class="header-section-number">3.4.2</span> Stability of a Set of ODEs</a></li>
+  </ul></li>
+  <li><a href="#limitations-of-the-euler-method" id="toc-limitations-of-the-euler-method" class="nav-link" data-scroll-target="#limitations-of-the-euler-method"><span class="header-section-number">3.5</span> Limitations of the Euler Method</a>
+  <ul class="collapse">
+  <li><a href="#bounds-on-the-stepsize" id="toc-bounds-on-the-stepsize" class="nav-link" data-scroll-target="#bounds-on-the-stepsize"><span class="header-section-number">3.5.1</span> Bounds on the Stepsize</a></li>
+  <li><a href="#exact-bound" id="toc-exact-bound" class="nav-link" data-scroll-target="#exact-bound"><span class="header-section-number">3.5.2</span> Exact Bound</a></li>
+  <li><a href="#estimated-bound" id="toc-estimated-bound" class="nav-link" data-scroll-target="#estimated-bound"><span class="header-section-number">3.5.3</span> Estimated Bound</a></li>
+  </ul></li>
+  <li><a href="#matlab-code" id="toc-matlab-code" class="nav-link" data-scroll-target="#matlab-code"><span class="header-section-number">3.6</span> MATLAB Code</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Part_IVPs.html">Solving Initial Value Problems</a></li><li class="breadcrumb-item"><a href="./07_IVP_Euler.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Euler Method</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Euler Method</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Consider the first order ordinary differential equation (ODE) <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=f(t,y), \quad t \in [t_0,t_f]\]</span> where <span class="math inline">\(f\)</span> is a known function, <span class="math inline">\(t_0\)</span> is an initial time and <span class="math inline">\(t_f\)</span> is the final time. An <em>initial condition</em> can be prescribed to this differential equation which will assign a “starting value” for the unknown function <span class="math inline">\(y\)</span> at the starting time as <span class="math inline">\(y(t_0)=y_0\)</span>. The combination of the first order ODE and the initial value gives the <strong><em>Initial Value Problem</em></strong> (or <strong><em>IVP</em></strong>) <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=f(t,y) \quad \text{with} \quad y(t_0)=y_0, \quad t \in [t_0,t_f].\]</span></p>
+<p>There are many analytic methods for solving first order ordinary differential equations, but they all hold restrictions, like linearity or homogeneity. This chapter will develop the simplest numerical technique for solving any first order ordinary differential equation, this method is called the <strong><em>Euler Method</em></strong>.</p>
+<p>Consider the following first order IVP <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=f(t,y), \quad \text{with} \quad y(t_0)=y_0 \quad t \in [t_0,t_f].\]</span> The function <span class="math inline">\(f\)</span> is known and in most cases, is assumed to be “well-behaved” (does not have discontinuities or sharp corners). The term <span class="math inline">\(y_0\)</span> is known as the <strong><em>Initial Value</em></strong> of the function <span class="math inline">\(y\)</span> at the starting time <span class="math inline">\(t_0\)</span>. Solving this initial value problem is essentially finding an unknown curve <span class="math inline">\(y(t)\)</span> that starts at the point <span class="math inline">\((t_0, y_0)\)</span> and ends at time <span class="math inline">\(t_f\)</span>.</p>
+<p>The first step in the Euler method (as is the case in most numerical techniques) is to discretise the domain. This changes the domain from the continuous interval <span class="math inline">\([t_0,t_f]\)</span> to <span class="math inline">\(N\)</span> subintervals, each with constant<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> width <span class="math inline">\(h\)</span> (sometimes also denoted <span class="math inline">\(\delta t\)</span>), which is known as the <strong><em>Stepsize</em></strong>. The discretised interval will be the set of points <span class="math display">\[\left\{ t_0, t_0+h, t_0+2h, \dots, t_0+Nh \right\}.\]</span> <img src="figures/IVP_Disc.jpg" class="img-fluid"></p>
+<p>The aim of the numerical procedure is to start from the starting point <span class="math inline">\((t_0,y_0)\)</span> and progressively find consequent points until the final time <span class="math inline">\(t_f\)</span> is reached.</p>
+<p>The Euler method uses the gradient, namely <span class="math inline">\(\frac{\mathrm{d} y}{\mathrm{d} t}\)</span>, at the starting point <span class="math inline">\((t_0, y_0)\)</span> in order to find the value of <span class="math inline">\(y\)</span> at the subsequent point which will be labelled <span class="math inline">\((t_1, y_1)\)</span>. This will, in turn, determine the new gradient at <span class="math inline">\((t_1,y_1)\)</span> and this process is then continued until the final time is reached. The smaller the value of <span class="math inline">\(h\)</span> is, the more points there will be between <span class="math inline">\(t_0\)</span> and <span class="math inline">\(t_f\)</span> resulting in a more accurate final solution to the initial value problem.</p>
+<p>The accuracy of the Euler method is usually characterised by how small <span class="math inline">\(h\)</span> is or how large <span class="math inline">\(N\)</span> is. Since the stepsize may not always give an appropriate subdivision (like dividing the interval <span class="math inline">\([0,1]\)</span> into subintervals of width <span class="math inline">\(0.4\)</span>), then the number of subdivisions <span class="math inline">\(N\)</span> can be used to find an appropriate <span class="math inline">\(h\)</span> by using <span class="math display">\[h=\frac{t_f-t_0}{N}.\]</span></p>
+<section id="steps-of-the-euler-method" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="steps-of-the-euler-method"><span class="header-section-number">3.1</span> Steps of the Euler Method</h2>
+<p>Consider the IVP <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=f(t,y), \quad \text{with} \quad y(t_0)=y_0 \quad t \in [t_0,t_f].\]</span></p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Parallel Example">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Parallel Example
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The steps of the Euler method will be explained theoretically and applied to this IVP in parallel to demonstrate the steps: <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=6-2y \quad \text{with} \quad y(0)=0, \quad t \in [0,2].\]</span> In this case, the function on the RHS is <span class="math inline">\(f(t,y)=6-2y\)</span>. Note that this IVP has the exact solution <span class="math display">\[y(t)=3-3\mathrm{e}^{-2t}.\]</span></p>
+</div>
+</div>
+<ol type="1">
+<li>Discretise the interval <span class="math inline">\([t_0,t_f]\)</span> with stepsize <span class="math inline">\(h\)</span> to form the set of points <span class="math display">\[\left\{ t_0, t_0+h, t_0+2h, \dots, t_0+Nh \right\}.\]</span></li>
+</ol>
+<div class="callout callout-style-default callout-caution callout-titled" title="Inverval Discretisation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Inverval Discretisation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose that the interval <span class="math inline">\([0,2]\)</span> is to be split into <span class="math inline">\(5\)</span> subintervals, then <span class="math inline">\(N=5\)</span> and <span class="math display">\[h=\frac{t_f-t_0}{N}=\frac{2-0}{5}=0.4.\]</span> Therefore the discretised points are <span class="math display">\[\left\{ 0.0, 0.4, 0.8, 1.2, 1.6, 2.0 \right\}.\]</span> Note that <span class="math inline">\(N\)</span> denotes the number of subintervals and <strong>not</strong> the number of points, that would be <span class="math inline">\(N+1\)</span> points since the starting point is <span class="math inline">\(0\)</span>.</p>
+</div>
+</div>
+<ol start="2" type="1">
+<li>At the starting point <span class="math inline">\((t_0,y_0)\)</span>, the gradient is known since <span class="math display">\[y'(t_0)=f(t_0,y_0).\]</span></li>
+</ol>
+<div class="callout callout-style-default callout-caution callout-titled" title="Gradient at $\boldsymbol{(t_0,y_0)}$">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gradient at <span class="math inline">\(\boldsymbol{(t_0,y_0)}\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At the initial point, <span class="math display">\[y'(t_0)=f(t_0,y_0) \quad \implies \quad y'(0)=f(0,0)=6-2(0)=6.\]</span> So the starting gradient is <span class="math inline">\(6\)</span>.</p>
+</div>
+</div>
+<ol start="3" type="1">
+<li>The next step is to find the the value of <span class="math inline">\(y\)</span> at the subsequent time <span class="math inline">\(t_1=t_0+h\)</span>. For this purpose, consider the Taylor series expansion of <span class="math inline">\(y\)</span> at <span class="math inline">\(t=t_1\)</span>, <span class="math display">\[y(t_1)=y(t_0+h)=y(t_0)+h y'(t_0)+ \frac{h^2}{2!} y''(t_0)+\mathcal{O}\left(h^3\right).\]</span></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The term <span class="math inline">\(\mathcal{O}\left(h^3\right)\)</span> simply means that the terms after this point have a common factor of <span class="math inline">\(h^3\)</span> and these terms are regarded as <em>higher order terms</em> and can be neglected since they are far smaller than the first terms provided <span class="math inline">\(h\)</span> is small.</p>
+</div>
+</div>
+<p>Since <span class="math inline">\(h\)</span> is assumed to be sufficiently small, then all terms higher order terms, in this case <span class="math inline">\(h^2\)</span> or higher, can be neglected (i.e.&nbsp;<span class="math inline">\(h^n \approx 0\)</span> for <span class="math inline">\(n \geq 2\)</span>). Therefore <span class="math display">\[y(t_1) \approx y(t_0)+h y'(t_0).\]</span></p>
+<p>Let <span class="math inline">\(Y_1\)</span> denote the <em>approximated value</em> of the solution at the point <span class="math inline">\(t_1\)</span>, i.e.&nbsp;<span class="math inline">\(Y_1 \approx y(t_1)\)</span>, so in this case, <span id="eq-Euler1"><span class="math display">\[Y_1=y_0+h y'(t_0). \tag{3.1}\]</span></span> This determines the value of <span class="math inline">\(Y_1\)</span> which is an approximation to <span class="math inline">\(y(t_1)\)</span>.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Calcuating $\boldsymbol{Y_1}$">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Calcuating <span class="math inline">\(\boldsymbol{Y_1}\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The point <span class="math inline">\(Y_1\)</span> can be calculated as follows: <span class="math display">\[Y_1=y_0+hy'(t_0)=0+(0.4)(6)=2.4.\]</span> This means that the next point is <span class="math inline">\((t_1,Y_1)=(0.4,2.4)\)</span>.</p>
+</div>
+</div>
+<ol start="4" type="1">
+<li>This iteration can be continued to find <span class="math inline">\(Y_{n+1}\)</span> (which is the approximate value of <span class="math inline">\(y(t_{n+1})\)</span>) for all <span class="math inline">\(n=1, 2, \dots, N-1\)</span> <span class="math display">\[Y_{n+1}=Y_n+h y'(t_n) \quad \text{where} \quad y'(t_n)=f(t_n,Y_n).\]</span></li>
+</ol>
+<div class="callout callout-style-default callout-caution callout-titled" title="Calculating $\boldsymbol{Y_n}$">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Calculating <span class="math inline">\(\boldsymbol{Y_n}\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The values of <span class="math inline">\(Y_2, Y_3, Y_4\)</span> and <span class="math inline">\(Y_5\)</span> can be calculated as follows: <span class="math display">\[Y_2: \quad y'(t_1)=f(t_1,Y_1) \quad \implies \quad y'(0.4)=f(0.4,2.4)=6-2(2.4)=1.2\]</span> <span class="math display">\[\implies \quad Y_2=Y_1+hy'(t_1)=2.4+(0.4)(1.2)=2.88\]</span></p>
+<p><span class="math display">\[Y_3: \quad y'(t_2)=f(t_2,Y_2) \quad \implies \quad y'(0.8)=f(0.8,2.88)=6-2(2.88)=0.24\]</span> <span class="math display">\[\implies \quad Y_3=Y_2+hy'(t_2)=2.88+(0.4)(0.24)=2.976\]</span></p>
+<p><span class="math display">\[Y_4: \quad y'(t_3)=f(t_3,Y_3) \quad \implies \quad y'(1.2)=f(1.2,2.976)=6-2(2.976)=0.048\]</span> <span class="math display">\[\implies \quad Y_4=Y_3+hy'(t_3)=2.976+(0.4)(0.048)=2.9952\]</span></p>
+<p><span class="math display">\[Y_5: \quad y'(t_4)=f(t_4,Y_4) \quad \implies \quad y'(1.6)=f(1.6,2.9952)=6-2(2.9952)=0.0096\]</span> <span class="math display">\[\implies \quad Y_5=Y_4+hy'(t_4)=2.9952+(0.4)(0.0096)=2.99904\]</span></p>
+</div>
+</div>
+<ol start="5" type="1">
+<li>The solution to the IVP can now be approximated by the function that passes through the points <span class="math display">\[(t_0,Y_0), \quad (t_1, Y_1), \quad \dots \quad (t_N,Y_N).\]</span></li>
+</ol>
+<div class="callout callout-style-default callout-caution callout-titled" title="Solution to the IVP">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution to the IVP
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The approximate solution to the IVP <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=6-2y \quad \text{with} \quad y(0)=0, \quad t \in [0,2]\]</span> is the function that passes through the points: <span class="math display">\[(0,0), \quad (0.4,2.4), \quad (0.8,2.88), \quad (1.2,2.976), \quad (1.6,2.9952), \quad (2,2.99904).\]</span> This is a good approximation since the <em>exact</em> locations, as per the exact solution are, (to 4 decimal places): <span class="math display">\[(0,0), \quad (0.4,1.6520), \quad (0.8,2.3943), \quad (1.2,2.7278), \quad (1.6,2.8777), \quad (2,2.9451)\]</span> which is not bad for such a coarse interval breakdown.</p>
+</div>
+</div>
+<p>The Euler method needs <span class="math inline">\(N\)</span> steps to complete and every step <span class="math inline">\(n \in \left\{ 1,2,\dots,N \right\}\)</span> requires finding <span class="math inline">\(y'(t_{n-1})=f(t_{n-1},y_{n-1})\)</span> and <span class="math inline">\(Y_n=Y_{n-1}+h y'(t_{n-1})\)</span>. Of course, the larger <span class="math inline">\(N\)</span> is, the smaller <span class="math inline">\(h\)</span> becomes, meaning that more steps will be required but the solution will be closer to the exact solution</p>
+<p>Notice that the terms on the right hand side of <a href="#eq-Euler1" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> are all known and for this reason, the Euler method is known as an <strong><em>Explicit Method</em></strong>.</p>
+</section>
+<section id="accuracy" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="accuracy"><span class="header-section-number">3.2</span> Accuracy</h2>
+<p>Consider the Taylor series expansion for the function <span class="math inline">\(y\)</span> at the point <span class="math inline">\(t_1=t_0+h\)</span>, <span class="math display">\[y(t_1)=y(t_0+h)=y(t_0)+h y'(t_0)+ \frac{h^2}{2!} y''(t_0)+\mathcal{O}\left(h^3\right).\]</span> Using <strong><em>Taylor’s Theorem</em></strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, this can be written as <span class="math display">\[y(t_1)=y(t_0+h)=y(t_0)+h y'(t_0)+ \frac{h^2}{2!} y''(\tau_1)\]</span> for some point <span class="math inline">\(\tau_1\)</span> between <span class="math inline">\(t_0\)</span> and <span class="math inline">\(t_1\)</span>. The Euler method determines the approximation <span class="math inline">\(Y_1\)</span> to the function <span class="math inline">\(y\)</span> at the point <span class="math inline">\(t_1\)</span>, particularly, <span class="math display">\[Y_1=y(t_0)+hy'(t_0) \approx y(t_1).\]</span></p>
+<p>The <strong><em>Local Truncation Error</em></strong> at the first step, denoted <span class="math inline">\(e_1\)</span>, is defined as the absolute difference between the exact and approximated values at the first step, and this is given by <span class="math display">\[e_1=\left| y(t_1)-Y_1 \right|=\frac{h^2}{2!}\left| y''(\tau_1) \right|.\]</span></p>
+<p>This can be done for all the locations to give a list of local truncation errors <span class="math inline">\(e_1, e_2, e_3,\dots,e_N\)</span>. Note that <em>technically</em>, these errors are hypothetical since the <em>exact solution</em> <span class="math inline">\(y\)</span>, and thus <span class="math inline">\(y(t_n)\)</span>, are not known but these are put as placeholders to establish the full accuracy of the method. In this case, the local truncation error <span class="math inline">\(e\)</span> is said to be of <em>second order</em> since <span class="math inline">\(e=\mathcal{O}\left(h^2\right)\)</span>.</p>
+<p>As the iteration progresses, the errors will accumulate to result in a <strong><em>Global Integration Error</em></strong> denoted <span class="math inline">\(E\)</span>. In this case, the global integration error is <span class="math display">\[E=|y(t_f)-Y_N|.\]</span> The global integration error has to be at most the accumulation of all the local truncation errors, namely <span class="math display">\[E=|y(t_f)-Y_N| \leq \underbrace{\sum_{n=1}^{N}{e_n}}_{\substack{\text{sum of all} \\ \text{local truncation} \\ \text{errors}}}= \sum_{n=1}^{N}{\frac{h^2}{2!}\left| y''(\tau_n) \right|}=h^2\sum_{n=1}^{N}{\frac{1}{2}\left| y''(\tau_n) \right|}.\]</span></p>
+<p><span id="eq-GIEEuler"><span class="math display">\[\implies \quad E \leq h^2\sum_{n=1}^{N}{\frac{1}{2}\left| y''(\tau_n) \right|} \tag{3.2}\]</span></span></p>
+<p>A bound for the sum needs to be found in order bound the global integration error. To this end, consider the set of the second derivatives in the sum above, i.e. <span class="math display">\[\left\{ \frac{1}{2}\left| y''(\tau_1) \right|, \frac{1}{2}\left| y''(\tau_2) \right|, \dots, \frac{1}{2}\left| y''(\tau_n) \right| \right\}.\]</span></p>
+<p>Since all these terms take a finite value, then at least one of these terms must be larger than all the rest, this is denoted <span class="math inline">\(M\)</span> and can be written as <span class="math display">\[M=\max\left\{ \frac{1}{2}\left| y''(\tau_1) \right|, \frac{1}{2}\left| y''(\tau_2) \right|, \dots, \frac{1}{2}\left| y''(\tau_n) \right| \right\}.\]</span></p>
+<p>This can also be expressed differently as <span class="math display">\[M=\max_{\tau \in [t_0, t_f]}\left\{ \frac{1}{2}\left| y''(\tau) \right| \right\}.\]</span> Therefore, since <span class="math display">\[\frac{1}{2}\left| y''(\tau_n) \right| \leq M \quad \text{for all} \quad n=1,2,\dots,N\]</span> then <span class="math display">\[\sum_{n=1}^{N}{\frac{1}{2}\left| y''(\tau_n) \right|} \leq \sum_{n=1}^{N}{M}=NM.\]</span> Thus, returning back to the expression for <span class="math inline">\(E\)</span> in <a href="#eq-GIEEuler" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> <span class="math display">\[E \leq h^2\sum_{n=1}^{N}{\frac{1}{2}\left| y''(\tau_n) \right|} \leq NMh^2=Mh \cdot (Nh)=Mh(t_f-t_0)=\mathcal{O}\left(h\right).\]</span> Hence, the global integration error <span class="math inline">\(E=\mathcal{O}\left(h\right)\)</span>, this means that the Euler method is a <strong><em>First Order Method</em></strong>. This means that both <span class="math inline">\(h\)</span> and the global integration error behave linearly to one another, so if <span class="math inline">\(h\)</span> is halved, then the global integration error is halved as well.</p>
+<p>In conclusion, the local truncation error of the Euler method is <span class="math inline">\(e=\mathcal{O}\left(h^2\right)\)</span> while the global integration error <span class="math inline">\(E=\mathcal{O}\left(h\right)\)</span> when <span class="math inline">\(h\)</span> is small.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Different Stepsizes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Different Stepsizes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Returning to the IVP <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=6-2y \quad \text{with} \quad y(0)=0, \quad t \in [0,2].\]</span></p>
+<p>The Euler method can be repeated for different values of <span class="math inline">\(h\)</span> and these can be seen in the figure below.</p>
+<p><img src="figures/ODE3.jpg" class="img-fluid"></p>
+<p>The table below shows the global integration error for the different values of <span class="math inline">\(h\)</span>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(h\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(E\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.4</td>
+<td style="text-align: center;">0.05399</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0.2</td>
+<td style="text-align: center;">0.03681</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0.1</td>
+<td style="text-align: center;">0.02036</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0.05</td>
+<td style="text-align: center;">0.01060</td>
+</tr>
+</tbody>
+</table>
+<p>When the value of <span class="math inline">\(h\)</span> is halved, the global integration error is approximately halved as well.</p>
+</div>
+</div>
+</section>
+<section id="sec-EulerSys" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-EulerSys"><span class="header-section-number">3.3</span> Set of IVPs</h2>
+<p>SO far, the Euler Method has been used to solve a single IVP, however this can be extended to solving a set of linear IVPs.</p>
+<p>Consider the set of <span class="math inline">\(K\)</span> linear IVPs defined on the interval <span class="math inline">\([t_0,t_f]\)</span>: <span class="math display">\[\begin{align*}
+&amp; \frac{\mathrm{d} y_1}{\mathrm{d} t} = a_{11} y_1 + a_{12} y_2 + \dots + a_{1K} y_K + b_1, &amp; y_1(t_0)=\tilde{y}_1 \\
+&amp; \frac{\mathrm{d} y_2}{\mathrm{d} t} = a_{21} y_1 + a_{22} y_2 + \dots + a_{2K} y_K + b_2, &amp; y_2(t_0)=\tilde{y}_2 \\
+&amp; \qquad \qquad \qquad \qquad \qquad \vdots &amp; \\
+&amp; \frac{\mathrm{d} y_K}{\mathrm{d} t} = a_{K1} y_1 + a_{K2} y_2 + \dots + a_{KK} y_K + b_K, &amp; y_K(t_0)=\tilde{y}_K \\
+\end{align*}\]</span> where, for <span class="math inline">\(i,j=1, 2, \dots, K\)</span>, the functions <span class="math inline">\(y_i=y_i(t)\)</span> are unknown, <span class="math inline">\(a_{ij}\)</span> are known constant coefficients and <span class="math inline">\(b_i\)</span> are all known (these can generally depend on <span class="math inline">\(t\)</span>).</p>
+<p>This set of initial value problems need to be written in matrix form as <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b} \quad \text{with} \quad \boldsymbol{y}(t_0)=\boldsymbol{y}_0, \quad t \in [t_0,t_f]\]</span> <span class="math display">\[\text{where} \quad \boldsymbol{y}(t)=\begin{pmatrix} y_1(t) \\ y_2(t) \\ \vdots \\ y_K(t) \end{pmatrix}, \quad A=\begin{pmatrix} a_{11} &amp; a_{12} &amp; \dots &amp; a_{1K} \\ a_{21} &amp; a_{22} &amp; \dots &amp; a_{2K} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{K1} &amp; a_{K2} &amp; \dots &amp; a_{KK} \end{pmatrix},\]</span> <span class="math display">\[\boldsymbol{b}=\begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_K \end{pmatrix}, \quad \boldsymbol{y}_0=\begin{pmatrix} \tilde{y}_1 \\ \tilde{y}_2 \\ \vdots \\ \tilde{y}_K \end{pmatrix}.\]</span> In this case, <span class="math inline">\(\boldsymbol{y}(t)\)</span> is the unknown solution vector, <span class="math inline">\(A\)</span> is a matrix of constants, <span class="math inline">\(\boldsymbol{y}_0\)</span> is the vector of initial values and <span class="math inline">\(\boldsymbol{b}\)</span> is a vector of known terms (possibly depending on <span class="math inline">\(t\)</span>) and is referred to as the <strong><em>Inhomogeneity</em></strong> or <strong><em>Forcing Term</em></strong>.</p>
+<p>The Euler iteration would be performed in a similar way as before. First, the interval <span class="math inline">\([t_0,t_f]\)</span> needs to be discretised into <span class="math inline">\(N\)</span> equally spaced subintervals, each of width <span class="math inline">\(h\)</span> to give the set of discrete times <span class="math inline">\((t_0, t_1, \dots, t_N)\)</span> where <span class="math inline">\(t_n=t_0+nh\)</span> for <span class="math inline">\(n=0,1,\dots,N\)</span>. Let <span class="math inline">\(\boldsymbol{Y}_n\)</span> be the approximation to the function vector <span class="math inline">\(\boldsymbol{y}\)</span> at the time <span class="math inline">\(t=t_n\)</span>, then <span class="math display">\[\boldsymbol{Y}_{n+1}=\boldsymbol{Y}_n+h\boldsymbol{y}'(t_n) \quad \text{where} \quad \boldsymbol{y}'(t_n)=A\boldsymbol{Y_n}+\boldsymbol{b}_n \quad \text{for} \quad n=0,1,2,\dots,N-1\]</span> subject to the initial values <span class="math inline">\(\boldsymbol{Y}_0=\boldsymbol{y}_0\)</span>. (Note that if the vector <span class="math inline">\(\boldsymbol{b}\)</span> depends on <span class="math inline">\(t\)</span>, then <span class="math inline">\(\boldsymbol{b}_n=\boldsymbol{b}(t_n)\)</span>.)</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Sets of IVPs">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sets of IVPs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the two coupled IVPs on the interval <span class="math inline">\([0,1]\)</span>: <span class="math display">\[\begin{align*}
+\frac{\mathrm{d} y}{\mathrm{d} t} = y + 2z, &amp; \quad y(0)=1 \\
+\frac{\mathrm{d} z}{\mathrm{d} t} = \frac{3}{2}y-z, &amp;   \quad z(0)=0
+\end{align*}\]</span></p>
+<p>Before attempting to solve this set of IVPs, it needs to be written in matrix form as <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b} \quad \text{with} \quad \boldsymbol{y}(0)=\boldsymbol{y}_0.\]</span> In this case, <span class="math display">\[\boldsymbol{y}(t)=\begin{pmatrix}y(t) \\ z(t)\end{pmatrix}, \quad A=\begin{pmatrix}1 &amp; 2 \\ \frac{3}{2} &amp; -1\end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix}0 \\ 0\end{pmatrix}, \quad \boldsymbol{y}_0=\begin{pmatrix}1 \\ 0\end{pmatrix}.\]</span></p>
+<p>Let <span class="math inline">\(N=5\)</span>, so <span class="math display">\[h=\frac{t_f-t_0}{N}=\frac{1-0}{5}=0.2.\]</span> The Euler iteration will be <span class="math display">\[\boldsymbol{Y}_{n+1}=\boldsymbol{Y}_n+h\boldsymbol{y}'(t_n) \quad \text{where} \quad \boldsymbol{y}'(t_n)=A \boldsymbol{Y}_n+\boldsymbol{b}_n \quad \text{for} \quad n=0,1,2,3,4.\]</span> This can be written as <span class="math display">\[\boldsymbol{Y}_{n+1}=\boldsymbol{Y}_n+h\left[ A \boldsymbol{Y}_n+\boldsymbol{b}_n \right] \quad \text{for} \quad n=0,1,2,3,4\]</span> keeping in mind that <span class="math inline">\(t_n=hn=0.2n\)</span> the vector <span class="math inline">\(\boldsymbol{b}_n=\boldsymbol{b}(t_n)=\boldsymbol{0}\)</span> and <span class="math inline">\(\boldsymbol{Y}_0=\boldsymbol{y}_0\)</span>: <span class="math display">\[\begin{align*}
+    &amp;\boldsymbol{Y}_1=\boldsymbol{Y}_0+0.2\left[ A \boldsymbol{Y}_0+\boldsymbol{b}_0 \right]=\begin{pmatrix}1 \\ 0\end{pmatrix}+0.2\left[ \begin{pmatrix}1 &amp; 2 \\ \frac{3}{2} &amp; -1\end{pmatrix}\begin{pmatrix}1 \\ 0\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix} \right]=\begin{pmatrix}1.2 \\ 0.3\end{pmatrix} \\
+    &amp;\boldsymbol{Y}_2=\boldsymbol{Y}_1+0.2\left[ A \boldsymbol{Y}_1+\boldsymbol{b}_1 \right]=\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}+0.2\left[ \begin{pmatrix}1 &amp; 2 \\ \frac{3}{2} &amp; -1\end{pmatrix}\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix} \right]=\begin{pmatrix}1.56 \\ 0.6\end{pmatrix} \\
+    &amp;\boldsymbol{Y}_3=\boldsymbol{Y}_2+0.2\left[ A \boldsymbol{Y}_2+\boldsymbol{b}_2 \right]=\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}+0.2\left[ \begin{pmatrix}1 &amp; 2 \\ \frac{3}{2} &amp; -1\end{pmatrix}\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix} \right]=\begin{pmatrix}2.112 \\ 0.948\end{pmatrix} \\
+    &amp;\boldsymbol{Y}_4=\boldsymbol{Y}_3+0.2\left[ A \boldsymbol{Y}_3+\boldsymbol{b}_3 \right]=\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}+0.2\left[ \begin{pmatrix}1 &amp; 2 \\ \frac{3}{2} &amp; -1\end{pmatrix}\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix} \right]=\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix} \\
+    &amp;\boldsymbol{Y}_5=\boldsymbol{Y}_4+0.2\left[ A \boldsymbol{Y}_4+\boldsymbol{b}_4 \right]=\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}+0.2\left[ \begin{pmatrix}1 &amp; 2 \\ \frac{3}{2} &amp; -1\end{pmatrix}\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix} \right]=\begin{pmatrix}4.0531 \\ 1.9877\end{pmatrix} \\
+\end{align*}\]</span> <span class="math display">\[\text{therefore} \quad y(1)=4.0531, \quad z(1)=1.9877.\]</span></p>
+<p><img src="figures/IVP_Euler1.jpg" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="higher-order-ivps" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="higher-order-ivps"><span class="header-section-number">3.4</span> Higher Order IVPs</h2>
+<p>The previous sections solved one first order IVP and a set of first order IVPs. What happens if a higher order IVP is to be solved? Or a set of higher order IVPs? The difference will be minimal, subject to a few manipulations first.</p>
+<p>Consider the <span class="math inline">\({K}^{\mathrm{th}}\)</span> order linear IVP on the interval <span class="math inline">\([t_0,t_f]\)</span> <span id="eq-HOODE"><span class="math display">\[\frac{\mathrm{d}^{K} y}{\mathrm{d} t^{K}}+a_{K-1} \frac{\mathrm{d}^{K-1} y}{\mathrm{d} t^{K-1}} + \dots + a_2 \frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}+a_1 \frac{\mathrm{d} y}{\mathrm{d} t}+a_0 y=f(t) \tag{3.3}\]</span></span> where <span class="math inline">\(a_k \in \mathbb{R}\)</span> and <span class="math inline">\(f\)</span> is a known function. This IVP is to be solved subject to the initial conditions <span class="math display">\[y(t_0)=\eta_0, \quad \frac{\mathrm{d} y}{\mathrm{d} t}(t_0)=\eta_1 \quad \dots \quad \frac{\mathrm{d}^{K-1} y}{\mathrm{d} t^{K-1}}(t_0)=\eta_{K-1}.\]</span></p>
+<p>This <span class="math inline">\({K}^{\mathrm{th}}\)</span> order IVP can be written as a set of <span class="math inline">\(K\)</span> first order IVPs. Indeed, let the functions <span class="math inline">\(y_k\)</span> be given by <span class="math display">\[y_1(t)=\frac{\mathrm{d} y}{\mathrm{d} t}\]</span> <span class="math display">\[y_2(t)=y_1'(t)=\frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}\]</span> <span class="math display">\[y_3(t)=y_2'(t)=\frac{\mathrm{d}^{3} y}{\mathrm{d} t^{3}}\]</span> <span class="math display">\[\vdots\]</span> <span class="math display">\[y_{K-3}(t)=y_{K-4}'(t)=\frac{\mathrm{d}^{K-3} y}{\mathrm{d} t^{K-3}}\]</span> <span class="math display">\[y_{K-2}(t)=y_{K-3}'(t)=\frac{\mathrm{d}^{K-2} y}{\mathrm{d} t^{K-2}}\]</span> <span class="math display">\[y_{K-1}(t)=y_{K-2}'(t)=\frac{\mathrm{d}^{K-1} y}{\mathrm{d} t^{K-1}}\]</span></p>
+<p>Notice that <span class="math display">\[\begin{align*}
+\frac{\mathrm{d} y_{K-1}}{\mathrm{d} t}=\frac{\mathrm{d}^{K} y}{\mathrm{d} t^{K}} &amp; =-a_{K-1} \frac{\mathrm{d}^{K-1} y}{\mathrm{d} t^{K-1}} - \dots - a_2 \frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}- a_1 \frac{\mathrm{d} y}{\mathrm{d} t} - a_0 y+f(t) \\
+&amp; =-a_{K-1} y_{K-1}- \dots - a_2 y_2 - a_1 y_1 -a_0 y+ f(t)
+\end{align*}\]</span> Let <span class="math inline">\(\boldsymbol{y}\)</span> be the vector of the unknown functions <span class="math inline">\(y, y_1, y_2, \dots, y_{K-1}\)</span>. This means that the IVP in <a href="#eq-HOODE" class="quarto-xref">Equation&nbsp;<span>3.3</span></a> can be written in matrix form <span class="math inline">\(\boldsymbol{y}'=A\boldsymbol{y}+\boldsymbol{b}\)</span> as follows: <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=\frac{\mathrm{d} }{\mathrm{d} t}\begin{pmatrix} y \\ y_1 \\ y_2 \\ \vdots \\ y_{K-3} \\ y_{K-2} \\ y_{K-1} \end{pmatrix}=\begin{pmatrix} y' \\ y_1' \\ y_2' \\ \vdots \\ y_{K-3}' \\ y_{K-2}' \\ y_{K-1}' \end{pmatrix}=\begin{pmatrix} y_1 \\ y_2 \\ y_3 \\ \vdots \\ y_{K-2} \\ y_{K-1} \\ \frac{\mathrm{d}^{K} y}{\mathrm{d} t^{K}} \end{pmatrix}\]</span> <span class="math display">\[=\begin{pmatrix} y_1 \\ y_2 \\ y_3 \\ \vdots \\ y_{K-2} \\ y_{K-1} \\ -a_{K-1} y_{K-1}- \dots - a_2 y_2 - a_1 y_1 - a_0 y+ f(t) \end{pmatrix}\]</span> <span class="math display">\[=\underbrace{\begin{pmatrix} 0 &amp; 1 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 1 \\ -a_0 &amp; -a_1 &amp; -a_2 &amp; \dots &amp; -a_{K-3} &amp; -a_{K-2} &amp; -a_{K-1}  \end{pmatrix}}_{A} \underbrace{\begin{pmatrix} y \\ y_1 \\ y_2 \\ \vdots \\ y_{K-3} \\ y_{K-2} \\ y_{K-1} \end{pmatrix}}_{\boldsymbol{y}}+\underbrace{\begin{pmatrix} 0 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 0 \\ f(t) \end{pmatrix}}_{\boldsymbol{b}}=A \boldsymbol{y}+\boldsymbol{b}.\]</span></p>
+<p>The initial condition vector will be <span class="math display">\[\boldsymbol{y}_0=\begin{pmatrix} y(0) \\ y_1(0) \\ y_2(0) \\ \vdots \\ y_{K-3}(0) \\ y_{K-2}(0) \\ y_{K-1}(0) \end{pmatrix}=\begin{pmatrix} y(0) \\ \frac{\mathrm{d} y}{\mathrm{d} t}(0) \\ \frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}(0) \\ \vdots \\ \frac{\mathrm{d}^{K-3} y}{\mathrm{d} t^{K-3}}(0) \\ \frac{\mathrm{d}^{K-2} y}{\mathrm{d} t^{K-2}}(0) \\ \frac{\mathrm{d}^{K-1} y}{\mathrm{d} t^{K-1}}(0) \end{pmatrix}=\begin{pmatrix} \eta_0 \\ \eta_1 \\ \eta_2 \\ \vdots \\ \eta_{K-3} \\ \eta_{K-2} \\ \eta_{K-1} \end{pmatrix}.\]</span></p>
+<p>The matrix <span class="math inline">\(A\)</span> is called the <strong><em>Companion Matrix</em></strong> and is a matrix with 1 on the super diagonal and the last row is the minus of the coefficients in the higher order IVP, and zeros otherwise. Now that the <span class="math inline">\({K}^{\mathrm{th}}\)</span> order IVP has been converted into a set of <span class="math inline">\(K\)</span> linear IVPs, it can be solved just as in <a href="#sec-EulerSys" class="quarto-xref"><span>Section 3.3</span></a>. Note that <em>any</em> linear <span class="math inline">\({K}^{\mathrm{th}}\)</span> order IVP can always be converted into a set of <span class="math inline">\(K\)</span> first order IVPs but the converse is not always possible.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Higher Order IVPs">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Higher Order IVPs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the following higher order IVP <span class="math display">\[\frac{\mathrm{d}^{4} y}{\mathrm{d} t^{4}}-8\frac{\mathrm{d}^{3} y}{\mathrm{d} t^{3}}+7\frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}-\frac{\mathrm{d} y}{\mathrm{d} t}+2y=\cos(t) \quad \text{for} \quad t \in \mathbb{R}_{\geq 0}\]</span> <span class="math display">\[\text{with} \quad y(0)=4, \quad \frac{\mathrm{d} y}{\mathrm{d} t}(0)=1, \quad \frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}(0)=3, \quad \frac{\mathrm{d}^{3} y}{\mathrm{d} t^{3}}(0)=0.\]</span></p>
+<p>Let <span class="math inline">\(u=\frac{\mathrm{d} y}{\mathrm{d} t}, v=u'=\frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}\)</span> and <span class="math inline">\(w=v'=\frac{\mathrm{d}^{3} y}{\mathrm{d} t^{3}}\)</span>. The derivatives of <span class="math inline">\(u,v\)</span> and <span class="math inline">\(w\)</span> are: <span class="math display">\[\begin{align*}
+&amp; u'=v \\
+&amp; v'=w \\
+&amp; w'= \frac{\mathrm{d}^{4} y}{\mathrm{d} t^{4}}=8\frac{\mathrm{d}^{3} y}{\mathrm{d} t^{3}}-7\frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}+\frac{\mathrm{d} y}{\mathrm{d} t}-2y+\cos(t)=8w-7v+u+2y+\cos(t)
+\end{align*}\]</span> Define the vector <span class="math inline">\(\boldsymbol{y}={(y, u, v, w)}^{\mathrm{T}}\)</span> <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=\frac{\mathrm{d} }{\mathrm{d} t}\begin{pmatrix} y \\ u \\ v \\ w \end{pmatrix}=\begin{pmatrix} u \\ v \\ w \\ \cos(t)+8w-7v+u-2y \end{pmatrix}\]</span> <span class="math display">\[=\underbrace{\begin{pmatrix} 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \\ -2 &amp; 1 &amp; -7 &amp; 8 \end{pmatrix}}_{A}\underbrace{\begin{pmatrix} y \\ u \\ v \\ w \end{pmatrix}}_{\boldsymbol{y}}+\underbrace{\begin{pmatrix} 0 \\ 0 \\ 0 \\ \cos(t) \end{pmatrix}}_{\boldsymbol{b}(t)}=A\boldsymbol{y}+\boldsymbol{b}(t).\]</span></p>
+<p>The initial condition vector will be <span class="math display">\[\boldsymbol{y}_0=\begin{pmatrix} y(0) \\ u(0) \\ v(0) \\ w(0) \end{pmatrix}=\begin{pmatrix} y(0) \\ \frac{\mathrm{d} y}{\mathrm{d} t}(0)\\ \frac{\mathrm{d}^{2} y}{\mathrm{d} t^{2}}(0) \\ \frac{\mathrm{d}^{3} y}{\mathrm{d} t^{3}}(0) \end{pmatrix}=\begin{pmatrix} 4 \\ 1 \\ 3 \\ 0 \end{pmatrix}.\]</span></p>
+<p>Now the IVP can be solved using the Euler method as before but only the first function is the most relevant, all others have been used as placeholders.</p>
+</div>
+</div>
+<section id="sets-of-higher-order-ivps" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="sets-of-higher-order-ivps"><span class="header-section-number">3.4.1</span> Sets of Higher Order IVPs</h3>
+<p>The method above can be extended into a set of higher order IVPs.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Set of Higher Order IVPs">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Set of Higher Order IVPs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the following coupled system of higher order IVPs <span class="math display">\[y''+6y'+y=\sin(t), \quad z'''-8z''=5y-2y'+\mathrm{e}^{2t}\]</span> <span class="math display">\[\text{with} \quad y(0)=1, \quad \frac{\mathrm{d} y}{\mathrm{d} t}(0)=2, \quad z(0)=4, \quad \frac{\mathrm{d} z}{\mathrm{d} t}(0)=1, \quad \frac{\mathrm{d}^{2} z}{\mathrm{d} t^{2}}(0)=2\]</span></p>
+<p>In the case of a coupled system, the vector function <span class="math inline">\(\boldsymbol{y}\)</span> should consist of all the unknown functions and their derivatives up to but not including their highest order derivative. In other words, <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=\frac{\mathrm{d} }{\mathrm{d} t}\begin{pmatrix} y \\ y' \\ z \\ z' \\ z'' \end{pmatrix}=\begin{pmatrix} y' \\ y'' \\ z' \\ z'' \\ z''' \end{pmatrix}=\begin{pmatrix} y' \\ -y-6y'+\sin(t) \\ z' \\ z'' \\ 5y-2y'+8z''+\mathrm{e}^{2t} \end{pmatrix}\]</span> <span class="math display">\[=\underbrace{\begin{pmatrix} 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\ -1 &amp; -6 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\ 5 &amp; -2 &amp; 0 &amp; 0 &amp; 8 \end{pmatrix}}_{A}\underbrace{\begin{pmatrix} y \\ y' \\ z \\ z' \\ z'' \end{pmatrix}}_{\boldsymbol{y}}+\underbrace{\begin{pmatrix} 0 \\ \sin(t) \\ 0 \\ 0 \\ \mathrm{e}^{2t} \end{pmatrix}}_{\boldsymbol{b}}.\]</span> The vector of initial values would be <span class="math display">\[\boldsymbol{y}(0)=\begin{pmatrix} y(0) \\ y'(0) \\ z(0) \\ z'(0) \\ z''(0) \end{pmatrix}=\begin{pmatrix} 1 \\ 2 \\ 4 \\ 1 \\ 2 \end{pmatrix}.\]</span></p>
+<p>Now this can be solved just as before with the most relevant terms being the first and third (since those are <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span>).</p>
+</div>
+</div>
+</section>
+<section id="stability-of-a-set-of-odes" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="stability-of-a-set-of-odes"><span class="header-section-number">3.4.2</span> Stability of a Set of ODEs</h3>
+<p>Consider the set of <span class="math inline">\(K\)</span> homogeneous ODEs <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}.\]</span> Let <span class="math inline">\(\lambda_1, \lambda_2, \dots, \lambda_K\)</span> be the eigenvalues of the matrix <span class="math inline">\(A\)</span> and <span class="math inline">\(\boldsymbol{v}_1, \boldsymbol{v}_2, \dots, \boldsymbol{v}_K\)</span> be their <em>distinct</em> corresponding eigenvectors (distinct for the sake argument). Analytically, the set of differential equations <span class="math inline">\(\boldsymbol{y}'=A\boldsymbol{y}\)</span> has the general solution <span class="math display">\[\boldsymbol{y}(t)=C_1 \boldsymbol{v}_1 \mathrm{e}^{\lambda_1 t}+C_2 \boldsymbol{v}_2 \mathrm{e}^{\lambda_2 t}+\dots+C_K \boldsymbol{v}_K \mathrm{e}^{\lambda_K t}\]</span> where <span class="math inline">\(C_1, C_2, \dots, C_n\)</span> are constants that can be determined from the initial values.</p>
+<div id="def-Stab" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.1</strong></span> The initial value problem <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b} \quad \text{with} \quad \boldsymbol{y}(0)=\boldsymbol{y}_0\]</span> is said to be <strong><em>Asymptotically Stable</em></strong> if <span class="math inline">\(\boldsymbol{y} \to \boldsymbol{0}\)</span> as <span class="math inline">\(t \to \infty\)</span>, in other words, all functions in <span class="math inline">\(\boldsymbol{y}\)</span> tend to 0 as <span class="math inline">\(t\)</span> tends to infinity.</p>
+</div>
+<p>This definition will be important when looking at the long term behaviour of solutions from the eigenvalues to then determine stepsize bounds.</p>
+<div id="thm-Stability" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 3.1</strong></span> The initial value problem <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b}\]</span> is asymptotically stable if <strong>all</strong> the eigenvalues of the matrix <span class="math inline">\(A\)</span> have negative real parts. If <span class="math inline">\(A\)</span> has at least one eigenvalue with a non-negative real part, then the system is not asymptomatically stable.</p>
+</div>
+<p>Notice that the stability of a set of ODEs does <em>not</em> depend on the forcing term <span class="math inline">\(\boldsymbol{b}\)</span> nor does it depend on the initial condition <span class="math inline">\(\boldsymbol{y}(0)\)</span>.</p>
+</section>
+</section>
+<section id="limitations-of-the-euler-method" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="limitations-of-the-euler-method"><span class="header-section-number">3.5</span> Limitations of the Euler Method</h2>
+<p>In some cases, if the stepsize <span class="math inline">\(h\)</span> is taken to be too large, then the Euler method can give misleading results.</p>
+<p>For example, consider the initial value problem: <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=-3y \quad \text{with} \quad y(0)=1, \quad t\in [0,5].\]</span> Choosing a large stepsize <span class="math inline">\(h\)</span> can render the method ineffective. Case in point, when <span class="math inline">\(h=1\)</span>, the approximate solution oscillates and grows quite rapidly, however choosing a smaller value of <span class="math inline">\(h\)</span>, say <span class="math inline">\(h=0.1\)</span>, gives a very good approximation to the exact solution. These are illustrated in the figures below.</p>
+<p><img src="figures/ODE6.jpg" class="img-fluid"> <img src="figures/ODE7.jpg" class="img-fluid"></p>
+<p>Another situation when the Euler method fails is when the IVP does not have a unique solution. For example, consider the IVP: <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=y^{\frac{1}{3}} \quad \text{with} \quad y(0)=0, \quad t \in [0,2].\]</span> This has the exact solution <span class="math inline">\(y(t)=\left( \frac{2}{3}t \right)^{\frac{3}{2}}\)</span> however this is not unique since <span class="math inline">\(y(t)=0\)</span> is also a perfectly valid solution. The Euler method in this case will not be able to capture the first non-trivial solution but will only capture the second trivial solution giving a straight line at 0<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<section id="bounds-on-the-stepsize" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="bounds-on-the-stepsize"><span class="header-section-number">3.5.1</span> Bounds on the Stepsize</h3>
+<p>Consider the initial value problem <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b} \quad \text{with} \quad \boldsymbol{y}(0)=\boldsymbol{y}_0.\]</span> If <span class="math inline">\(A\)</span> is asymptotically stable, then a maximum bound <span class="math inline">\(h_0\)</span> for the stepsize can be found to ensure that the iterations converge. (This means that asymptotic stability of <span class="math inline">\(A\)</span> is a necessary and sufficient condition for the existence of an upper bound <span class="math inline">\(h_0\)</span> such that if <span class="math inline">\(h&lt;h_0\)</span>, then the Euler iteration converges.)</p>
+<p>If the stepsize is too large, then the method may not converge but on the other hand if it is too low, then the iteration will take a considerable amount of time to perform. Therefore an “optimal” stepsize is needed to obtain sufficiently accurate solutions.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Different Stepsizes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Different Stepsizes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the following initial value problem <span class="math display">\[\frac{\mathrm{d} y}{\mathrm{d} t}=100(\sin(t)-y) \quad \text{with} \quad y(0)=0.\]</span> The figure below shows the Euler method being used to solve the initial value problem in the interval <span class="math inline">\([0,1]\)</span> for the stepsizes <span class="math inline">\(h=0.03, 0.02, 0.01, 0.001\)</span>.</p>
+<p><img src="figures/Unstable.jpg" class="img-fluid"></p>
+<p>When <span class="math inline">\(h=0.03\)</span>, the Euler method does not converge. At <span class="math inline">\(h=0.02\)</span>, the Euler method converges but there clearly is a distinct artefact in the solution that shows a slight oscillation. For <span class="math inline">\(h\)</span> less than <span class="math inline">\(0.02\)</span>, this oscillation is no longer observed and the Euler method is convergent.</p>
+</div>
+</div>
+</section>
+<section id="exact-bound" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="exact-bound"><span class="header-section-number">3.5.2</span> Exact Bound</h3>
+<p>Consider the IVP <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b} \quad \text{with} \quad \boldsymbol{y}(0)=\boldsymbol{y}_0.\]</span> Let <span class="math inline">\(\lambda_1, \lambda_2, \dots, \lambda_K\)</span> be the eigenvalues of <span class="math inline">\(A\)</span>. Suppose that the matrix <span class="math inline">\(A\)</span> is asymptotically stable (i.e.&nbsp;<span class="math inline">\(\Re(\lambda_k)&lt;0\)</span> for all <span class="math inline">\(k=1,2,\dots,K\)</span>). In order for the Euler iterations to converge, the stepsize <span class="math inline">\(h\)</span> needs be less than the threshold stepsize <span class="math inline">\(h_0\)</span> where <span id="eq-h0Bound"><span class="math display">\[h_0=2\min_{k=1,2,\dots,K}\left\{ \frac{|\Re(\lambda_k)|}{|\lambda_k|^2} \right\} \tag{3.4}\]</span></span> <span class="math display">\[\text{or} \quad h_0=2 \min_{k=1,2,\dots,K} \left\{ \frac{1}{|\lambda_k|} \right\} \quad \text{if all the eigenvalues are real.}\]</span> In other words, if the initial value problem is asymptotically stable, then the Euler method is stable if an only if <span class="math inline">\(h&lt;h_0\)</span>. This means that the convergence of the Euler is characterised by the eigenvalue that is furthest away from the origin, also called the <strong><em>Dominant Eigenvalue</em></strong>.</p>
+<p>!!!!!DO!!!!!</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Euler Upper Bound">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Euler Upper Bound
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the system of differential equations <span class="math inline">\(\boldsymbol{y}'=A\boldsymbol{y}\)</span> with <span class="math inline">\(\boldsymbol{y}(0)=\boldsymbol{y}_0\)</span> where <span class="math display">\[A=\begin{pmatrix} -1 &amp; 0 &amp; 3 \\ 0 &amp; -10 &amp; 0 \\ 18 &amp; -1 &amp; -100 \end{pmatrix}.\]</span> The eigenvalues of the matrix <span class="math inline">\(A\)</span> are <span class="math inline">\(-0.4575, -100.5425, -10\)</span>. Since all the eigenvalues are negative, this system is asymptotically stable. Since all the eigenvalues are real, then the threshold stepsize for a convergent Euler method is <span class="math display">\[h_0=2\min\left\{ \frac{1}{|\lambda_k|} \right\} =2\min \left\{ \frac{1}{|-0.4575|}, \frac{1}{|-100.5425|}, \frac{1}{|-10|} \right\}\]</span> <span class="math display">\[=2\min \left\{ 2.0858, 0.0099, 0.1 \right\}=2 \times 0.0099=0.0199.\]</span></p>
+<p>Solutions for different stepsizes are as shown below with the initial values <span class="math inline">\(y_1(0)=1\)</span> (blue), <span class="math inline">\(y_2(0)=2\)</span> (red) and <span class="math inline">\(y_3(0)=1\)</span> (magenta). It can be seen that if <span class="math inline">\(h \geq h_0\)</span>, then at least one solution will diverge but if <span class="math inline">\(h&lt;h_0\)</span>, then all solutions converge to 0.</p>
+<p><img src="figures/Unstable2.jpg" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="estimated-bound" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="estimated-bound"><span class="header-section-number">3.5.3</span> Estimated Bound</h3>
+<p>One drawback in attempting to determine the value of <span class="math inline">\(h_0\)</span> using <a href="#eq-h0Bound" class="quarto-xref">Equation&nbsp;<span>3.4</span></a> is that <em>all</em> the eigenvalues of the matrix <span class="math inline">\(A\)</span> have to be determined before <span class="math inline">\(h_0\)</span> can be found. This can be computationally expensive for especially for very large matrices.</p>
+<p>An estimate for the threshold stepsize <span class="math inline">\(h_0\)</span> can be found with far fewer computations using the <em>sup-norm</em> <span class="math inline">\(|| \cdot ||_{\infty}\)</span> (also known as the <em>infinity norm</em> or the <em>Chebyshev norm</em>). Recall that for a vector <span class="math inline">\(\boldsymbol{x}=(x_1, x_2, \dots, x_n)\)</span>, the <strong>sup-norm</strong> of <span class="math inline">\(\boldsymbol{x}\)</span> is the maximum absolute value in the vector, i.e. <span class="math display">\[|| \boldsymbol{x} ||_{\infty}=\max |x_n|.\]</span></p>
+<p>Whereas for a matrix <span class="math inline">\(A\)</span>, the <strong>sup-norm</strong> of <span class="math inline">\(A\)</span> is the maximal absolute row sum. In other words, for a given matrix <span class="math inline">\(A\)</span>, take the absolute value of all the terms, take the sum of each row and the sup-norm will be the largest out of these.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Sup-Norm of Vectors &amp; Matrices">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sup-Norm of Vectors &amp; Matrices
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the vector <span class="math inline">\(\boldsymbol{x}\)</span> and matrix <span class="math inline">\(M\)</span> given by <span class="math display">\[\boldsymbol{x}=\begin{pmatrix} 1 \\ -4 \\ -9 \\ 7 \end{pmatrix}, \quad M=\begin{pmatrix}
+     5 &amp; 2 &amp;  4 &amp;  1 \\
+    -9 &amp; 5 &amp;  3 &amp; -7 \\
+     6 &amp; 0 &amp; -1 &amp;  4 \\
+     9 &amp; 5 &amp; -2 &amp;  4
+\end{pmatrix}.\]</span></p>
+<p>The sup-norm of <span class="math inline">\(\boldsymbol{x}\)</span> is simply the largest absolute element which is <span class="math inline">\(9\)</span>, therefore <span class="math inline">\(|| \boldsymbol{x} ||_{\infty}=9\)</span>.</p>
+<p>As for <span class="math inline">\(M\)</span>, to find the sup-norm, first take the absolute value of all the terms, then add the rows. The sup-norm is the maximum element that results: <span class="math display">\[
+\begin{pmatrix}
+     5 &amp; 2 &amp;  4 &amp;  1 \\
+    -9 &amp; 5 &amp;  3 &amp; -7 \\
+     6 &amp; 0 &amp; -1 &amp;  4 \\
+     9 &amp; 5 &amp; -2 &amp;  4
+\end{pmatrix} \quad \xrightarrow[| \bullet |]{} \quad
+\begin{pmatrix}
+     5 &amp; 2 &amp;  4 &amp;  1 \\
+     9 &amp; 5 &amp;  3 &amp;  7 \\
+     6 &amp; 0 &amp;  1 &amp;  4 \\
+     9 &amp; 5 &amp;  2 &amp;  4
+\end{pmatrix}
+\left. \begin{matrix}
+     \to 12 \\ \to 24 \\ \to 11 \\ \to 20
+\end{matrix} \right\} \text{maximum is 24.}
+\]</span> Therefore <span class="math inline">\(|| M ||_{\infty}=24\)</span>.</p>
+<p>Both of these can be found in MATLAB using <code>norm(x,Inf)</code> and <code>norm(M,Inf)</code>.</p>
+</div>
+</div>
+<div id="thm-Eig" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 3.2</strong></span> Consider the set of linear IVPs <span class="math display">\[\frac{\mathrm{d} \boldsymbol{y}}{\mathrm{d} t}=A\boldsymbol{y}+\boldsymbol{b} \quad \text{with} \quad \boldsymbol{y}(0)=\boldsymbol{y}_0\]</span> where <span class="math inline">\(A\)</span> is asymptotically stable. Then the Euler method is numerically convergent for any choice of <span class="math inline">\(h\)</span> which satisfies <span class="math display">\[|| \mathcal{I}+hA ||_{\infty} \leq 1.\]</span></p>
+</div>
+<p>Computing all the eigenvalues of the matrix <span class="math inline">\(A\)</span> can be computationally expensive but obtaining the sup-norm is takes far fewer computations, however as a drawback, the resulting value of <span class="math inline">\(h_0\)</span> would be an estimate.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Stepsize Bound Estimate 1 (Tridiagonal)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Stepsize Bound Estimate 1 (Tridiagonal)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the differential equation <span class="math inline">\(\boldsymbol{y}'=A\boldsymbol{y}\)</span> where <span class="math display">\[
+A=\begin{pmatrix}
+    -2 &amp;  1 &amp;  0 &amp;  0 &amp;  0 \\
+     1 &amp; -2 &amp;  1 &amp;  0 &amp;  0 \\
+     0 &amp;  1 &amp; -2 &amp;  1 &amp;  0 \\
+     0 &amp;  0 &amp;  1 &amp; -2 &amp;  1 \\
+     0 &amp;  0 &amp;  0 &amp;  1 &amp; -2
+\end{pmatrix}.
+\]</span></p>
+<p>To find the upper bound for the stepsize for which the Euler method converges, first evaluate <span class="math inline">\(\mathcal{I}+hA\)</span>: <span class="math display">\[
+\mathcal{I}+hA=\begin{pmatrix}
+    1-2h &amp;  h &amp;  0 &amp;  0 &amp;  0 \\
+     h &amp; 1-2h &amp;  h &amp;  0 &amp;  0 \\
+     0 &amp;  h &amp; 1-2h &amp;  h &amp;  0 \\
+     0 &amp;  0 &amp;  h &amp; 1-2h &amp;  h \\
+     0 &amp;  0 &amp;  0 &amp;  h &amp; 1-2h
+\end{pmatrix}
+\]</span></p>
+<p>To find the sup-norm, take the absolute value of all the terms and find the maximal row sum: <span class="math display">\[
+\xrightarrow[| \bullet |]{} \quad
+\begin{pmatrix}
+    |1-2h| &amp;  h &amp;  0 &amp;  0 &amp;  0 \\
+     h &amp; |1-2h| &amp;  h &amp;  0 &amp;  0 \\
+     0 &amp;  h &amp; |1-2h| &amp;  h &amp;  0 \\
+     0 &amp;  0 &amp;  h &amp; |1-2h| &amp;  h \\
+     0 &amp;  0 &amp;  0 &amp;  h &amp; |1-2h|
+\end{pmatrix}
+\begin{matrix} \to \\ \to \\ \to \\\to \\ \to \end{matrix}\begin{matrix} |1-2h|+h \\ |1-2h|+2h \\ |1-2h|+2h \\ |1-2h|+2h \\ |1-2h|+h. \end{matrix}
+\]</span> Let <span class="math inline">\(a=|1-2h|+2h\)</span> and <span class="math inline">\(b=|1-2h|+h\)</span>. Since <span class="math inline">\(h&gt;0\)</span>, then <span class="math inline">\(a&gt;b\)</span>, therefore <span class="math display">\[|| \mathcal{I}+hA ||_{\infty}=|1-2h|+2h.\]</span></p>
+<p>In order to satisfy the inequality <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty}\leq 1\)</span>, consider the cases when <span class="math inline">\(1-2h \geq 0\)</span> and <span class="math inline">\(1-2h&lt;0\)</span> separately:</p>
+<ol type="1">
+<li><p>If <span class="math inline">\(1-2h \geq 0\)</span>, then <span class="math inline">\(h \leq \frac{1}{2}\)</span>: <span class="math display">\[|| \mathcal{I}+hA ||_{\infty}=|1-2h|+2h=1-2h+2h=1.\]</span> Therefore <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty}=1 \leq 1\)</span> is indeed true.</p></li>
+<li><p>If <span class="math inline">\(1-2h &lt; 0\)</span>, then <span class="math inline">\(h &gt; \frac{1}{2}\)</span>: <span class="math display">\[|| \mathcal{I}+hA ||_{\infty}=|1-2h|+2h=2h-1+2h=4h-1.\]</span> If <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty} \leq 1\)</span>, then <span class="math inline">\(4h-1 \leq 1\)</span>. Simplifying this would result in <span class="math inline">\(h \leq \frac{1}{2}\)</span> which contradicts with the assumption that <span class="math inline">\(h&gt;\frac{1}{2}\)</span>.</p></li>
+</ol>
+<p>From these two cases, it is clear that <span class="math inline">\(h \ngtr \frac{1}{2}\)</span> (since that case leads to a contradiction), therefore <span class="math inline">\(h \leq \frac{1}{2}\)</span>. Thus for a convergent Euler method, the stepsize <span class="math inline">\(h\)</span> must be less than the threshold stepsize <span class="math inline">\(h_0=\frac{1}{2}\)</span>.</p>
+<p>This can be compared to the exact bound; the eigenvalues of the matrix <span class="math inline">\(A\)</span> are <span class="math display">\[-3.7321, \quad -3, \quad -2, \quad -1, \quad -0.2679.\]</span> Therefore <span class="math display">\[h_0=2 \min \left\{ \frac{1}{|\lambda_k|} \right\}=0.5359\]</span> which is a larger bound compared to the one obtained using the sup-norm method. Observe that if the size of the matrix was larger but followed the same theme (i.e.&nbsp;<span class="math inline">\(2\)</span> on the main diagonal and <span class="math inline">\(-1\)</span> and the sub and super diagonals), then no further calculations are required for the sup-norm method, the outcome will still be <span class="math inline">\(h_0=\frac{1}{2}\)</span>. As for the eigenvalue method, all the eigenvalues have to be recalculated again.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled" title="Stepsize Bound Estimate 2 (Bidiagonal)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Stepsize Bound Estimate 2 (Bidiagonal)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the differential equation <span class="math inline">\(\boldsymbol{y}'=A\boldsymbol{y}\)</span> where <span class="math display">\[
+A=\begin{pmatrix}
+    -1 &amp;  0 &amp;  0 &amp;  0 &amp;  0 \\
+     1 &amp; -1 &amp;  0 &amp;  0 &amp;  0 \\
+     0 &amp;  1 &amp; -1 &amp;  0 &amp;  0 \\
+     0 &amp;  0 &amp;  1 &amp; -1 &amp;  0 \\
+     0 &amp;  0 &amp;  0 &amp;  1 &amp; -1
+\end{pmatrix}.
+\]</span></p>
+<p>To find the upper bound for the stepsize for which the Euler method converges, first evaluate <span class="math inline">\(\mathcal{I}+hA\)</span>: <span class="math display">\[
+\mathcal{I}+hA=\begin{pmatrix}
+    1-h &amp;  0 &amp;  0 &amp;  0 &amp;  0 \\
+     h &amp; 1-h &amp;  0 &amp;  0 &amp;  0 \\
+     0 &amp;  h &amp; 1-h &amp;  0 &amp;  0 \\
+     0 &amp;  0 &amp;  h &amp; 1-h &amp;  0 \\
+     0 &amp;  0 &amp;  0 &amp;  h &amp; 1-h
+\end{pmatrix}
+\]</span> To find the sup-norm, take the absolute value of all the terms and find the maximal row sum: <span class="math display">\[
+\xrightarrow[| \bullet |]{} \quad
+\begin{pmatrix}
+    |1-h| &amp;  0 &amp;  0 &amp;  0 &amp;  0 \\
+     h &amp; |1-h| &amp;  0 &amp;  0 &amp;  0 \\
+     0 &amp;  h &amp; |1-h| &amp;  0 &amp;  0 \\
+     0 &amp;  0 &amp;  h &amp; |1-h| &amp;  0 \\
+     0 &amp;  0 &amp;  0 &amp;  h &amp; |1-h|
+\end{pmatrix}
+\begin{matrix} \to \\ \to \\ \to \\\to \\ \to \end{matrix}\begin{matrix} |1-h| \\ |1-h|+h \\ |1-h|+h \\ |1-h|+h \\ |1-h|+h. \end{matrix}
+\]</span> Let <span class="math inline">\(a=|1-h|+h\)</span> and <span class="math inline">\(b=|1-h|\)</span>. Clearly <span class="math inline">\(a&gt;b\)</span> since <span class="math inline">\(h&gt;0\)</span>, therefore <span class="math display">\[|| \mathcal{I}+hA ||_{\infty}=|1-h|+h.\]</span></p>
+<p>In order to satisfy the inequality, <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty}\leq 1\)</span>, consider the cases when <span class="math inline">\(1-h \geq 0\)</span> and <span class="math inline">\(1-h&lt;0\)</span>:</p>
+<ol type="1">
+<li><p>If <span class="math inline">\(1-h \geq 0\)</span>, then <span class="math inline">\(h \leq 1\)</span>: <span class="math display">\[|| \mathcal{I}+hA ||_{\infty}=|1-h|+h=1-h+h=1,\]</span> therefore <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty} \leq 1\)</span> is indeed true.</p></li>
+<li><p>If <span class="math inline">\(1-h &lt; 0\)</span>, then <span class="math inline">\(h &gt; 1\)</span>: <span class="math display">\[|| \mathcal{I}+hA ||_{\infty}=|1-h|+h=h-1+h=2h-1.\]</span> If <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty} \leq 1\)</span>, then <span class="math inline">\(2h-1 \leq 1\)</span>, meaning that <span class="math inline">\(h \leq 1\)</span> which contradicts with the assumption that <span class="math inline">\(h&gt;1\)</span>.</p></li>
+</ol>
+<p>This means that for a convergent Euler method, the stepsize <span class="math inline">\(h\)</span> must be less than <span class="math inline">\(h_0=1\)</span>.</p>
+<p>This can be compared to the exact upper bound. The eigenvalues of the matrix <span class="math inline">\(A\)</span> are just <span class="math inline">\(-1\)</span> five times, therefore <span class="math display">\[h_0=2 \min \left\{ \frac{1}{|\lambda_k|} \right\}=2,\]</span> this shows that the sup-norm method gives a tighter than using eigenvalues.</p>
+</div>
+</div>
+<p>The sup-norm method works well when the matrix in question has a diagonal, bidiagonal or tridiagonal structure where the diagonal terms are the same. In general, the sup-norm method might <em>not</em> be suitable for any matrix.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Stepsize Bound Estimate 3 (General)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Stepsize Bound Estimate 3 (General)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider the differential equation <span class="math inline">\(\boldsymbol{y}'=A\boldsymbol{y}\)</span> where <span class="math display">\[A=\begin{pmatrix} -1 &amp; -2 \\ 4 &amp; -3 \end{pmatrix}.\]</span></p>
+<p>Find the sup-norm: <span class="math display">\[\mathcal{I}+hA=\begin{pmatrix}
+        1-h &amp; -2h \\
+        4h &amp; 1-3h
+    \end{pmatrix} \xrightarrow[| \bullet |]{} \begin{pmatrix}
+    |1-h| &amp; 2h \\
+    4h &amp; |1-3h|
+    \end{pmatrix} \begin{matrix}
+    \to \\ \to
+    \end{matrix} \begin{matrix}
+    |1-h|+2h \\ |1-3h|+4h
+    \end{matrix}
+\]</span> Let <span class="math inline">\(a=|1-h|+2h\)</span> and <span class="math inline">\(b=|1-3h|+4h\)</span>. Here, it is not obvious which is larger, <span class="math inline">\(a\)</span> or <span class="math inline">\(b\)</span>. Therefore, consider the three cases <span class="math inline">\(0&lt;h&lt;\frac{1}{3}\)</span>, <span class="math inline">\(\frac{1}{3}&lt;h&lt;1\)</span> and <span class="math inline">\(h&gt;1\)</span>.</p>
+<ol type="1">
+<li><p><span class="math inline">\(0&lt;h&lt;\frac{1}{3}\)</span>: In this case, <span class="math inline">\(1-h&gt;0\)</span> and <span class="math inline">\(1-3h&gt;0\)</span>, therefore <span class="math inline">\(a=|1-h|+2h=1+h\)</span> and <span class="math inline">\(b=|1-3h|+4h=1+h\)</span>, hence <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty}=1+h\)</span>. In order to satisfy <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty} \leq 1\)</span>, this would mean that <span class="math inline">\(h&lt;0\)</span> which contradicts with the fact that <span class="math inline">\(h&gt;0\)</span>. Therefore <span class="math inline">\(h \notin \left( 0,\frac 13 \right)\)</span>.</p></li>
+<li><p><span class="math inline">\(\frac{1}{3}&lt;h&lt;1\)</span>: In this case, <span class="math inline">\(1-h&gt;0\)</span> and <span class="math inline">\(1-3h&lt;0\)</span>, therefore <span class="math inline">\(a=|1-h|+2h=1+h\)</span> and <span class="math inline">\(b=|1-3h|+4h=7h-1\)</span>. This should now be split into two subcases to check which one will lead to a contradiction:</p>
+<ol type="i">
+<li>Suppose that <span class="math inline">\(a&gt;b\)</span>, then <span class="math display">\[1+h &gt; 7h-1 \quad \implies \quad h&lt;\frac{1}{3}\]</span> which contradicts with <span class="math inline">\(h&gt;\frac13\)</span></li>
+<li>Suppose that <span class="math inline">\(a&lt;b\)</span>, then <span class="math display">\[1+h &lt; 7h-1 \quad \implies \quad h&gt;\frac{1}{3}\]</span> not leading to any contradiction. therefore since <span class="math inline">\(b&gt;a\)</span>, then <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty}=b=7h-1\)</span>.</li>
+</ol></li>
+</ol>
+<p>In order to satisfy <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty} \leq 1\)</span> then <span class="math inline">\(h&lt;\frac{2}{7}\)</span> which contradicts with the fact that <span class="math inline">\(\frac{1}{3}&lt;h\)</span>. Therefore <span class="math inline">\(h \notin \left( \frac 13,1 \right)\)</span>.</p>
+<ol start="3" type="1">
+<li><span class="math inline">\(h&gt;1\)</span>: In this case, <span class="math inline">\(1-h&lt;0\)</span> and <span class="math inline">\(1-3h&lt;0\)</span>, therefore <span class="math inline">\(a=|1-h|+2h=3h-1\)</span> and <span class="math inline">\(b=|1-3h|+4h=7h-1\)</span>. Clearly <span class="math inline">\(b&gt;a\)</span> since <span class="math inline">\(h&gt;0\)</span>, so <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty}=7h-1\)</span>. In order to satisfy <span class="math inline">\(|| \mathcal{I}+hA ||_{\infty} \leq 1\)</span> then <span class="math inline">\(h&lt;\frac{2}{7}\)</span> which contradicts with the fact that <span class="math inline">\(h&gt;1\)</span>. This means that <span class="math inline">\(h \ngtr 1\)</span>.</li>
+</ol>
+<p>So in every possible case, there will be a contradiction when using the sup-norm method. This <em>does not</em> mean that the system is asymptotically unstable, in fact, the eigenvalues of the matrix <span class="math inline">\(A\)</span> are <span class="math inline">\(-2 \pm 2.65 \mathrm{i}\)</span> meaning that the system is asymptotically stable and the threshold stepsize is in fact <span class="math inline">\(h_0=0.0992\)</span>.</p>
+<p>This example shows that the sup-norm method cannot be used for any matrix system, but if a matrix has a banded structure, then it would be appropriate and would require fewer computations compared to finding all the eigenvalues.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="matlab-code" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="matlab-code"><span class="header-section-number">3.6</span> MATLAB Code</h2>
+<p>The following MATLAB code performs the Euler iteration for the following set of IVPs on the interval <span class="math inline">\([0,1]\)</span>: <span class="math display">\[\begin{align*}
+&amp; \frac{\mathrm{d} u}{\mathrm{d} t}=2u+v+w+\cos(t), &amp; \quad u(0)=0 \\
+&amp; \frac{\mathrm{d} v}{\mathrm{d} t}=\sin(u)+\mathrm{e}^{-v+w}, &amp; \quad v(0)=1 \\
+&amp; \frac{\mathrm{d} w}{\mathrm{d} t}=uv-w, &amp; \quad w(0)=0.
+\end{align*}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Linearity">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Linearity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that this code is built for a general case that <em>does not</em> have to be linear even though the entire derivation process was built on the fact that the system is linear.</p>
+</div>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">function</span> <span class="va">IVP_Euler</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">%% Solve a set of first order IVPs using Euler</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">% This code solves a set of IVP when written explicitly</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">% on the interval [t0,tf] subject to the initial conditions</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">% y(0)=y0.  The output will be the graph of the solution(s)</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">% and the vector value at the final point tf.  Note that the</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">% IVPs do not need to be linear or homogeneous.</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">%% Lines to change:</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">% Line 28   : t0 - Start time</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">% Line 31   : tf - End time</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">% Line 34   : N  - Number of subdivisions</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">% Line 37   : y0 - Vector of initial values</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">% Line 105+ : Which functions to plot, remembering to assign</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">%             a colour, texture and legend label</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co">% Line 125+ : Set of differential equations written</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">%             explicitly.  These can also be non-linear and</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">%             include forcing terms.  These equations can</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="co">%             also be written in matrix form if the</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">%             equations are linear.</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co">%% Set up input values</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="co">% Start time</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="va">t0</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a></span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="co">% End time</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="va">tf</span><span class="op">=</span><span class="fl">1</span><span class="op">;</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a></span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="co">% Number of subdivisions</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="va">N</span><span class="op">=</span><span class="fl">50</span><span class="op">;</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a></span>
+<span id="cb1-36"><a href="#cb1-36"></a><span class="co">% Column vector initial values y0=y(t0)</span></span>
+<span id="cb1-37"><a href="#cb1-37"></a><span class="va">y0</span><span class="op">=</span>[<span class="fl">0</span><span class="op">;</span><span class="fl">1</span><span class="op">;</span><span class="fl">0</span>]<span class="op">;</span></span>
+<span id="cb1-38"><a href="#cb1-38"></a></span>
+<span id="cb1-39"><a href="#cb1-39"></a><span class="co">%% Set up IVP solver parameters</span></span>
+<span id="cb1-40"><a href="#cb1-40"></a></span>
+<span id="cb1-41"><a href="#cb1-41"></a><span class="co">% T = Vector of times t0,t1,...,tN.</span></span>
+<span id="cb1-42"><a href="#cb1-42"></a><span class="co">% This is generated using linspace which splits the</span></span>
+<span id="cb1-43"><a href="#cb1-43"></a><span class="co">% interval [t0,tf] into N+1 points (or N subintervals)</span></span>
+<span id="cb1-44"><a href="#cb1-44"></a><span class="va">T</span><span class="op">=</span><span class="va">linspace</span>(<span class="va">t0</span><span class="op">,</span><span class="va">tf</span><span class="op">,</span><span class="va">N</span><span class="op">+</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb1-45"><a href="#cb1-45"></a></span>
+<span id="cb1-46"><a href="#cb1-46"></a><span class="co">% Stepsize</span></span>
+<span id="cb1-47"><a href="#cb1-47"></a><span class="va">h</span><span class="op">=</span>(<span class="va">tf</span><span class="op">-</span><span class="va">t0</span>)<span class="op">/</span><span class="va">N</span><span class="op">;</span></span>
+<span id="cb1-48"><a href="#cb1-48"></a></span>
+<span id="cb1-49"><a href="#cb1-49"></a><span class="co">% Number of differential equations</span></span>
+<span id="cb1-50"><a href="#cb1-50"></a><span class="va">K</span><span class="op">=</span><span class="va">length</span>(<span class="va">y0</span>)<span class="op">;</span></span>
+<span id="cb1-51"><a href="#cb1-51"></a></span>
+<span id="cb1-52"><a href="#cb1-52"></a><span class="co">%% Perform the Euler iteration</span></span>
+<span id="cb1-53"><a href="#cb1-53"></a></span>
+<span id="cb1-54"><a href="#cb1-54"></a><span class="co">% Y = Solution matrix</span></span>
+<span id="cb1-55"><a href="#cb1-55"></a><span class="co">% The matrix Y will contain K rows and N+1 columns.  Every</span></span>
+<span id="cb1-56"><a href="#cb1-56"></a><span class="co">% row corresponds to a different IVP and every column</span></span>
+<span id="cb1-57"><a href="#cb1-57"></a><span class="co">% corresponds to a different time.  So the matrix Y will</span></span>
+<span id="cb1-58"><a href="#cb1-58"></a><span class="co">% take the following form:</span></span>
+<span id="cb1-59"><a href="#cb1-59"></a><span class="co">% y_1(t_0)  y_1(t_1)  y_1(t_2)  ...  y_1(t_N)</span></span>
+<span id="cb1-60"><a href="#cb1-60"></a><span class="co">% y_2(t_0)  y_2(t_1)  y_2(t_2)  ...  y_2(t_N)</span></span>
+<span id="cb1-61"><a href="#cb1-61"></a><span class="co">% ...</span></span>
+<span id="cb1-62"><a href="#cb1-62"></a><span class="co">% y_K(t_0)  y_K(t_1)  y_K(t_2)  ...  y_K(t_N)</span></span>
+<span id="cb1-63"><a href="#cb1-63"></a><span class="va">Y</span><span class="op">=</span><span class="va">zeros</span>(<span class="va">K</span><span class="op">,</span><span class="va">N</span><span class="op">+</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb1-64"><a href="#cb1-64"></a></span>
+<span id="cb1-65"><a href="#cb1-65"></a><span class="co">% The first column of the vector Y is the initial vector y0</span></span>
+<span id="cb1-66"><a href="#cb1-66"></a><span class="va">Y</span>(<span class="op">:,</span><span class="fl">1</span>)<span class="op">=</span><span class="va">y0</span><span class="op">;</span></span>
+<span id="cb1-67"><a href="#cb1-67"></a></span>
+<span id="cb1-68"><a href="#cb1-68"></a><span class="co">% Set the current time t to be the starting time t0 and the</span></span>
+<span id="cb1-69"><a href="#cb1-69"></a><span class="co">% current value of the vector y to be the strtaing values y0</span></span>
+<span id="cb1-70"><a href="#cb1-70"></a><span class="va">t</span><span class="op">=</span><span class="va">t0</span><span class="op">;</span></span>
+<span id="cb1-71"><a href="#cb1-71"></a><span class="va">y</span><span class="op">=</span><span class="va">y0</span><span class="op">;</span></span>
+<span id="cb1-72"><a href="#cb1-72"></a></span>
+<span id="cb1-73"><a href="#cb1-73"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span><span class="op">+</span><span class="fl">1</span></span>
+<span id="cb1-74"><a href="#cb1-74"></a></span>
+<span id="cb1-75"><a href="#cb1-75"></a>    <span class="va">dydt</span><span class="op">=</span><span class="va">DYDT</span>(<span class="va">t</span><span class="op">,</span><span class="va">y</span><span class="op">,</span><span class="va">K</span>)<span class="op">;</span>  <span class="co">% Find gradient at the current step</span></span>
+<span id="cb1-76"><a href="#cb1-76"></a></span>
+<span id="cb1-77"><a href="#cb1-77"></a>    <span class="va">y</span><span class="op">=</span><span class="va">y</span><span class="op">+</span><span class="va">h</span><span class="op">*</span><span class="va">dydt</span><span class="op">;</span>        <span class="co">% Find y at the current step</span></span>
+<span id="cb1-78"><a href="#cb1-78"></a></span>
+<span id="cb1-79"><a href="#cb1-79"></a>    <span class="va">t</span><span class="op">=</span><span class="va">T</span>(<span class="va">n</span>)<span class="op">;</span>            <span class="co">% Update the new time</span></span>
+<span id="cb1-80"><a href="#cb1-80"></a></span>
+<span id="cb1-81"><a href="#cb1-81"></a>    <span class="va">Y</span>(<span class="op">:,</span><span class="va">n</span>)<span class="op">=</span><span class="va">y</span><span class="op">;</span>          <span class="co">% Replace row n in Y with y</span></span>
+<span id="cb1-82"><a href="#cb1-82"></a></span>
+<span id="cb1-83"><a href="#cb1-83"></a><span class="kw">end</span></span>
+<span id="cb1-84"><a href="#cb1-84"></a></span>
+<span id="cb1-85"><a href="#cb1-85"></a><span class="co">%% Setting plot parameters</span></span>
+<span id="cb1-86"><a href="#cb1-86"></a></span>
+<span id="cb1-87"><a href="#cb1-87"></a><span class="co">% Clear figure</span></span>
+<span id="cb1-88"><a href="#cb1-88"></a><span class="va">clf</span></span>
+<span id="cb1-89"><a href="#cb1-89"></a></span>
+<span id="cb1-90"><a href="#cb1-90"></a><span class="co">% Hold so more than one line can be drawn</span></span>
+<span id="cb1-91"><a href="#cb1-91"></a><span class="va">hold</span> <span class="va">on</span></span>
+<span id="cb1-92"><a href="#cb1-92"></a></span>
+<span id="cb1-93"><a href="#cb1-93"></a><span class="co">% Turn on grid</span></span>
+<span id="cb1-94"><a href="#cb1-94"></a><span class="va">grid</span> <span class="va">on</span></span>
+<span id="cb1-95"><a href="#cb1-95"></a></span>
+<span id="cb1-96"><a href="#cb1-96"></a><span class="co">% Setting font size and style</span></span>
+<span id="cb1-97"><a href="#cb1-97"></a><span class="va">set</span>(<span class="va">gca</span><span class="op">,</span><span class="ss">'FontSize'</span><span class="op">,</span><span class="fl">20</span><span class="op">,</span><span class="ss">'FontName'</span><span class="op">,</span><span class="ss">'Times'</span>)</span>
+<span id="cb1-98"><a href="#cb1-98"></a></span>
+<span id="cb1-99"><a href="#cb1-99"></a><span class="co">% Label the axes</span></span>
+<span id="cb1-100"><a href="#cb1-100"></a><span class="va">xlabel</span>(<span class="ss">'$t$'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)</span>
+<span id="cb1-101"><a href="#cb1-101"></a><span class="va">ylabel</span>(<span class="ss">'$\mathbf{y}(t)$'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)</span>
+<span id="cb1-102"><a href="#cb1-102"></a></span>
+<span id="cb1-103"><a href="#cb1-103"></a><span class="co">% Plot the desried solutions.  If all the solutions are</span></span>
+<span id="cb1-104"><a href="#cb1-104"></a><span class="co">% needed, then consider using a for loop in that case</span></span>
+<span id="cb1-105"><a href="#cb1-105"></a><span class="va">plot</span>(<span class="va">T</span><span class="op">,</span><span class="va">Y</span>(<span class="fl">1</span><span class="op">,:</span>)<span class="op">,</span><span class="ss">'-b'</span><span class="op">,</span><span class="ss">'LineWidth'</span><span class="op">,</span><span class="fl">2</span>)</span>
+<span id="cb1-106"><a href="#cb1-106"></a><span class="va">plot</span>(<span class="va">T</span><span class="op">,</span><span class="va">Y</span>(<span class="fl">2</span><span class="op">,:</span>)<span class="op">,</span><span class="ss">'-r'</span><span class="op">,</span><span class="ss">'LineWidth'</span><span class="op">,</span><span class="fl">2</span>)</span>
+<span id="cb1-107"><a href="#cb1-107"></a><span class="va">plot</span>(<span class="va">T</span><span class="op">,</span><span class="va">Y</span>(<span class="fl">3</span><span class="op">,:</span>)<span class="op">,</span><span class="ss">'-k'</span><span class="op">,</span><span class="ss">'LineWidth'</span><span class="op">,</span><span class="fl">2</span>)</span>
+<span id="cb1-108"><a href="#cb1-108"></a></span>
+<span id="cb1-109"><a href="#cb1-109"></a><span class="co">% Legend labels</span></span>
+<span id="cb1-110"><a href="#cb1-110"></a><span class="va">legend</span>(<span class="ss">'$y_1(t)$'</span><span class="op">,</span><span class="ss">'$y_2(t)$'</span><span class="op">,</span><span class="ss">'$y_3(t)$'</span>)</span>
+<span id="cb1-111"><a href="#cb1-111"></a><span class="va">set</span>(<span class="va">legend</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)</span>
+<span id="cb1-112"><a href="#cb1-112"></a></span>
+<span id="cb1-113"><a href="#cb1-113"></a><span class="co">% Display the values of the vector y at tf</span></span>
+<span id="cb1-114"><a href="#cb1-114"></a><span class="va">disp</span>(<span class="va">strcat</span>(<span class="ss">'The vector y at t='</span><span class="op">,</span><span class="va">num2str</span>(<span class="va">tf</span>)<span class="op">,</span><span class="ss">' is:'</span>))</span>
+<span id="cb1-115"><a href="#cb1-115"></a><span class="va">disp</span>(<span class="va">Y</span>(<span class="op">:,</span><span class="kw">end</span>))</span>
+<span id="cb1-116"><a href="#cb1-116"></a></span>
+<span id="cb1-117"><a href="#cb1-117"></a><span class="kw">end</span></span>
+<span id="cb1-118"><a href="#cb1-118"></a></span>
+<span id="cb1-119"><a href="#cb1-119"></a><span class="kw">function</span> [<span class="va">dydt</span>]<span class="op">=</span><span class="va">DYDT</span>(<span class="va">t</span><span class="op">,</span><span class="va">y</span><span class="op">,</span><span class="va">K</span>)</span>
+<span id="cb1-120"><a href="#cb1-120"></a></span>
+<span id="cb1-121"><a href="#cb1-121"></a><span class="co">% When the equation are written in explicit form</span></span>
+<span id="cb1-122"><a href="#cb1-122"></a></span>
+<span id="cb1-123"><a href="#cb1-123"></a><span class="va">dydt</span><span class="op">=</span><span class="va">zeros</span>(<span class="va">K</span><span class="op">,</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb1-124"><a href="#cb1-124"></a></span>
+<span id="cb1-125"><a href="#cb1-125"></a><span class="va">dydt</span>(<span class="fl">1</span>)<span class="op">=</span><span class="fl">2</span><span class="op">*</span><span class="va">y</span>(<span class="fl">1</span>)<span class="op">+</span><span class="va">y</span>(<span class="fl">2</span>)<span class="op">+</span><span class="va">y</span>(<span class="fl">3</span>)<span class="op">+</span><span class="va">cos</span>(<span class="va">t</span>)<span class="op">;</span></span>
+<span id="cb1-126"><a href="#cb1-126"></a></span>
+<span id="cb1-127"><a href="#cb1-127"></a><span class="va">dydt</span>(<span class="fl">2</span>)<span class="op">=</span><span class="va">sin</span>(<span class="va">y</span>(<span class="fl">1</span>))<span class="op">+</span><span class="va">exp</span>(<span class="op">-</span><span class="va">y</span>(<span class="fl">2</span>)<span class="op">+</span><span class="va">y</span>(<span class="fl">3</span>))<span class="op">;</span></span>
+<span id="cb1-128"><a href="#cb1-128"></a></span>
+<span id="cb1-129"><a href="#cb1-129"></a><span class="va">dydt</span>(<span class="fl">3</span>)<span class="op">=</span><span class="va">y</span>(<span class="fl">1</span>)<span class="op">*</span><span class="va">y</span>(<span class="fl">2</span>)<span class="op">-</span><span class="va">y</span>(<span class="fl">3</span>)<span class="op">;</span></span>
+<span id="cb1-130"><a href="#cb1-130"></a></span>
+<span id="cb1-131"><a href="#cb1-131"></a><span class="co">% If the set of equations is linear, then these can be</span></span>
+<span id="cb1-132"><a href="#cb1-132"></a><span class="co">% written in matrix form as dydt=A*y+b(t).  For example, if</span></span>
+<span id="cb1-133"><a href="#cb1-133"></a><span class="co">% the set of equations is:</span></span>
+<span id="cb1-134"><a href="#cb1-134"></a><span class="co">% dudt = 7u - 2v +  w + exp(t)</span></span>
+<span id="cb1-135"><a href="#cb1-135"></a><span class="co">% dvdt = 2u + 3v - 9w + cos(t)</span></span>
+<span id="cb1-136"><a href="#cb1-136"></a><span class="co">% dwdt =      2v + 5w + 2</span></span>
+<span id="cb1-137"><a href="#cb1-137"></a><span class="co">% Then:</span></span>
+<span id="cb1-138"><a href="#cb1-138"></a><span class="co">% A=[7,-2,1;2,3,-9;0,2,5];</span></span>
+<span id="cb1-139"><a href="#cb1-139"></a><span class="co">% b=@(t) [exp(t);cos(t);2];</span></span>
+<span id="cb1-140"><a href="#cb1-140"></a><span class="co">% dydt=A*y+b(t)</span></span>
+<span id="cb1-141"><a href="#cb1-141"></a></span>
+<span id="cb1-142"><a href="#cb1-142"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>In most cases, the interval width <span class="math inline">\(h\)</span> is constant but more advanced numerical techniques have different subinterval widths.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><strong><em>Taylor’s Theorem</em></strong> states that for a function <span class="math inline">\(f\)</span> that is at least <span class="math inline">\(N+1\)</span> times differentiable in the open interval <span class="math inline">\((x,x_0)\)</span> (or <span class="math inline">\((x_0,x)\)</span>), then <span class="math display">\[f(x)=f(x_0)+f'(x_0)(x-x_0)+\frac{1}{2!}f''(x_0)(x-x_0)^2+\frac{1}{3!}f'''(x_0)(x-x_0)\]</span> <span class="math display">\[+\dots+\frac{1}{N!}f^{(N)}(x_0)(x-x_0)^N+\frac{1}{(N+1)!}f^{(N+1)}(\xi)(x-x_0)^{N+1}\]</span> for some point <span class="math inline">\(\xi\)</span> between <span class="math inline">\(x\)</span> and <span class="math inline">\(x_0\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In general, according to the <strong><em>Picard-Lindelöf Theorem</em></strong>, an IVP of the form <span class="math inline">\(y'=f(t,y)\)</span> with <span class="math inline">\(y(0)=y_0\)</span> has a <em>unique solution</em> if the function <span class="math inline">\(f\)</span> is continuous in <span class="math inline">\(t\)</span> and uniformly Lipschitz continuous in <span class="math inline">\(y\)</span>. In this example shown above, the function <span class="math inline">\(f(t,y)=y^{\frac{1}{3}}\)</span> does not satisfy the aforementioned conditions and therefore the initial value problem does not have a unique solution. These concepts of continuity are far beyond the realms of this course and no further mention of them will be made.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Part_IVPs.html" class="pagination-link" aria-label="Solving Initial Value Problems">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Solving Initial Value Problems</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./08_IVP_ModEuler.html" class="pagination-link" aria-label="The Modified Euler Method">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Modified Euler Method</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

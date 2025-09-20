@@ -1,0 +1,469 @@
+:::{.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+# Appdenix C:  Loops {.unnumbered}
+
+Loops are some of the most important features in any programming language and they fall under three types: `if`, `while` and `for` loops.
+
+## `if` Loops
+
+An `if` command executes a loop if a certain condition is satisfied.  This requires the use of comparative operators which are:
+
+| Operation                | MATLAB Syntax |
+|:------------------------:|:-------------:|
+| Less than                | `<`           |
+| Less than or equal to    | `<=`          |
+| Equal to                 | `==`          |
+| Greater than             | `>`           |
+| Greater than or equal to | `>=`          |
+| Not equal to             | `~=`          |
+
+An `if` loops must have the following structure:
+
+```matlab
+if compare <=> compare with
+
+      do something
+	
+elseif compare <=> compare with
+
+      do something else
+	
+else
+
+     do something if none of the above conditions have been met
+	
+end
+```
+
+:::{.callout-caution title="`if` Loop Example"}
+Suppose a function is to be written which takes a number $N$ as an input then in the command window, displays "The Good" if it is positive, "The Bad" if it is negative and "The Ugly" if it is zero[^GBU].
+
+[^GBU]:  In reference to the 1966 film "The Good, the Bad and the Ugly."
+
+```matlab
+function Good_Bad_Ugly(N)
+
+if N>0                   % First check if the input N is positive
+
+     disp('The Good')    % If N is positive, display 'The Good'
+    
+elseif N<0               % If N is not positive, check if it is negative
+
+     disp('The Bad')     % If N is negative, display 'The Bad'
+    
+elseif N==0              % If N is neither positive nor negative, check
+                         % if it zero
+                         
+     disp('The Ugly')    % If N is zero, display 'The Ugly'
+    
+end
+
+end
+```
+
+The `disp` command outputs the variables stated within the brackets, if the argument is single quotation marks, namely `'...'`, then it will be displayed verbatim.  Note that here, the line will not start with `ans =` since it is was only asked to display and not specify variables.  This function can be run within the command window as follows:
+
+```matlab
+>> Good_Bad_Ugly(3)
+The Good
+>> Good_Bad_Ugly(-5)
+The Bad
+>> Good_Bad_Ugly(0)
+The Ugly
+```
+
+In `if` loops, it is always a good idea to have a few `elseif` commands in order to have all the cases covered, this is because sometimes, MATLAB can misunderstand some inputs.  For instance, suppose that the input is the complex number $1-2\ii$:
+
+```matlab
+>> Good_Bad_Ugly(1-2i)
+The Good
+```
+
+This does not make sense since the number $1-2\ii$ is neither positive nor negative, nor zero for that matter.  In this case, MATLAB takes the real part only without being prompted to do so, and prints the output and since the real part is $1$, the output will be `The Good`.  In order to accommodate for this, an extra condition can be added in the form of another `if` loop that considers this and displays "The Complex" if the number is complex.
+
+```matlab
+function Good_Bad_Ugly(N)
+
+if imag(N)~=0            % First, check if N has a non-zero imaginary
+                         % part
+
+     disp('The Complex') % If N does have a non-zero imaginary part,
+	                    % display 'The Complex'
+	                      
+else                     % Otherwise, run the code as before
+
+     if N>0
+     
+          disp('The Good')
+		
+	elseif N<0
+	
+	     disp('The Bad')
+
+     elseif N==0
+	
+	     disp('The Ugly')
+		
+	end
+	
+end
+
+end
+```
+
+In this case, if the input as $1-2\ii$, then the output will be `The Imaginary`.
+:::
+
+It is important to note that in `if` loops, the code will quit the loop after the first time the `if` condition is satisfied and will not check the other conditions.
+
+:::{.callout-caution title="`if` Loop Ordering"}
+Suppose a function is to be written which takes an input $N$ and displays "Multiple of 2" if it is a multiple of 2, "Multiple of 3" if it is a multiple of 3 and "Too high to count" otherwise.  This function will require the use of the `mod` syntax; for numbers `N` and `b`, `mod(N,b)` will produce `0` if `N` is a multiple of `b`.
+
+```matlab
+function Mult(N)
+
+if mod(N,2)==0      % Check if N is a multiple of 2
+     
+     disp('Multiple of 2')
+     
+elseif mod(N,3)==0  % Check if N is a multiple of 3
+
+     disp('Multiple of 3')
+     
+else
+
+     disp('Too high to count')
+     
+end
+
+end
+```
+
+Run this code with the inputs $10, 15, 19$ and $24$:
+```matlab
+>> Mult(10)
+Multiple of 2
+>> Mult(15)
+Multiple of 3
+>> Mult(19)
+Too high to count
+>> Mult(24)
+Multiple of 2
+```
+
+For the inputs $10, 15$ and $19$, the results are as expected however with $24$, only one output is produced, suggesting that $24$ is a multiple of 2 only.  The reason this is produced is because the `if` loop checked the first condition and since it was satisfied, it executed the code block underneath and quit the whole loop, not running through the others.  That is why it is very important to be aware of the ordering of the `if` and `elseif` commands.
+:::
+
+## `while` Loops {#sec-While}
+
+The `while` loop is somewhat similar to the `if` loop in the sense that values of two terms are being compared but here, the loop will keep repeating until the condition is no longer satisfied.
+
+:::{.callout-caution title="`while` Loop Example"}
+Suppose a function is to be written that takes two inputs, $N$ and $d$ and keeps subtracting $d$ from $N$ until it can no longer do so without becoming negative, the function should then output the last positive integer after this repeating operation.  This code is the equivalent of finding the remainder of dividing a number $N$ by $d$ (or taking $N \; (\mathrm{mod} \; d)$).  For example, if $N=9$ and $d=4$, then $N-d=5$, $N-2d=1$, $N-3d=-3$, then the function would take the inputs $(N,d)=(9,4)$ and outputs 1.
+
+```matlab
+function [r]=Remainder(N,d)
+
+M=N;           % Start with the number M being equal to N
+
+while M-d>=0   % As long as M-d is non-negative, run the loop
+    
+     M=M-d;    % Since M-d is non-negative, find M-d
+               % and let M be equal to this new value,
+               % this keeps repeating until M-d<0
+               
+end
+
+r=M;           % Set the remainder r to be this final value M
+
+end
+```
+
+This can be used in the command window as follows (note that here, because there is only one output, then it does not need to be explicitly stated in square brackets):
+
+```matlab
+>> [r]=Remainder(9,4)
+r =
+     1
+>> [r]=Remainder(10,2)
+r =
+     0
+>> Remainder(14515,135)
+ans =
+     70
+>> Remainder(1e12,42578)
+ans =
+     20554
+```
+
+Suppose now that this code is to be modified so that it can also output the number of times $d$ can be subtracted from $N$.  For example, as before, if $(N,d)=(9,4)$, the remainder is 1 and the number of times $d$ must be subtracted from $N$ to obtain this remainder is 2, this is the equivalent of finding the number of times the `while` loop actually ran.  This is a very common procedure and the way to tackle this is by use of a "counter".  This is a variable that starts with the value 0 and every time the while loop is run, 1 is added to it.  This modification can be done as follows.
+
+```matlab
+function [r,counter]=Remainder(N,d)
+
+M=N;                     % Start with the number M being equal to N
+
+counter=0;               % Start with the counter being 0
+
+while M-d>=0             % As long as M-d is non-negative, run the loop
+
+     M=M-d;              % Since M-d is non-negative, find M-d
+                         % and let M be equal to this new value  
+                        
+     counter=counter+1;  % Add 1 to the counter every time
+                         % the while loop is run 
+end
+
+r=M;                     % Set the remainder r to be this final value M
+
+end
+```
+
+This can be used in the command window as follows (in this case, since there are two outputs, they both have to be stated, but they don't need to be of the same name, only the same order):
+
+```matlab
+>> [r,counter]=Remainder(9,4)
+r =
+     1
+counter =
+     2
+>> [r,c]=Remainder(10,2)
+r =
+     0
+c =
+     5
+>> [R,C]=Remainder(14515,135)
+R =
+     70
+C =
+     107
+>> [r,c]=Remainder(1e12,42578)
+r =
+     20554
+c =
+     23486307
+```
+:::
+
+:::{#cau-Collatz .callout-caution title="Collatz Conjecture"}
+In mathematics, there is a famous algorithm known as the *Collatz Conjecture*, the steps of the algorithm are as follows:
+
+1. Pick any positive integer.
+2.
+     i. If the number is even, divide by 2.
+     ii. If the number is odd, multiply by 3 and add 1.
+3. Repeat Step 2.
+
+For instance, if the input is the number 10, the sequence of numbers will be as follows:
+$$10 \; \rarrow{\div 2} \; 5  \; \rarrow{\times3+1} \; 16 \; \rarrow{\div 2} \; 8 \; \rarrow{\div 2} \; 4 \; \rarrow{\div 2} \; 2 \; \rarrow{\div 2} \; 1$$
+
+Similarly, if the input is 21:
+$$21 \; \rarrow{\times 3 + 1} \; 64 \; \rarrow{\div 2} \; 32 \; \rarrow{\div 2} \; 16 \; \rarrow{\div 2} \; 8 \; \rarrow{\div 2} \; 4 \; \rarrow{\div 2} \; 2 \; \rarrow{\div 2} \; 1$$
+
+Both number sequences end up at 1 from two different starting numbers of 10 and 21.  (The algorithm is stopped at 1 since if the algorithm is carried on after reaching 1, then a loop will be formed going 4, 2, 1, 4, 2, 1, ... .)  The *Collatz Conjecture* states that regardless of the starting value, this sequence will *always* reach a 4-2-1 loop.  This statement has been put forward in 1937 and has not yet been proven or disproven but has been computed for numbers larger than $10^{17}$, all the numbers end at the 4-2-1 loop.
+
+The `while` loop can be used in conjunction with the `if` loop in order to make a function that outputs the number of steps it takes to get to 1.  This code can be checked by having an input of 10 and the output should be 6 since the algorithm required 6 steps before reaching 1, similarly, if the input is 21, then the output should be 7 and these can be used as test cases.
+
+In writing codes, it is helpful to start with a pseudocode:
+
+1. Read the input number.
+2. As long as the number is greater than 1, do the following:
+     i. If the number is even, divide by 2.
+     ii. If the number is odd, multiply by 3 and add 1.
+3. Repeat Step 2 until 1 is reached.
+
+From this pseudocode, it is clear that Step 2 can be represented by an `if` loop.  Steps 2 and 3 require the number to be greater than 1, since it is unknown when that will happen, the `while` loop can be used.  Now, the pseudocode can be translated into MATLAB syntax with an input value of `a` and an output value `N` which is the number of staeps it takes to get to 1.
+
+```matlab
+function [N]=Collatz(a)
+
+N=0;                     % Start with N=0
+
+while a>1                % Perform the code block as long as the number
+                         % is bigger than 1
+
+     if mod(a,2)==0      % Check if the number is even
+
+          a=a/2;         % If it is, redefine a as a/2
+
+     else                % Otherwise, if a is odd
+
+          a=3*a+1;       % Redefine a as 3a+1
+
+     end
+
+     N=N+1;              % Every time the code block is run, add 1 to N
+
+end
+
+end
+```
+
+This code can be checked using the test cases:
+```matlab
+>> Collatz(10)
+ans =
+     6
+>> Collatz(21)
+ans =
+     7
+>> Collatz(1000)
+ans =
+     111
+```
+
+The function `Collatz` should only be able to take integer inputs.  A custom error message can be made to ensure that; the following can be added in Line 2:
+```matlab
+if mod(a,1)~=0
+     error('a must be an integer')
+end
+```
+:::
+
+## Multiple Conditions for `if` & `while` Loops
+
+Occasionally, multiple conditions may need to be satisfied when running `if` or `while` loops, this can be done with the `&&` for conjunctive conditions (equivalent to *and*) and `||` for disjunctive conditions (equivalent to *or*).
+
+:::{.callout-caution title="Collatz Isolation"}
+For the function `Collatz` in @cau-Collatz, the code should only be able to take any positive integer.  An exclusion was introduced to produce an error message if the input was not an integer.  Suppose that another condition is to be added that would produce the same error message if the input value is non-positive or not real.  This can be done using the *or* syntax, which is `||`.
+```matlab
+if imag(a)~=0 || mod(a,1)~=0 || a<=0 || imag(a)~=0
+     error('a must be an integer')
+end
+```
+:::
+
+## `for` Loops
+
+A `for` loop is different compared to the `while` and `if` loops since it does not require comparison, instead, it runs through a series of terms that have been predefined.
+
+:::{.callout-caution title="`for` Loop Example 1"}
+Suppose a simple `for` loop is needed that takes an input value $N$ and adds all the positive integers from $1$ to $N$.  So if $N=10$, then the function would output the sum of the numbers from $1$ to $10$, namely $55$.  This can be written as follows:
+
+```matlab
+function [Sum]=Summation(N)
+
+Sum=0;
+
+for i=1:1:N
+
+     Sum=Sum+i;
+
+end
+
+end
+```
+
+This simple code starts with a `Sum=0`, then the variable `i` runs from $1$ to $N$ and adds itself onto `Sum`, the final result would be the sum of all the positive integers form 1 to $N$[^Sum].
+:::
+
+[^Sum]:  Bear in mind that this is a contrived example for the sake of demonstration.  This exact procedure can be done in one single command `sum(1:1:10)`.
+
+:::{.callout-caution title="`for` Loop Example 2"}
+Suppose a `for` loop is desired that takes a vector $\B{v}$ as an input and outputs the vector $\B{u}$ whose elements are the squares of $\B{v}$[^Sq].
+
+[^Sq]:  Just as before, this is intended to be a contrived example to show the working of a `for` loop.  This procedure can be done in a single command as `u=v.^2` for elementwise exponentiation.
+
+The vector $\B{v}$ will be a part of the input but the vector $\B{u}$ needs to be *initialised*, meaning that $\B{u}$ has to be predefined in some way.  Since the size of $\B{u}$ will be the same as $\B{v}$, then the vector $\B{u}$ can be initialised as a vector of zeros that is the same size as $\B{v}$, this can be done using `u=zeros(size(v))`.  The code can then be written by replacing the appropriate term in the list.
+
+```matlab
+function [u]=Square(v)
+
+u=zeros(size(v));
+
+for i=1:1:N
+
+     u(i)=v(i)^2;
+
+end
+
+end
+```
+
+Alternatively, if the size of $\B{u}$ is not known, then it can be initialised as an empty array `[]` and terms can be concatenated to it.
+
+```matlab
+function [u]=Square2(v)
+
+u=[];
+
+for i=1:1:N
+
+     u=[u,v(i)^2];
+
+end
+
+end
+```
+:::
+
+## Exercises
+
+:::{.callout-important title="Excersise 1"}
+Write a MATLAB function called `Fib` that takes an input $N$ and produces a value $F$ that is the $N^{\mathrm{th}}$ term of the Fibonacci sequence starting from 1,3 (recall that a Fibonacci sequence is a sequence where any term is the sum of the previous two terms).  For example, if $N=5$, then the first 5 terms of this Fibonacci sequence are $(1,3,4,7,11)$, meaning that the output should be $F=11$.  Use the following test cases to verify that the code produces the correct results:
+
+- $N=10$: $F=123$;
+- $N=20$: $F=15127$;
+- $N=50$: $F=28143753123$.
+:::
+
+:::{.callout-tip title="Solution 1" collapse="true"}
+```matlab
+function [F]=Fib(N)
+
+S=zeros(1,N);       % Initialise the sequence S as a list of N zeros
+
+S(1)=1;             % Redefine the first term of S to be equal to 1
+
+S(2)=3;             % Redefine the second term of S to be equal to 3
+
+for n=3:1:N         % Starting from the third term onwards
+
+     S(n)=S(n-1)+S(n-2); % Let the nth term of S be the sum of the
+                         % previous two terms
+
+end
+
+F=S(end);      % Let F be the last term in the sequence S,
+               % alteratively, F=S(N) can be used since it is known that
+               % N is the last term
+
+end
+```
+:::
+
+:::{.callout-important title="Exersise 2"}
+Write a MATLAB function called `Fib2` that takes an input $M$ and produces values $c$ and $G$ where $G$ is the largest term of the Fibonacci sequence starting from 2,5 such that $G<M$ and the number of terms in the sequence up to that point is $c$.  For example, if $M=60$, start a Fibonacci sequence with the 2,5 until a number above $M$ is reached and count the number terms.  So if $M=60$, then the sequence is $(2,5,7,12,19,31,50,81)$, meaning that $G=50$ (since it is the largest term in the sequence that is less than $M$) and $c=6$ (since it takes 6 steps to get to 50).  Use the following test cases to verify that the code produces the correct results:
+
+- $M=100$: $G=81$, $c=9$;
+- $M=1000$: $G=898$, $c=14$;
+- $M=10^9$: $G=638162747$, $c=42$.
+:::
+
+:::{.callout-tip collapse="true" title="Solution 2"}
+```matlab
+function [c,G]=Fib2(M)
+
+S=[2,5];       % Since, in principle, the number of terms is not known,
+               % then define S as the seuqnece starting with 2 and 5
+
+while S(end)<M % Run the while loop as long as the last term of the
+               % sequence is less than M
+
+     S=[S S(end)+S(end-1)];   % Redefine S in terms of itself; start
+                              % with the sequnce S and append an extra
+                              % term at the end that is the sum of the
+                              % last term and the one before it
+
+end
+
+G=S(end-1);    % G will be the second to last term (since the last one
+               % is bigger than M)
+               
+c=length(S);   % c is simply the length of S
+
+end
+```
+:::

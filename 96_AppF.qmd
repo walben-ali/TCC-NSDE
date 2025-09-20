@@ -1,0 +1,163 @@
+:::{.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+#  Appendix F:  Reading & Writing Data {.unnumbered}
+
+Reading and writing data files can be important for importing data for analysis on MATLAB and exporting data for further processing elsewhere.
+
+## Writing Into Data Files
+
+Data can be exported from MATLAB into a .dat or .txt file, both of which can be opened with *Notepad*.
+
+:::{.callout-caution title="Writing Data"}
+Suppose that a list of values of $x$ from $0$ to $100$ need to be exported along with a corresponding list of $x^2$, $\sin(x)$ and $\ex{-x}$  as seen here:
+\begin{equation*}
+\begin{matrix}
+	x      & x^2    & \sin(x) & \ex{x}  \\
+	1      & 1      & 0.84147 & 0.36788 \\
+	2      & 4      & 0.90930 & 0.13534 \\
+	\vdots & \vdots & \vdots  & \vdots  \\
+	99     & 9801   & -0.9992 & 1.0112\E{-43} \\
+	100    & 10000  & -0.5063 & 3.7200\E{-44}
+\end{matrix}
+\end{equation*}
+
+First, define each of these columns.
+```matlab
+>> x=[1:1:100]';   % Column vector of values from 1 to 100
+
+>> c1=x.^2;        % Column of x^2 terms
+
+>> c2=sin(x);      % Column of sin(x) terms
+
+>> c3=exp(x);      % Column of e^x terms
+
+>> M=[x,c1,c2,c3]; % Form a matrix out of the columns
+```
+
+Now that the matrix is ready to be exported, a file needs to be opened with the desired name, say "Data_Write.dat" (.txt would also work).  First, the file itself needs to be created in order to write the data into, this can be done by using `file_name=fopen('Data_Write.dat','w')`.  The `'w'` indicates that MATLAB needs to *write* the data into this file.  The data can then be written into the the file using the `fprintf` command as `fprintf(file_name,'%f %f %f %f \r\n',M')`
+
+The `%` sign determines the specification of the output and here, `%f` indicates that the output should be in the form of a floating point number.  There are four columns so four specifiers need to be declared (hence `%f` appearing four times).  The `\r\n` syntax indicates that MATLAB needs to move to the next line, otherwise, all the values will be printed on a single line (`\r\\n` needs to be used when opening using Microsoft Notepad, otherwise `\n` would suffice).  The matrix is printed as `M'` instead of `M` since Notepad works on the reverse dimensions, so the rows on MATLAB are columns on Notepad and vice versa (for some obscure reason).
+
+After writing all the data, the file needs to be closed so the data is not removed or overwritten using `fclose(file_name)`.
+
+Without context, this data is meaningless so an additional row can be added before writing the data as a title for every column as `fprintf(file_name,'x  x^2  sin(x)  exp(x) \r\n')`.  All these can be combined into the following executable section:
+
+```matlab
+x=[1:1:100]';       % Column vector of values from 1 to 100
+
+c1=x.^2;            % Column of x^2 terms
+c2=sin(x);          % Column of sin(x) terms
+c3=exp(x);          % Column of e^x terms
+
+M=[x,c1,c2,c3];     % Form a matrix out of the columns
+
+my_file=fopen('Data_Write.dat','w');    % Open the file 'Data_Write.dat',
+                                       % also works with 'Data_Write.txt'
+
+fprintf(my_file,'x x^2 sin(x) e^x \r\n');
+fprintf(my_file,'%f %f %f %f \r\n',M');
+
+fclose(my_file);
+```
+
+![](figures/Data1_Write.png)
+:::
+
+### Output Formats
+
+When writing data, it is often times important to present the data in a certain form or with certain spacings.  For example, $\sin(x)$ is better presented as a floating point and $\ex{x}$ is better presented in scientific notation.  These can be done by changing the format after the `%` sign as follows:
+
+| Syntax | Display                             | Example                         |
+|:------:|:-----------------------------------:|:-------------------------------:|
+| `%f`   | Floating point                      | `0.5` $\rightarrow$ `0.50000`   |
+| `%e`   | Scientific notation                 | `pi` $\rightarrow$ `3.1415e+00` |
+| `%g`   | Floating Point with no trailing 0's | `0.5000` $\rightarrow$ `0.5`    |
+| `%i`   | Integer                             | `pi` $\rightarrow$ `3`          |
+
+:::{.callout-note}
+There are many others that print numbers as strings (`%s`) or in hexadecimal notation (`%x`).
+:::
+
+### Alignment
+
+The way in which the data is spaced out is important since it allows the data to be read more easily.  By default, using `%f` will print the data as a floating point with six decimal places, one space will be added before the next item is printed.  This can be changed to `%15.10f` which will print the data as a floating point but will dedicate 15 spaces to write the value to 10 decimal places.
+
+:::{.callout-caution title="Writing Better Data"}
+
+The same code can be used as before with the alignment and decimal modifications.
+
+```matlab
+>> x=[1:1:100]';
+
+>> c1=x.^2;
+>> c2=sin(x);
+>> c3=exp(x);
+
+>> M=[x,c1,c2,c3];
+
+>> my_file=fopen('Data_Write.dat','w');
+
+>> fprintf(my_file,'%5s %5s %15s %15s \r\n','x','x^2','sin(x)','exp(x)');
+
+>> fprintf(my_file,'%5i %5i %15.10f %15.10e \r\n',M');
+
+>> fclose(my_file);
+```
+
+![](figures/Data2_Write.png)
+:::
+
+## Reading From Data Files
+
+Reading data from a .dat or .txt files is similar to writing.
+
+:::{.callout-caution title="Reading Data"}
+Suppose that there is a data file called "Data_Read.dat" (or .txt) that has three columns of unlabelled data.
+
+![](figures/Data1_Read.png)
+
+First, the file needs to be opened with `fopen` but in order to prepare it for reading, use the augmentation `'r'` (instead of `'w'` for writing).  The format has to be specified, in this case, it would be `'%f %f %f'` since there are three terms that need to be read which are all placed into a row and separated by a space.  The size of the data itself also needs to be specified as well, and since there are three columns, that could be defined as `[3 Inf]` if the number of rows is unknown.  The commands to read the data can be written as follows:
+
+```matlab
+my_file=fopen('Data_Read.dat','r');
+
+formatSpec = '%f %f %f';
+
+Size_Data= [3 Inf];
+
+M=fscanf(my_file,formatSpec,Size_Data);
+
+M=M';
+
+fclose(my_file);
+```
+
+This will produce an array `M` that contains all the data.
+:::
+
+## Reading & Writing Data with Excel
+
+Writing data into Microsoft Excel is much simpler than .dat or .txt since spacing and formatting are built into excel.  The difference is using `writematrix` and `readmatrix` instead of `fprintf` and `fscanf` and the file extension should be .xlsx and does not have to be opened and closed.
+
+:::{.callout-caution title="Reading & Writing with Excel"}
+
+Suppose the data as before needs to be written into Excel, this can be done as follows:
+```matlab
+x=[1:1:100]';
+
+c1=x.^2;
+
+c2=sin(x);
+
+c3=exp(x);
+
+M=[x,c1,c2,c3];
+
+writematrix(M,'Data_Excel.xlsx');
+```
+![](figures/Data1_XL.png)
+
+The same data can be read using `Data=readmatrix('Data_Excel.xlsx')`.
+:::

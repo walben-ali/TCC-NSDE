@@ -1,0 +1,104 @@
+::: {.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+# Data Fitting
+
+## Linear Regression
+
+***Linear Regression***, or ***Linear Least Squares*** (LS), problems originally arose from the need to fit a mathematical model to given observations; typically, to reduce the influence of errors in the observations.  It is desirable to use a greater number of measurements than the number of unknown parameters in the model (more equations than unknowns), hence leading to an overdetermined system of equations.  In other words, given $\B{b} \in \RR^M$ and $A \in \RR^{M\times N}$ with $M>N$, a solution $\B{x} \in \RR^N$ needs to be found such that $A \B{x}$ is the ``best'' approximation to $\B{b}$.
+
+For instance, consider a set of $M$ data points (or measurements) $(t_i,y_i)$ for $i=1,2,\dots,M$.  The idea behind linear regression is to find a parameter vector $\B{x} \in \RR^N$ such that the linear function $y$ given by
+$$y(t)=f(x,t)=\sum_{j=1}^N{x_j\varphi_j(t)}$$
+can approximate the data in the best possible way, by reducing the error between the measurement $(t_i,y_i)$ and the approximation $(t_i,y(t_i))$.
+
+There are $M$ equations represented by the $M$ measurements and $N$ unknowns, which are the terms of $\B{x}$.  Replacing the measurements into the equation for $y$ gives an overdetermined system
+$$y_i=\sum_{j=1}^N x_j\varphi_j(t_i) \qtq{for} i=1,\dots,M.$$
+This system can be written in matrix form as $A\B{x}=\B{b}$ where the elements of $A$ are $a_{ij}=\varphi_j(t_i)$ and the elements of $\B{b}$ are $b_i=y_i$.  The ``best'' way to fit the data can be different depending upon the discipline, but the one of the simplest and most statistically motivated choice is to find a vector $\B{x}$ where the square of the distance between the points is reduced as much as possible, i.e. reduce the value of $(y(t_i)-y_i)^2$.  More formally, this can be written as a minimisation problem to find
+$$\min_{\B{x}}\| \B{r} \|_2 \qtq{where} \B{r}=\B{b}-A\B{x} \quad \text{is the residual}$$
+and the linear least squares solution is
+$$\tilde{x}=\argmin{\B{x}}\|A\B{x}-\B{b}\|_2.$$
+Sometimes the solution $\B{x}$ may not be unique (if the rank of $A$ is less than $N$), in that case, the solution will be the one with the smallest 2-norm.
+
+::: {.callout-caution title="Hooke's Law"}
+Hooke's law states that the length $l$ of an extension of a spring is directly proportional to the force $F$ applied, specifically the extension can be written in terms of the force as $l=e + k F$ where $e$ is the equilibrium position and $k$ is the spring stiffness, both of which are constants to be determined.  Assume that an experiment was conducted and the following data was obtained
+
+| $F$ | 1 | 2 | 3 | 4 | 5 |
+|:---:|:-:|:-:|:-:|:-:|:-:|
+| $l$ | 7.97 | 10.2 | 14.2 | 16.0 | 21.2 |
+
+Therefore, a system of 5 equations in 2 unknowns is
+\begin{align*}
+7.97 & = e + k \\
+10.2 & = e + 2k \\
+14.2 & = e + 3k \\
+16.0 & = e + 4k \\
+21.2 & = e + 5k. \\
+\end{align*}
+This system can be written in matrix form as
+$$\Mat{1 & 1 \\ 1 & 2 \\ 1 & 3 \\ 1 & 4 \\ 1 & 5}\Mat{e \\ k}=\Mat{7.97 \\ 10.2 \\ 14.2 \\ 16.0 \\ 21.2}.$$
+
+This is an example of ***Inverse Problem} in which the parameters need to be found from the given data.
+:::
+
+This minimisation problem can also be solved using the QR decomposition of the matrix $A$.  Suppose that the matrix $A$ can be written as $A=QR$ where $Q$ is an orthogonal matrix and $R$ is upper triangular, then
+\begin{align*}
+A\B{x}-\B{b} &= QR\B{x} -\B{b} \qquad \text{since $A=QR$}
+& = Q(R\B{x}-\Tr{Q}\B{b}) \qquad \text{since $Q^{-1}=\Tr{Q}$}.
+\end{align*}
+Thus the 2-norm of the residual $\B{r}=A\B{x}-\B{b}$ is
+\begin{align*}
+\| \B{r} \|_2 &= \| A\B{x} - \B{b} \|_2 \\
+&= \| Q(R\B{x}- \Tr{Q}\B{b}) \|_2 \\
+&= \| R\B{x} - \Tr{Q}\B{b} \|_2 \qquad \text{since $Q$ is orthogonal, then $\| Q\B{v} \|_2=\| \B{v} \|_2.$}
+\end{align*}
+As already noted, in many problems of estimating $N$ parameters in a process with $M$ experimental data points, the number of observations is usually larger than the number of parameters, i.e. $M \geq  N$.  The problem of minimising $\| R \B{x} - \Tr{Q} \B{b} \|_2$ may be solved directly as follows:  let $\B{c}=\Tr{Q}\B{b}$, so that
+$$ R\B{x} - \Tr{Q}\B{b} = R\B{x}-\B{c} = \Mat{r_{11} & r_{12} & \dots & r_{1N} \\ 0 & r_{22} & \dots & r_{2N} \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & r_{NN} \\ 0 & 0 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & 0} \Mat{x_1 \\ x_2 \\ \vdots \\ x_N}-\Mat{c_1 \\ c_2 \\ \vdots \\ c_N \\ c_{N+1}\\ \vdots \\ c_M}=\Mat{r_{11}x_1+r_{12}x_2+\dots+r_{1N}x_N-c_1 \\ r_{22}x_2+\dots+r_{2N}x_N-c_2 \\ \vdots \\ r_{NN}x_N-c_N \\ -c_{N+1} \\ \vdots \\ -c_M}.$$
+This vector can be written as $\B{d}+\B{f}$ where
+$$\B{d}=\Mat{d_1 \\ d_2 \\ \vdots \\ d_N \\ 0 \\ \vdots \\ 0} \qtq{with} d_i=-c_i+\sum_{j=i}^{N}{r_{ij}x_j} \qtq{and} \B{f}=-\Mat{0 \\ 0 \\ \vdots \\ 0 \\ c_{N+1} \\ \vdots \\ c_M}.$$
+Also note that the vector $\B{d}$ can be written as $R\B{x}-\tilde{\B{c}}$ where $\tilde{\B{c}}$ is the first $N$ rows of $\B{c}$. 
+
+It can be seen that the vectors $\B{d}$ and $\B{f}$ are orthogonal (since $\B{d}\cdot\B{f}=0$), therefore $$\| \B{r} \|_2 = \| \B{d} \|_2+ \| \B{f} \|_2.$$
+
+::: {.callout-note}
+Recall that for two vectors $\B{x}$ and $\B{y}$, the *Triangle Inequality* states that $\| \B{x} + \B{y} \| \leq \| \B{x} \| + \| \B{y} \|$ and the equality holds when $\B{x}$ and $\B{y}$ are orthogonal.
+:::
+
+Since only the vector $\B{d}$ depends on $\B{x}$, then in order to minimise $\| \B{r} \|_2$, a choice for $\B{x}$ is needed such that $\| \B{d} \|_2=0$, meaning that $\B{d}$ must be the zero vector (by the rules of norms).  Therefore, if $\B{d}=\B{0}$, then $$R\B{x}=\tilde{\B{c}} \quad \implies \quad \B{x}=R^{-1}\tilde{\B{c}}=\Mat{r_{11} & r_{12} & \dots & r_{1N} \\ 0 & r_{22} & \dots & r_{2N} \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & r_{NN}}^{-1}\Mat{c_1 \\ c_2 \\ \vdots \\ c_N}$$
+which will be the best least squares fit.  The residual $\| \B{r} \|_2$ will then be equal to $\| \B{f} \|_2$ which will be an estimate for how good the best is.
+
+## Lines of Best Fit Using `polyfit`
+
+Sometimes when experimental data is given, a lines of best fit is needed to see which lines would best fit the data.
+
+Suppose there is data stored in an Excel file called `Data.xlsx` consisting of two columns that will be labelled `x` and `y` and the line of best fit needs to be found.  The `polyfit` function can fit a polynomial function to this data, so if a linear function $y=ax+b$ needs to be fitted, then `p=polyfit(x,y,1)` will produce two outputs which are the coefficients $a$ and $b$ respectively.  The fitted data can then be plotted using the `polyval` command.  All in all, the function below will read data, plot the raw data and the line of best fit:
+
+```matlab
+function Line_Best_Fit
+
+Data = xlsread('Data.xlsx');
+
+x = Data(:,1);
+y = Data(:,2);
+
+clf
+hold on
+grid on
+plot(x,y,'.k')
+
+p = polyfit(x,y,1);
+
+X = linspace(min(x),max(x));
+
+Y = polyval(p,X);
+
+plot(X,Y,'-r')
+
+end
+```
+
+The degree of the polynomial can be changed until the appropriate fitting is found.  For this data, it seems that a degree three polynomial would be most appropriate
+
+![`polyfit(x,y,1)` gives $y=7.2484x+17.7404$](figures/Best1.jpg)
+
+![`polyfit(x,y,3)` gives $y=0.1100x^3+0.3920x^2+0.5854x+4.5430$](figures/Best3.jpg)

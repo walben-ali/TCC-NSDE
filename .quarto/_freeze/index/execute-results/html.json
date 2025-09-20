@@ -1,0 +1,17 @@
+{
+  "hash": "0fe788dadbcd05e491f8ea20aa9c54d1",
+  "result": {
+    "engine": "knitr",
+    "markdown": "<!-- Shortcuts go here -->\n\n\\newcommand{\\ii}{\\mathrm{i}}\n\n\\newcommand{\\ex}[1]{\\mathrm{e}^{#1}}\n\\newcommand{\\Cos}[1]{\\cos \\left( #1 \\right)}\n\\newcommand{\\Sin}[1]{\\sin \\left( #1 \\right)}\n\\newcommand{\\Tan}[1]{\\tan \\left( #1 \\right)}\n\n\\newcommand{\\NN}{\\mathbb{N}}\n\\newcommand{\\ZZ}{\\mathbb{Z}}\n\\newcommand{\\RR}{\\mathbb{R}}\n\\newcommand{\\CC}{\\mathbb{C}}\n\n\\newcommand{\\nbr}[1]{\\left( #1 \\right)}\n\\newcommand{\\sbr}[1]{\\left[ #1 \\right]}\n\\newcommand{\\cbr}[1]{\\left\\{ #1 \\right\\}}\n\\newcommand{\\abs}[1]{\\left| #1 \\right|}\n\n\\newcommand{\\qtq}[1]{\\quad \\text{#1} \\quad}\n\\newcommand{\\tq}[1]{\\text{#1} \\quad}\n\\newcommand{\\qq}{\\quad ; \\quad}\n\\newcommand{\\qiq}{\\quad \\implies \\quad}\n\n\\newcommand{\\timplies}[1]{\\underset{\\text{#1}} \\implies \\quad}\n\\newcommand{\\mimplies}[1]{\\underset{#1} \\implies \\quad}\n\n\\newcommand{\\Mat}[1]{\\begin{pmatrix} #1 \\end{pmatrix}}\n\\newcommand{\\mat}[1]{\\begin{matrix} #1 \\end{matrix}}\n\n# Quarto Template\n\nThis is a generic template for generating Quarto documents.\n\n<!-- Headings -->\n\n# 1. Heading\n## 2. Heading\n### 3. Heading\n#### 4. Heading\n##### 5. Heading\n###### 6. Heading\n\n<!-- Tables -->\n\n| Right | Left | Default | Centre |\n|------:|:-----|---------|:------:|\n|   12  |  12  |    12   |    12  |\n|  123  |  123 |   123   |   123  |\n|    1  |    1 |     1   |     1  |\n\n<!-- Fonts -->\n\n*Italic*\n\n**Bold**\n\n***Bold-italic***\n\n:::{.callout-note}\nNote nte\n:::\n\n:::{.callout-warning}\nWarning wrn\n:::\n\n:::{.callout-important}\nImportant imp\n:::\n\n:::{.callout-tip}\nTip tip\n:::\n\n:::{.callout-caution}\nCaution cau\n:::\n\n:::{#nte-BoxLabel .callout-note}\n## Note Box Title\nNote with stuff\n:::\n\nNote box with label @nte-BoxLabel.\n\n:::{.callout-caution collapse=\"true\"}\nCollapsible caution\n:::\n\n> Blockquote\n\n:::{#def-SomeDef}\n## Definition\ndef\n:::\n\n:::{#thm-SomeThm}\n## Theorem\nthm\n:::\n\n:::{#cor-SomeCor}\n## Corollary\ncor\n:::\n\n:::{#lem-SomeLem}\n## Lemma\nlem\n:::\n\n:::{#prp-SomeProp}\n## Proposition\nprp\n:::\n\n:::{#cnj-SomeConj}\n## Conjecture\ncnj\n:::\n\n:::{#exm-SomeEg}\n## Example\nexm\n:::\n\n:::{#exr-SomeEx}\n## Excersise\nexr\n:::\n\n:::{#sol-SomeSol}\n## Solution\nsol\n:::\n\n:::{#rem-SomeRem}\n## Remark\nrem\n:::\n\nThis can be referenced as @thm-SomeThm.\n\n:::{.content-visible when-format=\"html\"}\nThings that only appear in HTML version.\n:::\n\n:::{.content-visible when-format=\"pdf\"}\nThings that only appear in PDF version.\n:::\n\n:::{.content-visible when-format=\"docx\"}\nThings that only appear in docx version.\n:::\n\n![Image caption.](images/Argand.jpg){width=100% #fig-Figure}\n\nIn Figure @fig-Figure, there is a figure.\n\n\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.python .cell-code}\nimport matplotlib.pyplot as plt\nplt.plot([1,23,2,4])\nplt.show()\n```\n\n::: {.cell-output-display}\n![A line plot ](index_files/figure-html/fig-line-plot-1.png){#fig-line-plot width=614}\n:::\n:::\n\n::: {.cell}\n<iframe src=\"https://numbas.mathcentre.ac.uk/question/157289/arithmetic-of-complex-numbers/embed/?token=894ca8f5-84f7-460d-9000-17132507780a\" width=\"672\" height=\"800px\" data-external=\"1\"></iframe>\n:::",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

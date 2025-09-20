@@ -1,0 +1,3 @@
+# Introduction {.unnumbered}
+
+This unit will cover many numerical methods and how they can be implemented in MATLAB.  The programming language MATLAB is an incredibly versatile and robust platform used in many industries including engineering, aeronautics, astronautics, manufacturing, telecommunication and many more.

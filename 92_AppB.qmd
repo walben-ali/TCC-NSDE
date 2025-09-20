@@ -1,0 +1,759 @@
+:::{.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+# Appendix B:  Arrays in MATLAB {.unnumbered}
+
+MATLAB is one of the most versatile programming languages when it comes to working with vectors and matrices, hence the name MATLAB, particularly MATrix LABoratory.  In MATLAB, vectors essentially represent lists and matrices represent tables.
+
+## Vectors
+
+To form a vector, use square brackets and separate the terms using commas to form a row vector or semicolons to form a column vector.
+
+```matlab
+>> v=[1,2,3,4]
+v =
+     1   2   3   4
+>> u=[1;2;3;4]
+u =
+     1
+     2
+     3
+     4
+```
+
+An algebraic sequence (a sequence where the consecutive terms differ by a fixed value) can be formed into a vector by using colons as `v=a:n:b`.  This forms a vector `v` where the first term is `a`, then next term is `a+n`, then `a+2*n`, etc. until `b` is reached.  If the sequence goes beyond `b`, then `b` is ignored and the last term before `b` will be the last term of the sequence.  Note that `v=a:b` will produce a row vector from `a` to `b` in steps of 1.
+
+```matlab
+>> u=[1:1:10]
+u =
+     1   2   3   4   5   6   7   8   9   10
+>> v=[20:3:30]
+v =
+     20   23   26   29
+>> w=[100:-20:-40]
+w =
+     100   80   60   40   20   0   -20   -40
+```
+
+Some useful operations that can be applied to vectors are:  For a vector `v`:
+
+- `abs(v)` takes the absolute value of all the terms of the vector `v`.
+
+- `v'` takes the transpose of the vector $\B{v}$, namely $\B{v}^{\mathrm{T}}$, so it changes $\B{v}$ from a row vector to a column vector and vice versa.
+
+- `length(v)` finds how many terms there are in the vector `v`.
+
+- `max(v)` finds the maximum value in the vector `v` while `min(v)` finds the minimum value.
+
+- `[a,b]=max(v)` produces two outputs, `a` which is the maximum value in the vector `v` and `b` which is its location in `v`, similarly with `[a,b]=min(v)`.  (Note that in MATLAB, array positions start from 1, unlike Python which starts from 0.)
+
+- `sum(v)` takes the sum of all the terms in the vector `v`.
+
+- `mean(v)` takes the mean of all the terms in the vector `v`.
+
+- `median(v)` takes the median of all the terms in the vector `v`.
+
+- `sort(v)` orders the terms of `v` in ascending order.
+
+- `sort(v,'descend')` orders the terms of `v` in descending order.
+
+- `norm(v)` finds the magnitude of the vector `v`.  Recall that for a vector $\B{v}=(v_1, v_2, \dots, v_N)$, the magnitude of the vector $\B{v}$ is given by:
+$$|\B{v}|=\sqrt{\sum_{n=1}^N{|v_n|^2}}=\sqrt{v_1^2+v_2^2+\dots+v_N^2}.$$
+
+- `norm(v,p)` finds the $p$-norm of the vector `v`.  Recall that for a vector $v=(v_1, v_2, \dots, v_N)$ and a positive integer $p$, the $p$-norm of $\B{v}$, denoted $||\B{v}||_p$ is given by
+$$||\B{v}||_{p}=\sqrt[p]{\sum_{n=1}^N{|v_n|^p}}=\sqrt[p]{v_1^p+v_2^p+\dots+v_N^p}.$$
+Note that `norm(v)` is the default 2-norm whereas `norm(V,inf)` is the *sup-norm*[^SupNorm] (also known as the *Chebyshev norm* or *infinity norm*).
+
+[^SupNorm]:  Recall that for a vector $\B{v}$, the *sup-norm*, denoted $||\B{v}||_{\infty}$ is the maximum absolute term in the vector, i.e. for a vector $v=(v_1, v_2, \dots, v_N)$,
+$$||\B{v}||_{\infty}=\max_{n=1,2,\dots,N} |v_n|.$$
+
+```matlab
+>> v=[2,-8,6,-2,-9,4]
+v =
+     2   -8   6   -2   -9   4
+>> abs(v)
+ans =
+     2   8   6   2   9   4
+>> v'
+ans =
+     2
+    -8
+     6
+    -2
+    -9
+     4
+>> (v')'
+ans =
+     2   -8   6   -2   -9   4
+>> length(v)
+ans =
+     6
+>> max(v)
+ans =
+     6
+>> [a,b]=max(v)
+a =
+     6
+b =
+     3
+>> min(v)
+ans =
+     -9
+>> [a,b]=min(v)
+a =
+     -9
+b =
+     5
+>> sum(v)
+ans =
+     -7
+>> mean(v)
+ans =
+     -1.1667
+>> median(v)
+ans =
+     0
+>> sort(v)
+ans =
+     -9   -8   -2   2   4   6
+>> sort(v,'descend')
+ans =
+     6   4   2   -2   -8   -9
+>> norm(v)
+ans =
+     14.3175
+>> norm(v,1)
+ans =
+     31
+>> norm(v,inf)
+ans =
+     9
+```
+
+## Matrices
+
+To form matrices, the same theme follows as with vectors where a comma indicates the next term on the same row and semicolons move to the next row.  Be careful to ensure that *all the rows have the same number of terms*, similarly with the columns.
+
+```matlab
+>> M=[1,2,3;4,5,6;7,8,9]
+M =
+     1    2    3
+     4    5    6
+     7    8    9
+>> N=[1,2,3,4,5;6,7,8,9,10]
+N =
+     1    2    3    4    5
+     6    7    8    9   10
+>> P=[1,2,3;4,5,6;7,8]
+Error using vertcat
+Dimensions of arrays being concatenated are not consistent.
+```
+
+There are some operations that translate from vectors to matrices, for example, for a matrix `M`:
+
+- `abs(M)` takes the absolute value of all the terms of the matrix `M`.
+
+- `M'` takes the transpose of the matrix `M`.
+
+Other functions as not as intuitive, for example, `length(M)` gives *only one* output which is *either* the number of rows *or* the number of columns, whichever is bigger.  Whereas `size(M)` gives two outputs with the first being the number of rows of `M` and the second is the number of columns of `M`.
+
+Some matrix functions are done column-wise, for example, `max(M)` *does not* give the maximum value that appears in the matrix, instead it produces a row vector of maxima where the first term is maximum value of all the terms in the first column, the second is the maximum of the second column and so on.  This same column-wise approach holds for other functions like `min(M)`, `sum(M)`, `mean(M)` and `sort(M)`; MATLAB works with the matrix as a collection of column vectors and applies these functions to each column separately.  To find the maximum/minimum/sum of all th terms in the entire matrix, then the function will need to be used twice, so the maximum element in the whole matrix can be found by using `max(max(M))`.
+
+Note that `[a,b]=max(M)` will give two outputs, the first output `a` is the vector `max(M)` as described above and the second output `b` is the vector of their locations.  Similarly for `[a,b]=min(M)`.
+
+Matrix norms are slightly more involved, in terms of their mathematical definition, than vector norms.  For a matrix $M$ of size $m \times n$ and a positive integer $p$, the matrix $p$-norm imposed by the vector $p$-norm is given by
+$$||M||_p=\sup_{\B{x} \in \CC^n} \frac{||M\B{x}||_p}{||\B{x}||_p}$$
+
+Calculating these explicitly can be very difficult since it requires using *all* possible vectors $\B{x} \in \CC^n$, however, the most useful norms have some closed forms:
+
+- $||M||_1$ is the *maximum absolute column sum*;
+- $||M||_{\infty}$ is the *maximum absolute row sum*;
+- $||M||_2$ is the ***Spectral Radius*** of $M$ (more specifically, it is the square root of the largest eigenvalue of the matrix $\He{M}M$ where $\He{M}$ is the Hermitian of $M$, or the complex conjugate transpose).
+
+There are other norms that are not imposed by vector norms, like the ***Frobenius Norm*** which is the square root of the sum of the squares of the absolute valaue of all the terms, i.e.
+$$||M||_F=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n} |m_{ij}|^2}.$$
+All these norms still use the same syntax as vector norms, i.e. using `norm(M,1)`, `norm(M,2)`, `norm(M,inf)` and `norm(M,'Fro')` (with `norm(M)` being the default 2-norm).  This is why it is imperative to be mindful of the context since the same operation can have different meanings depending on whether the input was a vector or a matrix.
+
+```matlab
+>> M=[-4,5;2,9;-6,10]
+M =
+    -4   5
+     2   9
+    -6   10
+>> abs(M)
+M =
+     4   5
+     2   9
+     6   10
+>> M'
+ans =
+    -4   2   -6
+     5   9    10
+>> size(M)
+ans =
+     3     2
+>> length(M)
+ans =
+     3
+>> max(M)
+ans =
+     2   10
+>> max(max(M))
+ans =
+     10
+>> [a,b]=max(M)
+a =
+     2   10
+b =
+     2   3
+>> min(M)
+ans =
+    -6   5
+>> min(min(M))
+ans =
+     -6
+>> [a,b]=min(M)
+a =
+    -6   5
+b =
+     3   1
+>> sum(M)
+ans =
+    -8   24
+>> sum(sum(M))
+ans =
+     16
+>> mean(M)
+ans =
+    -2.6667   8.0000
+>> median(M)
+ans =
+    -4   9
+>> sort(M)
+ans =
+    -6   5
+    -4   9
+     2   10
+>> sort(M,'descend')
+ans =
+     2   10
+    -4   9
+    -6   5
+>> norm(M)
+ans =
+     15.1099
+>> norm(M,1)
+ans =
+     24
+>> norm(M,inf)
+ans =
+     16
+>> norm(M,'Fro')
+ans =
+     16.1864
+```
+
+## Referencing Terms in Arrays
+
+Elements of a vector (row or column) can be referred to by putting the index of the desired element in brackets after the vector's name.  For example, `v(4)` is the $\nth{4}$ element in the vector `v`.
+
+:::{.callout-note}
+## MATLAB Indexing
+
+Note that in MATLAB, indexing starts from 1, not from 0 like Python.
+:::
+
+If the last element of a vector is desired where its size may not be known, then the index `end` can be used.
+
+```matlab
+>> u=[9;7;0;1]
+u =
+     9
+     7
+     0
+     1
+>> u(1)
+ans =
+     9
+>> u(4)
+ans =
+     1
+>> u(end)
+ans =
+     1
+>> u(6)
+Index exceeds array bounds.
+```
+
+For matrices, there are two indices, the first denotes the row number and the second the column number:
+$$\Mat{
+	(1,1)  & (1,2)  & (1,3)  & \dots  \\
+	(2,1)  & (2,2)  & (2,3)  & \dots  \\
+	(3,1)  & (3,2)  & (3,3)  & \dots  \\
+	\vdots & \vdots & \vdots & \ddots \\
+}$$
+
+So `M(2,3)` will output the element of `M` that is in row 2 and column 3.  MATLAB also has the ability to refer to terms in matrices by using one index only.  For instance, if a matrix $M$ is of size $3 \times 4$, then $M(10)$ would refer to the "$10^{\text{th}}$ element".  Under usual circumstances, this is meaningless unless $M$ is a vector, however, in this case, MATLAB can refer to the $10^{\text{th}}$ element where the elements start from 1 and work their way down columns as such:
+$$\Mat{
+	(1) & (4) & (7) & (10) \\
+	(2) & (5) & (8) & (11) \\
+	(3) & (6) & (9) & (12) \\
+}$$
+
+Therefore, the $10^{\text{th}}$ element of $M$ would be the element in the $1^{\text{st}}$ row and $4^{\text{th}}$ column for the $3 \times 4$ matrix.  Using this referencing system is certainly not recommended since it can cause issues with different sized matrices.
+
+MATLAB can also refer to whole rows or whole columns, this is done by using `:`, for example `M(:,3)` will produce the $3^{\mathrm{rd}}$ column whereas `M(1,:)` will produce the $1^{\mathrm{st}}$ row.
+
+```matlab
+>> M=[2,3,1,4;1,6,3,1;4,1,2,8]
+M =
+      2   3   1   4
+      1   6   3   1
+      4   1   2   8
+>> M(2,3)
+ans =
+      3
+>> M(3,1)
+ans =
+      4
+>> M(end,3)
+ans =
+      2
+>> M(end,end)
+ans =
+      8
+>> M(:,2)
+ans =
+      3
+      6
+      1
+>> M(3,:)
+ans =
+      4   1   2   8
+>> M(:,end)
+ans =
+      4
+      1
+      8
+>> M(2)
+ans =
+      1
+>> M(4)
+ans =
+      3
+>> M(12)
+ans =
+      8
+```
+
+## Matrix Operations
+
+Addition and subtraction of matrices (and vectors) follows the usual mathematical rules, namely, both matrices need to be of the same size and all the terms are added elementwise, i.e. the first term is added to the first term, the second to the second, etc.
+
+```matlab
+>> A=[1,3,7;5,2,6;2,3,2]
+A =
+     1   3   7
+     5   2   6
+     2   3   2
+>> B=[2,3,1;1,6,3;4,1,2]
+B =
+     2   3   1
+     1   6   3
+     4   1   2
+>> A+B
+ans =
+     3   6   8
+     6   8   9
+     6   4   4
+```
+
+Matrices and vectors can be multiplied or divided by *a scalar value* using the `*` and `/` operations.
+
+```matlab
+>> 2*A
+ans =
+     2   6  14
+    10   4  12
+     4   6   4
+>> B/2
+ans =
+     1.00    1.50   0.50
+     0.50    3.00   1.50
+     2.00    0.50   1.00
+```
+
+Matrix multiplication is carried out using the `*` operator.  Recall that for two matrices $A$, of size $m \times n$, and $B$, of size $p \times q$, the matrix product $AB$ is only possible if $n=p$ (i.e. the number of columns of $A$ is equal to the number of rows of $B$) and the resulting matrix $AB$ will then be of size $m \times q$.
+
+```matlab
+>> A*B
+ans =
+     33   28   24
+     36   33   23
+     15   26   15
+```
+
+Elementwise multiplication and division of matrices (also known as the **Hadamard Operations**) is also a possibility in MATLAB.  So for matrices $A$ and $B$ of the same size, the elementwise product (denoted mathematically as $A \circ B$) produces a matrix that is of the same size as $A$ and $B$ where the first element is the product of the first element of $A$ and the first element of $B$, the second element is the product of the second element of $A$ and the second element of $B$ and so on.  This is done using a dot `.` before the operations, in other words, the elementwise product $A \circ B$ is written as `A.*B`, similarly for elementwise division using `./` and elementwise exponentiation using `.^`.  Bear in mind this is *only possible if* the matrices/vectors are of the same size, just as in addition and multiplication.
+
+```matlab
+>> A.*B
+ans =
+      2   9   7
+      5  12  18
+      8   3   4
+>> A./B
+ans =
+      0.50  1.00   7.00
+      5.00  0.33   2.00
+      0.50  3.00   1.00
+>> A.^2
+ans =
+      1  9   49
+     25  4   36
+      4  9    4
+>> A^2
+ans =
+      30    30    39
+      27    37    59
+      21    18    36
+```
+
+There are some special matrices and matrix forms built into MATLAB such as:
+
+- `[]`:  empty vector/matrix which contains no terms, therefore has size $0 \times 0$ and is usually used as a placeholder.
+
+- `zeros(a,b)`:  forms a matrix of zeros with size `a` $\times$ `b`.
+
+- `ones(a,b)`:  forms a matrix of ones with size `a` $\times$ `b`.
+
+- `eye(a,b)`:  forms an identity matrix (ones on the main diagonal, zeros otherwise) of size `a` $\times$ `b`.
+
+- `rand(a,b)`:  forms a matrix of size `a` $\times$ `b` where all the elements are randomly chosen from a normal distribution whose entries lie between 0 and 1.
+
+- `randi([M,N],a,b)`:  forms a matrix of size `a` $\times$ `b` where all the elements are randomly chosen integers from a normal distribution whose entries lie between `M` and `N`.
+
+- `diag(v)`:  forms a square matrix whose diagonal entries are the elements of the vector `v`.
+
+There are also some matrix operations that are very useful such as:
+
+- `inv(A)`: find the inverse of the matrix `A`.
+
+- `det(A)`: find the determinant of the matrix `A`.
+
+- `trace(A)`: find the trace of the matrix `A` (which is the sum of the diagonal entries).
+
+## Substitution & Concatenation {#sec-SubsConc}
+
+Sometimes, vectors and matrices need to be augmented, either by adding, removing or changing some terms.
+
+For both vectors and matrices, individual values can be substituted and redefined by referring to its index.  For example, consider the vector $\B{v}$ and suppose that its second element is to be changed, this can be done by using `v(2)=` to assign a new value that will overwrite the original value. 
+
+```matlab
+>> v=[1,3,7,5]
+v =
+     1   3   7   5
+>> v(2)
+ans =
+     3
+>> v(2)=8
+v =
+     1   8   7   5
+>> v(4)=0
+v =
+     1   8   7   0
+```
+
+The same syntax can be used to redefine an element in terms of itself or in terms of others, like defining the second element as twice its original value or setting an element to be the sum of some other elements.
+
+```matlab
+>> v(2)=10*v(2)
+v =
+     1   80   7   0
+>> v(1)=v(3)
+v =
+     7   80   7   0
+>> v(4)=v(1)+v(2)+v(3)
+v =
+     7   80   7   94
+```
+
+The same can be done with matrices as well where this replacement can either be done by elements, rows or columns.
+
+```matlab
+>> M=[2,1;3,6]
+M =
+     2   1
+     3   6
+>> M(1,2)
+ans =
+     1
+>> M(1,2)=4
+M =
+     2   4
+     3   6
+>> M(2,2)=0
+M =
+     2   4
+     3   0
+>> M(1,:)
+ans =
+     2   4
+>> M(1,:)=[9,1]
+M =
+     9   1
+     3   6
+>> M(:,2)
+ans =
+     1
+     6
+>> M(:,2)=[4;0]
+M =
+     9   4
+     3   0
+```
+Matrices and vectors can also be concatenated or cut, that simply means that terms can be added or removed, this is done by using the comma or semi-colon depending on the situation.  Not only can terms be added, but whole rows and columns can be added as well but it is *critical* that the terms are added in a consistent fashion, meaning that if a new row is to be added, then it must be of the same size as all the other rows otherwise it will not make sense.  To remove rows or columns, then simply assign an empty vector, namely `[]`, to the desired location.
+
+```matlab
+>> A=[1,7]
+A =
+     1   7
+>> A=[A,4]          % Add 4 to the end
+A =
+     1   7   4
+>> A=[8,A]          % Add 8 to the start
+A =
+     8   1   7   4
+>> A=[A;[0,5,7,9]]  % Add a new row
+A =
+     8   1   7   4
+     0   5   7   9
+>> A=[A,[0;1]]      % Add a new column
+A =
+     8   1   7   4   0
+     0   5   7   9   1
+>> A(:,3)=[]        % Remove third column
+A =
+     8   1   4   0
+     0   5   9   1
+>> A(1,:)=[]        % Remove first row
+A =
+     0   5   9   1
+>> A(end)=[]        % Remove last term
+A =
+     0   5   9
+```
+
+## Finding Terms
+
+Sometimes, finding some terms is desired, say if the user needs to find all the values in a list that are greater than 5, or less than $-1$, or equal to 2.  In this case, the comparative operators should be used which are:
+
+| Operation                | MATLAB Syntax |
+|:------------------------:|:-------------:|
+| Less than                | `<`           |
+| Less than or equal to    | `<=`          |
+| Equal to                 | `==`          |
+| Greater than             | `>`           |
+| Greater than or equal to | `>=`          |
+| Not equal to             | `~=`          |
+
+These operators need to be used in conjunction with the `find` function.  So for a given vector `v`, if the terms greater than 5 need to be found, then use `find(v>5)`, this will produce a vector of *indices* that denote the locations of the values that greater than 5.  If there are no such values that satisfy the condition, then an empty vector will be produced, namely `[]`.  This can be very useful if, say, all the values greater than 5 need to be multiplied by 10, or all the values that are less than $-1$ need to be changed to 0, or all the values that are equal to 2 need to be removed.
+
+```matlab
+>> v=[1,2,-5,12,-3,2]
+v =
+     1   2   -5   12   -3   2
+>> i=find(v>5)
+ans =
+     4
+>> v(i)
+ans =
+     12
+>> v(i)=10*v(i)
+v =
+     1   2   -5   120   -3   2
+>> j=find(v<-1)
+ans =
+     3   5
+>> v(j)
+ans =
+    -5   -3
+>> v(j)=0
+v =
+     1   2   0   120   0   2
+>> k=find(v==2)
+ans =
+     2   6
+>> v(k)=[]
+v =
+     1   0   120   0
+```
+
+When finding terms in matrices, MATLAB tends to provide the location in the single index form rather than in the dual form.  In other words, if a matrix is of size $3 \times 3$ and MATLAB needs to refer to the $(2,3)$ element (second row, third column), it would display the index as the $7^{\text{th}}$ element.  This is an important distinction that needs to be made.
+
+```matlab
+>> M=[2,0,5;-1,2,9;-6,1,-8]
+M =
+     2   0   5
+    -1   2   9
+    -6   1  -8
+>> m=find(M>5)
+m =
+     8
+>> M(m)
+and =
+     9
+>> M(m)=M(m)*10
+M =
+     2   0   5
+    -1   2   90
+    -6   1  -8
+>> n=find(M<0)
+n =
+     2
+     3
+     9
+>> M(n)
+ans =
+    -1
+    -6
+    -9
+>> M(n)=0
+M =
+     2   0   5
+     0   2   90
+     0   1   0
+```
+
+An alternative way of finding terms would be to dispense with the `find` command altogether.  This will produce a binary matrix showing the locations of the terms that satisfy the condition (with `1` being true and `0` being false).
+
+```matlab
+>> A=[1,4,6,9,2;7,3,1,6,0]
+A =
+     1   4   6   9   2
+     7   3   1   6   0
+>> find(A>5)
+ans =
+     2
+     5
+     7
+     8
+>> A>5
+ans =
+     2×5 logical array
+     0   0   1   1   0
+     1   0   0   1   0
+```
+
+## Exercises
+
+:::{.callout-important title="Exersise 1:  Matrix Calculations"}
+$$A=\Mat{1 & 2 \\ 5 & 8} \quad ; \quad B=\Mat{4 & 0 & -4 \\ -1 & 0 & 1 \\ 2 & 1 & 3} \quad ; \quad C=\Mat{1 & 0 & 4 \\ 2 & -2 & 6}$$
+$$\B{u}=\Mat{1 \\ 8} \quad ; \quad \B{v}=\Mat{0 \\ 3 \\ 4}$$
+
+Using MATLAB, write a command/script to produce:
+
+- The matrix $AC$.
+
+- Element (2,3) of the matrix $CB$.
+
+- Third element of the matrix $\B{u}^{\mathrm{T}}C$.
+
+- Element (1,2) of the matrix $\B{u}\B{v}^{\mathrm{T}}$.
+
+- Trace of $B^2$.
+
+- Maximum and minimum terms in $B\B{v}$.
+
+- 2-norm of $\B{v}$.
+
+- Frobenius norm of $B$.
+
+- The determinant of $B$.
+
+- The inverse of $134(C^{\mathrm{T}}C+\mathcal{I})$ where $\mathcal{I}$ is the identity matrix.
+
+- The eigenvalues and eigenvectors of $\B{v}\B{u}^{\mathrm{T}}C$.
+:::
+
+:::{.callout-tip title="Solution 1" collapse="true"}
+
+```matlab
+>> A=[1,2;5,8];
+>> B=[4,0,-4;-1,0,1;2,1,3];
+>> C=[1,0,4;2,-2,6];
+>> u=[1;8];
+>> v=[0;3;4];
+>> A*C
+ans =
+     5    -4    16
+     21   -16   68
+>> D=C*B
+D =
+     12   4   8
+     22   6   8
+>> D(2,3)
+ans =
+     8
+>> E=u'*C
+E =
+     17   -16   52
+>> E(3)
+ans =
+     52
+>> F=u*v'
+F =
+     0   3    4
+     0   24   32
+>> F(1,2)
+ans =
+     3
+>> trace(B*B)
+ans =
+     11
+>> G=B*v
+G =
+    -16
+     4
+     15
+>> max(G)
+ans =
+     15
+>> min(G)
+ans =
+    -16
+>> norm(v,2)
+ans =
+     5
+>> norm(B,'Fro')
+ans =
+     6.9282
+>> det(B)
+ans =
+     0
+>> H=134*(C'*C+eye(3))
+H =
+     804    -536    2144
+    -536     670   -1608
+     2144   -1608   7102
+>> inv(H)
+ans =
+     0.0067   0.0011   -0.0018
+     0.0011   0.0035    0.0004
+    -0.0018   0.0004    0.0008
+>> J=v*u'*C
+J =
+     0     0     0
+     51   -48   156
+     68   -64   208
+>> [E,V]=eig(J)
+E =
+          0        0    0.0000
+     0.6000   0.9558   -0.9558
+     0.8000   0.2941   -0.2941
+v =
+     160   0     0
+     0     0     0
+     0     0     0
+```
+:::

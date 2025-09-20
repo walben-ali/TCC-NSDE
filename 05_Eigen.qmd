@@ -1,0 +1,229 @@
+::: {.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+# Eigenvalue Problems
+
+Given a square matrix $A \in \CC^{N \times N}$, the ***Eigenvalue Problem*** consists of finding a scalar $\lambda \in \CC$ and a vector $\B{v} \neq \B{0}$ such that $A\B{v}=\lambda\B{v}$.  Any such $\lambda$ is called an ***Eigenvalue*** of $A$, while $\B{v}$ is the associated ***Eigenvector***.  For any matrix $A$ and its eigenvalue $\lambda$, the associated eigenvector is not unique; in fact, any multiple of an eigenvector is still an eigenvector.  The eigenvalue/eigenvector pair will be written in ***Eigenpair*** notation as $\cbr{\lambda ; \B{v}}.$
+
+In order to calculate the eigenvalues of a matrix $A \in \CC^{N \times N}$, consider the polynomial
+$$p(\lambda)=\det(A-\lambda \II).$$
+This will be a polynomial of degree $N$, in fact, any root of the polynomial $p(\lambda)$ is an eigenvalue of $A$ and vice versa.  Note that if the highest order coefficient of $p$ is equal to 1, then the polynomial is known as the ***Characteristic Polynomial of $\B{A}$***.  More generally, for any matrix $A \in \CC^{N \times N}$, the characteristic polynomial is given by $P(\lambda)=(-1)^N \det(A-\lambda \II)$.  This means that the matrix $A$ of size $N \times N$ must have $N$ eigenvalues (not necessarily unique).  Also, if $A$ is a real matrix, the polynomial $p(\lambda)$ will have real coefficients and therefore (by the Fundamental Theorem of Algebra), any complex eigenvalues will appear in complex conjugate pairs.  If $A$ is a diagonal or triangular matrix, then the eigenvalues are simply the diagonal terms.  After the eigenvalues have been found, the eigenvectors can be calculated by finding a general form of the vector $\B{v}$ that satisfies $(A-\lambda I)\B{v}=\B{0}$.
+
+If the eigenvector $\B{v}$ is known, the eigenvalue $\lambda$ can be recovered by using the ***Rayleigh Quotient***
+$$\lambda=\frac{\He{\B{v}}A\B{v}}{\|\B{v}\|_2^2}$$
+where $\He{\B{v}}=\Tr{\B{v}}$ is the Hermitian of $\B{v}$ (the complex conjugate transpose).
+
+::: {.callout-caution}
+Let
+$$ A = \Mat{0 & -1\\ 1 & 0}.$$
+To find the eigenvalues, first consider the polynomial
+$$p(\lambda)=\det(A-\lambda I)=\det \nbr{\Mat{0 & -1 \\ 1 & 0}-\lambda \Mat{1 & 0 \\ 0 & 1}}=\det \Mat{-\lambda & -1 \\ 1 & -\lambda}=\lambda^2+1.$$
+This polynomial has two roots, $\lambda_1=\ii$ and $\lambda_2=-\ii$, hence giving the two eigenvalues of $A$.
+
+To calculate the eigenvectors, consider the eigenvalues separately, then for each eigenvalue, find the vector $\B{v}=\Tr{(V_1 \; \; V_2)}$ that satisfies $(A-\lambda I)\B{v}=\B{0}$:
+
+- $\lambda_1=\ii$:
+$$(A-\lambda_1 I)\B{v}=\B{0} \qiq \Mat{-\ii & -1 \\ 1 & -\ii}\Mat{V_1 \\ V_2}=\Mat{0 \\ 0} \qiq \mat{-\ii V_1 - V_2=0 \\ V_1-\ii V_2=0}$$
+which gives two equations in two unknowns.  However, notice that if the first equation is multiplied by $\ii$, the second equation will be obtained and therefore, the problem is underdetermined (i.e. one equation in two unknowns).  This must *always* be the case, finding an eigenvector must always result in an underdetermined system.  In this case, solving one equation would suffice.  Solving the second equation will give $V_1$ in terms of $V_2$ as $V_1=\ii V_2$.  Therefore the eigenvector $\B{v}$ will be
+$$\B{v}=\Mat{V_1 \\ V_2}=\Mat{\ii V_2 \\ V_2}=\Mat{\ii \\ 1}V_2.$$
+Now any value of $V_2$ can be chosen (except 0), and the result will be the eigenvector (this also shows why any multiple of an eigenvector is also an eigenvector), in this case, choose $V_2=1$.  This gives the first eigenpair
+$$\EP{\ii}{\ii \\ 1}.$$
+- $\lambda_2=-\ii$:
+$$(A-\lambda_2 I)\B{v}=\B{0} \qiq \Mat{\ii & -1 \\ 1 & \ii}\Mat{V_1 \\ V_2}=\Mat{0 \\ 0} \qiq \mat{\ii V_1 - V_2=0 \\ V_1+\ii V_2=0}$$
+which gives one equations in two unknowns (since the first equation multiplied by $-\ii$ gives the second).  Solving the second equation will give $V_1$ in terms of $V_2$ as $V_1=-\ii V_2$.  Therefore the eigenvector $\B{v}$ will be
+$$\B{v}=\Mat{V_1 \\ V_2}=\Mat{-\ii V_2 \\ V_2}=\Mat{-\ii \\ 1}V_2.$$
+For the sake of simplicity, choose $V_2=\ii$ (once again, any non-zero value of $V_2$ can be chosen).  This gives the second eigenpair
+$$\EP{-\ii}{1 \\ \ii}.$$
+
+Therefore, the matrix has the eigenpairs
+$$\EP{\ii}{\ii \\ 1}, \quad \EP{-\ii}{1 \\ \ii}.$$
+This can be verified by showing that $A\B{v}=\lambda \B{v}$ for each eigenpair:
+$$A \B{v}_1=\Mat{0 & -1 \\ 1 & 0}\Mat{\ii \\ 1}=\Mat{-1 \\ \ii} = \ii \Mat{\ii \\ 1}=\lambda_1 \B{v}_1$$
+$$A \B{v}_2=\Mat{0 & -1 \\ 1 & 0}\Mat{1 \\ \ii}=\Mat{-\ii \\ 1} = -\ii \Mat{1 \\ \ii}=\lambda_2 \B{v}_2.$$
+:::
+
+For a matrix $A \in \CC^{N \times N}$, there will always be $N$ eigenvalues (not necessarily distinct).  If an eigenvalue is repeated, then the same eigenvalue will have multiple eigenvectors however, it is possible that there might not necessarily be a total of $N$ eigenvectors.
+
+If the matrix $A$ has a complete set of eigenvectors (meaning it has $N$ distinct eigenvectors), then $A$ is said to be ***Diagonalisable***, i.e. there exists a non-singular matrix $V \in \CC^{N\times N}$ whose columns are the eigenvectors of $A$ and a diagonal matrix $\Lambda \in \CC^{N \times N}$ whose entries are the eigenvalues of $A$, such that $A=V\Lambda V^{-1}$.  Note that the order in which the eigenvalues and eigenvectors are placed in columns should be the same in both matrices, in other words, if the matrix $A$ has $N$ eigenpairs given by $\cbr{\lambda_1;\B{v}_1}, \cbr{\lambda_2;\B{v}_2}, \dots, \cbr{\lambda_N;\B{v}_N}$, then
+$$\Lambda=\Mat{\lambda_1 \\ & \lambda_2 \\ && \ddots \\ &&& \lambda_N}, \quad V=\Mat{\vdots & \vdots && \vdots \\ \B{v}_1 & \B{v}_2 & \cdots & \B{v}_N \\ \vdots & \vdots & & \vdots}.$$
+
+::: {.callout-caution}
+From the example above, the matrices $\Lambda$ and $V$ are
+$$\Lambda=\Mat{\ii & 0 \\ 0 & -\ii}, \quad V=\Mat{\ii & 1\\ 1 & \ii}.$$
+The matrix $A$ is diagonalisable since the product $V \Lambda V^{-1} V$ should give $A$, indeed
+$$V \Lambda V^{-1}=\Mat{\ii & 1\\ 1 & \ii}\Mat{\ii & 0 \\ 0 & -\ii}\Mat{\ii & 1\\ 1 & \ii}^{-1}=\frac{1}{\ii^2-1}\Mat{\ii & 1\\ 1 & \ii}\Mat{\ii & 0 \\ 0 & -\ii}\Mat{\ii & -1 \\ -1 & \ii}$$
+$$=-\frac{1}{2}\Mat{\ii & 1\\ 1 & \ii}\Mat{-1 & -\ii \\ \ii & 1}=\frac{1}{2}\Mat{0 & 2 \\ -2 & 0}=\Mat{0 & -1 \\ 1 & 0}=A.$$
+:::
+
+Note that the existence of a complete system of eigenvectors is helpful in representing a linear transformation (or equivalently a square matrix) of a Euclidean space, such as $\RR^N$, as a simple dilation or scaling (i.e. a multiplication by a suitable factor along each coordinate axis) in a suitable system of coordinates, obtained from the original one by a volume-preserving linear map.
+
+If the matrix $A$ is Hermitian, meaning that $\He{A}=A$, (this happens to be the case in many important applications, then the eigenvalue problem is much simpler since the following properties hold:
+
+- All eigenvalues are of $A$ are real (since $A$ is real and all eigenvalues are also real, then all eigenvectors can also be chosen to be real as well, usually by multiplying by an appropriate factor);
+- The eigenvectors corresponding to distinct eigenvalues are orthogonal (in fact, the eigenvectors of $A$ can be chosen to be orthonormal);
+- The matrix $A$ is always diagonalisable.
+
+::: {.callout-note}
+For example, in the numerical approximation of solutions of boundary value problems for second-order differential equations describing ``conservative" physical processes, i.e. those where there is no dissipation of energy or it is very weak and can be neglected in the first instance.
+:::
+
+!!!
+Let $\cbr{\lambda;\B{v}}$ be an eigenpair of $A$, i.e. $A\B{v}=\lambda\B{v}$, then
+\begin{align*}
+ & A \B{v}=\lambda \B{v} \\
+ \mathimplies{\He{\B{v}} \times} &  \He{\B{v}} A \B{v}=\lambda \He{\B{v}} \B{v} \\
+ \mathimplies{\He{A}=A} & \He{\B{v}} \He{A} \B{v}=\lambda \He{\B{v}}\B{v} \\
+ \mathimplies{\He{(A\B{v})}=\He{\B{v}}\He{A}} & \He{(A\B{v})} \B{v}=\lambda \He{\B{v}}\B{v} \\
+ \mathimplies{A\B{v}=\lambda \B{v}} & \He{(\lambda \B{v})} \B{v}=\lambda \He{\B{v}}\B{v} \\
+ \mathimplies{\He{(\alpha \B{u})}=\bar{\alpha} \He{\B{u}}} & \bar{\lambda} \He{\B{v}} \B{v}=\lambda \He{\B{v}}\B{v} \\
+ \mathimplies{\He{\B{u}}\B{u}=\| \B{u} \|_2^2} & \bar{\lambda} \| \B{v} \|_2^2=\lambda \| \B{v} \|_2^2 \\
+ \mathimplies{\div \| \B{v} \|_2^2 \text{ since } \B{v} \neq \B{0}} & \bar{\lambda}=\lambda \qiq \lambda \in \RR.
+\end{align*}
+
+Let $\cbr{\lambda;\B{v}}$ and $\cbr{\mu;\B{u}}$ be real eigenpairs of $A$ where $\lambda \neq \mu$, i.e. $A\B{v}=\lambda \B{v}$ and $A\B{u}=\mu \B{v}$.  Then
+\begin{align*}
+ & A\B{u}=\mu \B{u} \\
+ \mathimplies{\Tr{\B{v}} \times} & \Tr{\B{v}} A \B{u}=\mu \Tr{\B{v}} \B{u} \\
+ \mathimplies{\Tr{(A\B{v})}=\Tr{\B{v}} \Tr{A}} & \Tr{(A\B{v})} \B{u}=\mu \Tr{\B{v}} \B{u} \\
+ \mathimplies{A\B{v}=\lambda \B{v}} & \lambda \Tr{\B{v}} \B{u}=\mu \Tr{\B{v}} \B{u} \\
+ \implies & (\lambda - \mu)\Tr{\B{v}}\B{u}=0 \\
+ \mathimplies{\lambda \neq \mu} & \Tr{\B{v}}\B{u}=0 \qiq \text{$\B{u}$ and $\B{v}$ are orthogonal.}
+\end{align*}
+
+Let $V$ be the matrix whose columns are $\B{v}_1, \B{v}_2, \dots, \B{v}_N$ which are the distinct eigenvectors of $A$.  Since all the eigenvectors of $A$ are orthogonal, then $\abr{\B{v}_i,\B{v}_j}=\delta_{ij}$ for all $i,j=1,2,\dots,N$.  This means that $V$ must be an orthogonal matrix, i.e. $\Tr{V}V=\II$.  Moreover, since $A=V\Lambda V^{-1}$ and $V^{-1}=\Tr{V}$, then $A=V \Lambda \Tr{V}$.  Therefore the diagonal matrix of eigenvalues $\Lambda$ is equal to $\Lambda=\Tr{V} A V$, more specifically $\Tr{\B{v}_i} A \B{v}_j=\delta_{ij}\lambda_i$.
+!!!
+
+Therefore, if a matrix $A$ is real and symmetric, then the eigenvectors $\B{v}_1,\B{v}_2,\dots,\B{v}_N$ must satisfy
+$$\Tr{\B{v}_i} \B{v}_j=\delta_{ij}=\begin{cases} 1 & i=j \\ 0 & i \neq j\end{cases} \qtq{and} \Tr{\B{v}_i} A \B{v}_j=\delta_{ij}\lambda_i =\begin{cases} \lambda_i & i=j \\ 0 & i \neq j \end{cases}\qtq{for all} i,j=1,2,\dots,N.$$
+Since $\B{v}_1, \B{v}_2, \dots \B{v}_N$ is a set of $N$ linearly independent vectors in $\RR^N$, then they must span $\RR^N$.  Therefore, any vector $\B{x} \in \RR^N$ with $\| \B{x} \|_2=1$ can be written as a linear combination of $\B{v}_1,\B{v}_2,\dots,\B{v}_N$, specifically
+$$\B{x}=\sum_{j=1}^{N}{a_j \B{v}_j} \qtq{where} a_j \in \RR \qtq{for all} j=1,2,\dots,N.$$
+Therefore
+$$1=\| \B{x} \|=\Tr{\B{x}}\B{x}=\sum_{j=1}^{N}{a_j^2} \qtq{and} \Tr{\B{x}}A\B{x}=\sum_{j=1}^{N}{\lambda_j a_j^2}.$$
+
+::: {.callout-caution title="Fibonacci Sequence"}
+
+There are many applications of the eigenvalue decomposition.  A simple one involves the analysis of the Fibonacci numbers.  Consider the sequence $\cbr{F_n}_{n \in \NN}$ which satisfies
+$$ F_0 = 0 \quad ; \quad F_1 = 1 \quad ; \quad F_{n+1} = F_n + F_{n-1}\ , \quad n \geq 1.$$
+It is known that the ratio $\frac{F_{n+1}}{F_{n}} \to \varphi=\frac{1+\sqrt{5}}{2}$ as $n \to \infty$.  To show that in a different way using eigenvalue decomposition, consider the vector
+$$\B{u}_{n} = \Mat{F_{n+1} \\ F_n}.$$
+This vector can form the recurrence relation
+$$\B{u}_{n}=A\B{u}_{n-1} \qtq{where} A=\Mat{1 & 1\\ 1 & 0} \qtq{and} \B{u}_0=\Mat{1\\0}.$$
+The vector $\B{u}_n$ can then be written in terms of $\B{u}_0$ by repeated substitution:
+$$\B{u}_n=A\B{u}_{n-1}=A^2 \B{u}_{n-2}=\dots=A^{n-2} \B{n}_{2}=A^{n-1} \B{n}_{1}=A^n \B{u}_0.$$
+Therefore $\B{u}_n = A^n \B{u}_0$ but doing this requires calculating the $\nth{n}$ power of the matrix $A$ which may be difficult to do.
+
+In order to circumvent calculating $A^n$ explicitly, consider the eigenpairs of $A$ which are (noting that the eigenvectors of $A$ are orthogonal since $A$ is symmetric)
+$$\EP{\frac{1+\sqrt{5}}{2}}{1+\sqrt{5} \\ 2} \quad ; \quad \EP{\frac{1-\sqrt{5}}{2}}{1-\sqrt{5} \\ 2}.$$
+For the sake of convenience, define $\lambda_{\pm}=\frac{1 \pm \sqrt{5}}{2}$, then the eigenpairs can be rewritten as
+$$\EP{\lambda_+}{2\lambda_+ \\ 2} \quad ; \quad \EP{\lambda_-}{2\lambda_- \\ 2}.$$
+Since any multiple of an eigenvector is still an eignevctrors, then both eigenvectors can be divided by 2 to give
+$$\EP{\lambda_+}{\lambda_+ \\ 1} \quad ; \quad \EP{\lambda_-}{\lambda_- \\ 1}.$$
+
+Let $\Lambda$ be the diagonal matrix whose entries are the eigenvalues of $A$ and let $V$ be the matrix whose columns are the eigenvectors, i.e.
+$$\Lambda=\Mat{\lambda_+ & 0 \\ 0 & \lambda_-} \qtq{and} V=\Mat{\lambda_+ & \lambda_- \\ 1 & 1}.$$
+Since the eigenvectors are distinct, then $A$ is diagonalisable and can be written as $A=V \Lambda V^{-1}.$
+
+This can be verified as follows:
+\begin{align*}
+V \Lambda V^{-1} & = \Mat{\lambda_+ & \lambda_- \\ 1 & 1} \Mat{\lambda_+ & 0 \\ 0 & \lambda_-} \Mat{\lambda_+ & \lambda_- \\ 1 & 1}^{-1} \\
+& = \frac{1}{\lambda_+ - \lambda_-} \Mat{\lambda_+ & \lambda_- \\ 1 & 1} \Mat{\lambda_+ & 0 \\ 0 & \lambda_-} \Mat{1 & -\lambda_- \\ -1 & \lambda_+} \\
+& = \frac{1}{\lambda_+ - \lambda_-} \Mat{\lambda_+^2 & \lambda_-^2 \\ \lambda_+ & \lambda_-} \Mat{1 & -\lambda_- \\ -1 & \lambda_+} \\
+& = \frac{1}{\lambda_+ - \lambda_-} \Mat{\lambda_+^2 - \lambda_-^2 & -\lambda_+^2 \lambda_-+\lambda_-^2 \lambda_+ \\ \lambda_+ - \lambda_- & -\lambda_+ \lambda_- + \lambda_- \lambda_+} \\
+& = \frac{1}{\lambda_+ - \lambda_-} \Mat{\nbr{\lambda_+ + \lambda_-}\nbr{\lambda_+ - \lambda_-} & \lambda_+ \lambda_- \nbr{\lambda_- - \lambda_+} \\ \lambda_+ - \lambda_- & 0} \\
+& = \Mat{\lambda_+ + \lambda_- & - \lambda_+ \lambda_- \\ 1 & 0} \\
+& = \Mat{\frac{1+\sqrt{5}}{2}+\frac{1-\sqrt{5}}{2} & -\nbr{\frac{1+\sqrt{5}}{2}}\nbr{\frac{1-\sqrt{5}}{2}} \\ 1 & 0} = \Mat{1 & 1 \\ 1 & 0}=A.
+\end{align*}
+
+Now consider matrix $A^2$:
+$$A^2=AA=\nbr{V \Lambda V^{-1}}\nbr{V \Lambda V^{-1}}=V \Lambda^2 V^{-1}.$$
+Since $\Lambda$ is a diagonal matrix, then $\Lambda^2$ is also a diagonal matrix whose terms are the squares of $\Lambda$, i.e.
+$$\Lambda^2=\Mat{\lambda_+ & 0 \\ 0 & \lambda_-}^2=\Mat{\lambda_+^2 & 0 \\ 0 & \lambda_-^2}.$$
+Similarly, the higher powers can be done in the same way, therefore
+$$A^n=V\Mat{\lambda_+^n & 0 \\ 0 & \lambda_-^n}V^{-1} \qtq{for all} n \geq 1.$$
+This shows a way in which the matrix powers can be calculated easily.  Returning to $\B{u}_n=A^n \B{u}_0$:
+$$\B{u}_n=A^n \B{u}_0=V \Mat{\lambda_+^n & 0 \\ 0 & \lambda_-^n} V^{-1} \Mat{1 \\ 0}= \Mat{\lambda_+ & \lambda_- \\ 1 & 1} \Mat{\lambda_+^n & 0 \\ 0 & \lambda_-^n} \Mat{\lambda_+ & \lambda_- \\ 1 & 1}^{-1} \Mat{1 \\ 0} $$
+$$ \iq \B{u}_n=\Mat{\frac{\lambda_+^{n+1} - \lambda_-^{n+1}}{\lambda_+ - \lambda_-} \\ \frac{\lambda_+^{n} - \lambda_-^{n}}{\lambda_+ - \lambda_-}}.$$
+Therefore
+$$\frac{F_{n+1}}{F_n}= \frac{ \frac{\lambda_+^{n+1} - \lambda_-^{n+1}}{\lambda_+ - \lambda_-} }{ \frac{\lambda_+^{n} - \lambda_-^{n}}{\lambda_+ - \lambda_-} } = \frac{ \lambda_+^{n+1} - \lambda_-^{n+1} }{ \lambda_+^{n} - \lambda_-^{n}}.$$
+Since $0< | \lambda_- | < 1$, then $\lambda_-^n$ tends to 0 as $n$ tends to infinity.  Therefore, passing the limit as $n$ tends to infinity gives
+$$\lim_{n \to \infty} \frac{F_{n+1}}{F_n} = \lim_{n \to \infty}  \frac{ \lambda_+^{n+1} - \lambda_-^{n+1} }{ \lambda_+^{n} - \lambda_-^{n}} = \lim_{n \to \infty} \frac{ \lambda_+^{n+1} }{ \lambda_+^{n} } = \lim_{n \to \infty} \lambda_+ = \lambda_+=\frac{1+\sqrt{5}}{2}$$
+which is indeed the Golden Ratio.
+
+In performing this procedure, there is one important caveat.  The matrix $V$ must be inverted which is simple in the $2 \times 2$ case but can be computationally expensive for much larger sizes.  This, again, can be circumvented by ensuring that $V$ is an orthogonal matrix.  Recall that since $A$ is Hermitian, all its eigenvectors, and hence all the columns of $V$, must be orthogonal.  In order to make $V$ an orthogonal matrix, the 2-norm of each of its columns must be equal to 1, this can be done by dividing each column by its norm (which is feasible since any multiple of an eigenvector is still an eigenvector).  To normalise the vectors, divide them by their 2-norm:
+$$\left\|\Mat{1 \pm \sqrt{5} \\ 2}\right\|_2^2=\nbr{1 \pm \sqrt{5}}^2+2^2=10 \pm 2\sqrt{5}$$
+Therefore, after normalisation, eigenpairs will be
+$$\cbr{\lambda_+;c_+\Mat{\lambda_+ \\ 1}} \quad ; \quad \cbr{\lambda_-;c_-\Mat{\lambda_- \\ 1}} \qtq{where} c_{\pm}=\frac{2}{\sqrt{10 \pm 2\sqrt{5}}}.$$
+This means that the eigenvalue decomposition of $A$ is $A=\tilde{V}\Lambda \tilde{V}^{-1}$ where
+$$\tilde{V}=\Mat{c_+\lambda_+ & c_-\lambda_- \\ c_+ & c_-} \quad \text{and} \quad \Lambda=\Mat{\lambda_+ & 0 \\ 0 & \lambda_-}.$$
+The most important fact about the matrix $\tilde{V}$ is that it is an orthogonal matrix (meaning all its columns are orthonormal).  Therefore
+$$\tilde{V}^{-1} = \Tr{\tilde{V}} = \Mat{c_+ \lambda_+ & c_+ \\ c_- \lambda_- & c_-}.$$
+The normalisation procedure is computationally cheap and so is matrix transposition, much more so than matrix inversion.  The same matrix power can be used as before:
+$$\B{u}_n=A^n \B{u}_0=\tilde{V} \Mat{\lambda_+^n & 0 \\ 0 & \lambda_-^n} \tilde{V}^{-1} \B{u}_0 = \Mat{c_+\lambda_+ & c_-\lambda_- \\ c_+ & c_-} \Mat{\lambda_+^n & 0 \\ 0 & \lambda_-^n} \Mat{c_+\lambda_+ & c_+ \\ c_-\lambda_- & c_-} \Mat{1 \\ 0}$$
+$$\iq \B{u}_n =\sqrt{5}\Mat{c_+ c_- \lambda_+^{n+1}-c_+ c_- \lambda_-^{n+1} \\ c_+ c_- \lambda_+^n -c_+ c_- \lambda_-^n}=c_+ c_- \sqrt{5}\Mat{\lambda_+^{n+1}-\lambda_-^{n+1} \\ \lambda_+^n-\lambda_-^n}.$$
+Therefore
+$$\frac{F_{n+1}}{F_n}=\frac{c_+ c_- \sqrt{5} \nbr{\lambda_+^{n+1}-\lambda_-^{n+1}}}{c_+ c_- \sqrt{5} \nbr{\lambda_+^{n}-\lambda_-^{n}}}=\frac{\lambda_+^{n+1}-\lambda_-^{n+1}}{\lambda_+^{n}-\lambda_-^{n}}$$
+which is the same result as before.  The eigenvalue decomposition is useful in this case but for larger matrices, normalisation needs to be done on the eigenvectors in order to avoid inverting matrices.
+:::
+
+## Calculating Eigenvalues Using the Power Method
+
+For a diagonalisable matrix $A$, the ***Power Method*** is a process used to calculate the smallest and largest eigenvalues (in absolute value) as well as their associated eigenvectors.
+
+Let $A \in \RR^{N\times N}$ be a real diagonalisable matrix, then $A=V\Lambda V^{-1}$ where $\Lambda \in \RR^{N \times N}$ is the diagonal matrix whose terms are the eigenvalues of $A$ and $V \in \RR^{N \times N}$ is the matrix whose columns are the eigenvectors of $A$ corresponding to $\Lambda$.
+
+For now, suppose, suppose that $A$ is real and symmetric, then all the eigenvalues are real and all the eigenvectors are orthogonal, furthermore, the eigenvectors can be chosen to be orthonormal in order to make $V$ an orthogonal matrix.  Suppose that the eigenvalues of $A$ are ordered in such a way that
+$$ |\lambda_1| \geq |\lambda_2| \geq \dots \geq |\lambda_N|,$$ {#eq-EVal_geq}
+in this case, the largest eigenvalue in magnitude is called the ***Dominant Eigenvalue***, which is $\lambda_1$ in this case.
+
+The ***Power Method*** can be summarised as follows:  Start with an arbitrary unit vector $\B{q}^{(0)}$ that has a non-zero component in the direction of $\B{v}_1$ (i.e. $\| \B{q}^{(0)} \|_2=1$ and $\Tr{\nbr{\B{q}^{(0)}}}\B{v}_1 \neq 0$), then starting from $k=1$:
+
+- Calculate $\B{z}^{(k)}=A\B{q}^{(k-1)}$;
+- Update $\B{q}^{(k)}=\frac{\B{z}^{(k)}}{\| \B{z}^{(k)} \|_2}$ (meaning that $\B{q}^{(k)}$ is still a unit vector);
+- Update $\alpha^{(k)}=\Tr{(\B{q}^{(k)})}A\B{q}^{(k)}$;
+- Update $k \to k+1$ and repeat until
+$$\abs{\alpha^{(k)}-\alpha^{(k-1)}} \leq \tau \abs{\alpha^{(k)}}$$
+where $\tau$ is the desired tolerance.
+
+The final value of $\alpha$ will be the eigenvalue of $A$ which has the largest magnitude.  This result can be stated more formally as follows:
+
+::: {#thm-Power}
+## Power Method
+Let $A\in\RR^{N\times N}$ be symmetric with the eigenvalues $\lambda_1,\lambda_2,\dots,\lambda_N$ and their corresponding eigenvectors $\B{v}_1, \B{v}_2, \dots, \B{v}_N$ such that
+$$|\lambda_1| \geq |\lambda_2| \geq \dots \geq |\lambda_N|.$$
+Consider a unit vector $\B{q}^{(0)}$ such that $\Tr{(\B{q}^{(0)})} \B{v}_1 \neq 0$ (i.e. $\B{q}^{(0)}$ has a component in the direction of $\B{v}_1$).  Then the sequence of vectors
+$$\B{q}^{(k)}=\frac{A \B{q}^{(k-1)}}{\| A \B{q}^{(k-1)} \|_2}$$
+converges to $\B{v}_1$ and
+$$\alpha^{(k)}=\Tr{(\B{q}^{(k)})}A\B{q}^{(k)}$$
+converges to $\lambda_1$ as $k$ tends to $\infty$.
+:::
+
+::: {.proof}
+Since $A$ is real and symmetric, then the eigenvectors $\B{v}_1, \B{v}_2, \dots, \B{v}_N$ can be chosen in such a way that they form an orthonormal basis of $\RR^N$, therefore the unit vector $\B{q}^{(0)}$ can be written as a linear combination of $\B{v}_1, \B{v}_2, \dots, \B{v}_N$ as
+$$\B{q}^{(0)}=\frac{1}{\gamma^{(0)}} \sum_{i=1}^{N}{\beta_i \B{v}_i} \qtq{where} \gamma^{(0)}=\sqrt{\sum_{i=1}^{N}{\beta_i^2}}.$$
+(The division by $\gamma^{(0)}$ is to ensure that the vector $\B{q}^{(0)}$ is a unit vector.)
+
+It can be proven, by induction (as detailed in Appendix \ref{App:Ind}), that
+$$\B{q}^{(k)}=\frac{A \B{q}^{(k-1)}}{\| A \B{q}^{(k-1)} \|_2}=\frac{1}{\gamma^{(k)}}\sum_{i=1}^{N}{\beta_i \lambda_i^k \B{v}_{i}} \qtq{where} \gamma^{(k)}=\sqrt{\sum_{i=1}^{N}{\beta_i^2 \lambda_i^{2k}}}.$$
+This can be rewritten by isolating the first term in the sum as
+$$\B{q}^{(k)}=\frac{\beta_1 \lambda_1^k}{\gamma^{(k)}}\nbr{\B{v}_1+\sum_{i=2}^{N}{\frac{\beta_i}{\beta_1} \frac{\lambda_i^k}{\lambda_1^k} \B{v}_i}} \qtq{with} \gamma^{(k)}=\sqrt{\beta_1^2 \lambda_1^{2k} \nbr{1+\sum_{i=2}^{N}{\frac{\beta_i^2}{\beta_1^2} \frac{\lambda_i^{2k}}{\lambda_1^{2k}}}}}.$$
+
+Since, by the way the eigenvalues have been arranged, it was assumed that $\lambda_1$ is the largest eigenvalue in absolute value, then $\abs{\frac{\lambda_i}{\lambda_1}}<1$ for all $i$, and therefore $\abs{\frac{\lambda_i^k}{\lambda_1^k}}$ tends to 0 as $k$ tends to $\infty$.  Meaning that as $k$ tends to $\infty$, then $\gamma^{(k)} \to \beta_1 \lambda_1^{k}$ and hence $\B{q}^{(k)} \to \B{v}_1$.  Now consider the expression for $\alpha^{(k)}=\Tr{(\B{q}^{(k)})}A\B{q}^{(k)}$, passing the limit as $k$ tends to $\infty$ gives
+$$\lim_{k \to \infty}\alpha^{(k)}=\lim_{k \to \infty}\sbr{\Tr{(\B{q}^{(k)})}A\B{q}^{(k)}} = \Tr{\B{v}_1}A\B{v}_1 =\lambda_1$$
+since $A$ is diagonalisable and $\| \B{v}_1 \|_2=1$.
+:::
+
+The power method can be generalised in several ways:
+
+- **Inverse Power Method**:  A possible generalization involves applying the method to the inverse of the matrix $A$ (provided $A$ is non-singular).  Since the eigenvalues of $A^{-1}$ are the reciprocals of those of $A$, the power method in that case gives an approximation to the eigenvalue of $A$ of minimum modulus.  This is called the *Inverse Power Method* which can be formally stated as follows:  Given an initial unit vector $\B{x}^{(0)}$, let $\B{y}^{(0)} = \frac{\B{x}^{(0)}}{\|\B{x}^{(0)}\|_2}$.  Then, for $k \geq 1$, compute
+$$\B{x}^{(k)} =A^{-1}\B{y}^{(k-1)} \quad ; \quad \B{y}^{(k)} =\frac{\B{x}^{(k)}}{\|\B{x}^{(k)}\|_2} \quad ; \quad \mu^{(k)}= \Tr{(\B{y}^{(k)})}A^{-1} \B{y}^{(k)}.$$
+If $A$ has $N$ linearly independent eigenvectors and the minimum eigenvalue is distinct from all the others, then
+$$\lim_{k\rightarrow\infty}\mu^{(k)} = \frac{1}{\lambda_N}$$
+if the eigenvalues are arranged by size as before.  This means that $(\mu^{(k)})^{-1}$ tends to $\lambda_N$ as $k$ tends to $\infty$.  Effectively, at every step $k$, a linear system of the form $A\B{x}^{(k)} =\B{y}^{(k-1)}$ needs to be solved.  It is therefore convenient to find the LU decomposition of $A$ then solving the system since this would require solving two triangular systems at each iteration.
+
+- **Power Method with Shift**: Another generalization of the power method involves approximating the (unknown) eigenvalue of $A$ nearest to a given number $\sigma$ (either real or complex).  Let $\lambda_\sigma$ denote such eigenvalue and define the shifted matrix $A_\sigma = A-\sigma \II$ whose eigenvalues are $\lambda(A_\sigma) = \lambda(A)-\sigma$. In order to approximate $\sigma$, we can first approximate the eigenvalue of minimum length of $A_\sigma$, say $\lambda_n(A_\sigma)$, by applying the inverse power method to $A-\sigma \II$, and then compute $\lambda_\sigma = \lambda_n(A_\sigma) + \sigma$. This technique is known as the *Power Method with Shift* and the number $\sigma$ is called the *Shift*.  Obviously, the inverse power method (without shift) is recovered by simply setting $\sigma = 0$.
+
+- **QR Method**: All the eigenvalues of $A$ can be calculate at once by using the *QR Method* which is based on the QR decomposition of $A$.  Initialise the iteration with $A^{(0)}=A$, then for $k \geq 1$, calculate the QR decomposition of $A^{(k-1)}$ as $A^{(k-1)}=Q^{(k-1)}R^{(k-1)}$ and the next iteration of $A$ will be $A^{(k)}=R^{(k-1)}Q^{(k-1)}$.  It can be proven that $A^{(k)}$ converges to an upper triangular matrix as $k$ tends to $\infty$. Also
+$$A^{(k)}= Q^TA^{(k-1)} Q = Q^{-1}A^{(k-1)} Q$$ 
+which means that, for all $k$, $A^{(k-1)}$ has same eigenvalues as $A^{(0)} = A$, meaning that the diagonal entries of 
+$A^{(k)}$ get closer and closer  to the required eigenvalues of $A$ as $k$ tends to $\infty$. 
