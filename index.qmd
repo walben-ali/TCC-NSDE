@@ -1,3 +1,48 @@
 # Introduction {.unnumbered}
 
-This unit will cover many numerical methods and how they can be implemented in MATLAB.  The programming language MATLAB is an incredibly versatile and robust platform used in many industries including engineering, aeronautics, astronautics, manufacturing, telecommunication and many more.
+This unit will cover some of the numerical techniques used for solving differential equations and using MATLAB to implement these numerical methods.
+
+# Material {.unnumbered}
+
+All the material will be posted on the [Microsoft Teams Page](https://unioxfordnexus.sharepoint.com/:f:/r/sites/MathematicalInstitute-TCC/Shared%20Documents/Numerical%20Solutions%20to%20Differential%20Equations?csf=1&web=1&e=5yy5we) for the unit.
+
+# Unit Outline {.unnumbered}
+
+All lectures will be held online on **Fridays**, **10.00 - 12.00** on Microsoft Teams, to which you should have received a link.  The details for the link are as follows:
+Meeting ID: 358 213 646 365 0
+Passcode: Us2N6hB2
+
++---------+-------+---------------------------------------------------+
+| Lecture | Date  | Topic                                             |
++=========+=======+===================================================+
+| 1       | 17/10 | - Introduction to NSDE unit for TCC               |
+|         |       | - Aims & Objectives of the unit                   |
+|         |       | - Floating point arithmetic                       |
+|         |       | - Computational complexity                        |
+|         |       | - Code timing and profiling                       |
+|         |       | - Applications for solving linear systems         |
+|         |       | - Computational stability                         |
++=========+=======+===================================================+
+| 2       | 24/10 | - Solving linear systems using direct methods     |
+|         |       | - Solving linear systems using iterative methods  |
++=========+=======+===================================================+
+| 3       | 31/10 | - Euler method for IVPs                           |
++=========+=======+===================================================+
+| 4       | 07/11 | - Modified Euler method                           |
+|         |       | - Runge-Kutta method                              |
+|         |       | - Backwards Euler method                          |
+|         |       | - solving stiff IVPs                              |
++=========+=======+===================================================+
+| 5       | 14/11 | - Solving BVPs using the finite difference method |
++=========+=======+===================================================+
+| 6       | 21/11 | - Solving MVPs and symmetric BVPs                 |
++=========+=======+===================================================+
+| 7       | 28/11 | - Method of lines                                 |
+|         |       | - Apply MoL for diffusion and/or convection       |
++=========+=======+===================================================+
+| 8       | 05/12 | Stability of the method of lines                  |
++---------+-------+---------------------------------------------------+
+
+# Questions {.unnumbered}
+
+For any questions, queries or issues that you see in the material, do not hesitate to contact me on [w.a.a.ali@bath.ac.uk](mailto: w.a.a.ali@bath.ac.uk).
