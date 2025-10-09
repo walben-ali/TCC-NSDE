@@ -1,1 +1,1 @@
-{"headings":["command-window","executing-commands-in-the-command-window","defining-variables","naming-variables","scripts-functions","exersises"],"entries":[{"key":"fig-layout","order":{"number":1,"section":[0,1,0,0,0,0,0]},"caption":"Default MATLAB layout."}],"options":{"chapters":true}}
+{"options":{"chapters":true},"entries":[{"caption":"Default MATLAB layout.","key":"fig-layout","order":{"number":1,"section":[0,1,0,0,0,0,0]}}],"headings":["command-window","executing-commands-in-the-command-window","defining-variables","naming-variables","scripts-functions","exersises"]}

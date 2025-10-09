@@ -1,1 +1,1 @@
-{"headings":["calculating-eigenvalues-using-the-power-method"],"entries":[{"order":{"number":1,"section":[5,1,0,0,0,0,0]},"caption":"Power Method","key":"thm-Power"},{"order":{"number":1,"section":[5,1,0,0,0,0,0]},"caption":"","key":"eq-EVal_geq"}],"options":{"chapters":true}}
+{"entries":[{"caption":"","key":"eq-EVal_geq","order":{"section":[5,1,0,0,0,0,0],"number":1}},{"caption":"Power Method","key":"thm-Power","order":{"section":[5,1,0,0,0,0,0],"number":1}}],"options":{"chapters":true},"headings":["calculating-eigenvalues-using-the-power-method"]}

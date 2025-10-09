@@ -1,1 +1,1 @@
-{"entries":[{"key":"sec-SubsConc","caption":"Substitution & Concatenation","order":{"number":1,"section":[0,5,0,0,0,0,0]}}],"options":{"chapters":true},"headings":["vectors","matrices","referencing-terms-in-arrays","matrix-operations","sec-SubsConc","finding-terms","exercises"]}
+{"headings":["vectors","matrices","referencing-terms-in-arrays","matrix-operations","sec-SubsConc","finding-terms","exercises"],"entries":[{"caption":"Substitution & Concatenation","key":"sec-SubsConc","order":{"section":[0,5,0,0,0,0,0],"number":1}}],"options":{"chapters":true}}

@@ -1,1 +1,1 @@
-{"headings":["forming-lists-for-plotting","line-properties","multiple-plots","legends","figure-properties","subplots","aesthetics","discrete-plots"],"entries":[{"order":{"section":[0,3,0,0,0,0,0],"number":1},"caption":"","key":"fig-yzplot"}],"options":{"chapters":true}}
+{"entries":[{"key":"fig-yzplot","caption":"","order":{"number":1,"section":[0,3,0,0,0,0,0]}}],"options":{"chapters":true},"headings":["forming-lists-for-plotting","line-properties","multiple-plots","legends","figure-properties","subplots","aesthetics","discrete-plots"]}

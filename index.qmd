@@ -9,7 +9,9 @@ All the material will be posted on the [Microsoft Teams Page](https://unioxfordn
 # Unit Outline {.unnumbered}
 
 All lectures will be held online on **Fridays**, **10.00 - 12.00** on Microsoft Teams, to which you should have received a link.  The details for the link are as follows:
+
 Meeting ID: 358 213 646 365 0
+
 Passcode: Us2N6hB2
 
 +---------+-------+---------------------------------------------------+
@@ -42,6 +44,17 @@ Passcode: Us2N6hB2
 +=========+=======+===================================================+
 | 8       | 05/12 | Stability of the method of lines                  |
 +---------+-------+---------------------------------------------------+
+
+# Aims & Objectives
+
+The aim for this unit is to be able to understand and derive different numerical techniques for solving differential equations and being able to implement them on MATLAB.
+
+### Intended Learning Outcomes:
+
+- Understand the internal working mechanisms of MATLAB,
+- Solve linear systems using direct and iterative methods,
+- Use different differencing schemes to assess their ability to solve ODEs and PDEs,
+- Assess the stability of different numerical methods.
 
 # Questions {.unnumbered}
 
