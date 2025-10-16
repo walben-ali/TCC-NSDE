@@ -2,7 +2,7 @@
 {{< include _macros.qmd >}}
 :::
 
-# Appendix D:  Plotting in MATLAB {.unnumbered}
+# Plotting in MATLAB
 
 ## Forming Lists for Plotting
 
@@ -298,3 +298,31 @@ end
 
 - The `Collatz` function requires a single input, but in some cases, there could be many inputs and many outputs, in that case when calling the function, the sequence of inputs and outputs *must be in exactly the same order* as it appears in the function itself.
 :::
+
+## Plot Cheat Sheet
+
+| MATLAB Command | Purpose |
+|:--:|:--:|
+| `clf` | Clear figure space |
+| `figure` | Opens a new figure space |
+| `figure(n)` | Plots in figure space `n` |
+| `hold on` | Allows more than one plot to be drawn on the same figure |
+| `hold off` | Cancels `hold on` |
+| `grid on` | Turns on the plot grid |
+| `grid off` | Turns off the plot grid |
+| `plot([a,b],[c,d])` | Plots a straight line from point (`a`,`c`) to (`b`,`d`) |
+| `set(gca,'FontSize',20)` | Sets the global font size to 20 |
+| `set(gca,'FontName','Times')` | Sets the global font to Times |
+| `axis([left right down up])` | Sets the axes where the $x$-axis goes from `left` to `right` and the $y$-axis from `down` to `up` |
+| `title('Plot')` | Adds the title "Plot" to the figure |
+| `xlabel('x')` | Labels the $x$-axis with "x" |
+| `xlabel('$x$','Interpreter','Latex')` | Labels the $x$-axis with "$x$" |
+| `Leg=legend('Plot 1','Plot 2',...)` | Gives the legend a handle "`Leg`" for further modification and labels the first plotted line as "Plot 1", the second as "Plot 2", etc. |
+| `set(Leg,'Interpreter','Latex')` | Renders the legend in LaTeX, just like the labels |
+| `x=linspace(a,b)` | Generates a vector `x` with 100 points from `a` to `b` |
+| `x=linspace(a,b,n)` | Generates a vector `x` with `n` points from `a` to `b` |
+| `plot(x,y)` | Plots the vector `x` against the vector `y` as long as they are of the same size |
+| `plot(x,y,'-b')` | Plots `x` against `y` with a blue line (continuous) |
+| `plot(x,y,'-b','LineWidth',2)` | Plots `x` against `y` with a blue line of thickness 2 |
+| `plot(x,y,'xk')` | Plots `x` against `y` with black crosses (discrete) |
+| `plot(x,y,'xk','MarkerSize',10)` | Plots `x` against `y` with black crosses of size 10 |

@@ -4,7 +4,7 @@ This unit will cover some of the numerical techniques used for solving different
 
 # Material {.unnumbered}
 
-All the material will be posted on the [Microsoft Teams Page](https://unioxfordnexus.sharepoint.com/:f:/r/sites/MathematicalInstitute-TCC/Shared%20Documents/Numerical%20Solutions%20to%20Differential%20Equations?csf=1&web=1&e=5yy5we) for the unit.
+All the material will be posted on the [Microsoft Teams Page](https://unioxfordnexus.sharepoint.com/:f:/r/sites/MathematicalInstitute-TCC/Shared%20Documents/Numerical%20Solutions%20to%20Differential%20Equations?csf=1&web=1&e=5yy5we) for the unit.  Note that is document is regularly being updated so if you find any mistakes or parts missing then do let me know.
 
 # Unit Outline {.unnumbered}
 

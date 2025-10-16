@@ -2,7 +2,7 @@
 {{< include _macros.qmd >}}
 :::
 
-#  Appendix F:  Reading & Writing Data {.unnumbered}
+# Reading & Writing Data
 
 Reading and writing data files can be important for importing data for analysis on MATLAB and exporting data for further processing elsewhere.
 

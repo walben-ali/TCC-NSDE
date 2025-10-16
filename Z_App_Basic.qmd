@@ -2,7 +2,7 @@
 {{< include _macros.qmd >}}
 :::
 
-# Appendix A:  MATLAB Basics {.unnumbered}
+# MATLAB Basics
 
 This Appendix will cover some of the basic procedures in MATLAB.
 

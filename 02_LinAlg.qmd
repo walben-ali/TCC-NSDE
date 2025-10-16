@@ -2,54 +2,17 @@
 {{< include _macros.qmd >}}
 :::
 
-# Linear Algebra
+# Solving Linear Systems of Equations
 
-In this unit, the following Numerical Linear Algebra processes will be studies:
-
-- Solving linear systems of the form
-$$A \B{x} = \B{b} \qtq{where} A \in \RR^{N \times N}, \quad \B{x} \in \RR^N, \quad \B{b} \in \RR^N.$$
-![](figures/Axb.jpg)
-
-<!---
-\begin{figure}[H]
-\begin{center}
-\begin{tikzpicture}
-\node[anchor=south] at (2,5) {$A$};
-\node[anchor=south] at (5,5) {$\Bx$};
-\node[anchor=south] at (7,5) {$\Bb$};
-\node[anchor=south] at (6,2.5) {$=$};
-\draw[very thick] (0,0)--(4,0)--(4,5)--(0,5)--(0,0);
-\draw[very thick] (4.5,0)--(5.5,0)--(5.5,5)--(4.5,5)--(4.5,0);
-\draw[very thick] (6.5,0)--(7.5,0)--(7.5,5)--(6.5,5)--(6.5,0);
-\draw[|-|] (0,-0.3)--(4,-0.3) node [midway,fill=white,inner sep=1pt] {$N$};
-\draw[|-|] (-0.3,0)--(-0.3,5) node [midway,fill=white,inner sep=1pt] {$M$};
-\end{tikzpicture}
-\end{center}
-\end{figure}
---->
-
-This can be done by using a *Direct Method* if the solution of the system can be obtained in a finite number of steps or an *Iterative Method* if the solution, in principle, requires an infinite number of steps.
-
-The choice between direct and iterative methods may depend on several factors, primarily the predicted theoretical efficiency of the scheme, but also the particular type of matrix (such as systems that are sparse, diagonally dominant, tridiagonal and so forth) and the memory storage requirements.
-
-- Solving, or at least understanding, the nature of *overdetermined* problems of the form
-$$A \B{x} = \B{b} \qtq{where} A \in \RR^{M \times N}, \quad \B{x} \in \RR^N, \quad \B{b} \in \RR^M \qtq{with} M>N.$$
-![](figures/Axb2.jpg){#Axb2.jpg}
-
-This problem often arises when fitting models to a large data sets, where $\B{x}$ represents parameters in the model and $\B{b}$ represents the results (or measurements) of some experiments.
-
-- Solving eigenvalue problems of the form 
-$$A \B{x}=\lambda \B{x} \qtq{where} A \in \RR^{N \times N}, \quad \lambda \in \mathbb{C},\quad \B{x} \in \mathbb{C}^N$$
-and the generalisations thereof.
-
-## Solving Linear Systems of Equations
-
-The first part of linear algebra is solving the square linear system
+Before embarking on the main purpose of the course, which is solving differential equations, first solving linear systems will be necessary.  The linear systems will take the form
 $$A\B{x}=\B{b} \qtq{where} A \in \CC^{N \times N}, \B{x} \in \CC^N \qtq{and} \B{b} \in \CC^N.$$
 This is a situation when the LHS forms a system of equations with a vector of unknowns $\B{x}$ and the RHS is known.
 
-:::{.callout-caution title="Simple Example of Linear System"}
+:::{.callout-caution icon=false}
+## Simple Example of a Linear System
+
 Let $a, b$ and $c$ be integers such that:
+
 - their sum is equal to 20
 - $a$ is twice as large as $b$
 - $b$ is bigger than $c$ by 10.
@@ -63,21 +26,21 @@ This can written in matrix form as:
 $$\underbrace{\Mat{1 & 1 & 1 \\ 1 & -2 & 0 \\ 0 & 1 & -1}}_{A} \underbrace{\Mat{a \\ b \\ c}}_{\B{x}} = \underbrace{\Mat{20 \\ 0 \\ 10}}_{\B{b}}.$$
 :::
 
-There are many way in which this can be done, depending on the form of the matrix:
+There are two main ways in which this can be done, depending on the form of the matrix:
 
 - Direct Methods:
-     - Direct substitution for diagonal systems
-     - Forward substitution for lower triangular systems
-     - Backward substitution for upper training systems
-     - TDMA for tridiagonal systems
-     - Cramer's Rule and Gaussian Elimination for more general matrix systems
+     - Direct substitution for diagonal systems;
+     - Forward substitution for lower triangular systems;
+     - Backward substitution for upper triangular systems;
+     - TDMA for tridiagonal systems;
+     - Cramer's Rule and Gaussian Elimination for more general matrix systems.
 - Iterative Methods
-     - Jacobi:
-     - Gauss-Seidel
+     - Jacobi;
+     - Gauss-Seidel.
 - In-built Methods:
-     - Backsklash
+     - Backsklash operator.
 
-### Computational Stability of Linear Systems
+## Computational Stability of Linear Systems
 
 Before tackling any linear algebra techniques, it is important to understand ***Computational Stability***.
 
@@ -87,15 +50,15 @@ In real-life applications, the matrix $A$ is usually fully known and often inver
 $$A (\B{x} + \delta \B{x}) = \B{b} + \delta \B{b}.$${#eq-err1}
 Subtracting $A\B{x}=\B{b}$ form @eq-err1 gives $A \delta \B{x} = \delta \B{b}$, therefore $\delta \B{x}=A^{-1} \delta \B{b}$.
 
-For $p \in \NN$, consider the ratio between the $p$-norm of the error $\| \delta \B{x} \|_p$ and the $p$-norm of the exact solution $\| \B{x} \|_p$:
+For $p \in \NN$, consider the ratio between the $p$-norm of the error $\Norm{\delta \B{x}}{p}$ and the $p$-norm of the exact solution $\Norm{\B{x}}{p}$:
 \begin{align*}
-\frac{\| \delta \B{x} \|_p}{\| \B{x} \|_p} & = \frac{ \| A^{-1} \delta \B{b} \|_p}{\| \B{x} \|_p} && \quad \text{since} \quad \delta \B{x}=A^{-1} \delta \B{b}\\
-& \leq \frac{ \| A^{-1} \|_p \| \delta \B{b} \|_p}{\| \B{x} \|_p} && \quad \text{by the \emph{Submultiplicative Property}} \\
-& = \frac{ \| A^{-1} \|_p \| \delta \B{b} \|_p}{\| \B{x} \|_p} \times \frac{\| A \|_p}{\| A \|_p} && \quad \text{multiplying by} \quad 1=\frac{\| A \|_p}{\| A \|_p} \\
-& =\| A \|_p \| A^{-1} \|_p \frac{\| \delta \B{b} \|_p}{\| A \|_p \| \B{x} \|_p} && \quad \text{rearranging} \\
-& \leq \| A \|_p \| A^{-1} \|_p \frac{\| \delta \B{b} \|_p}{\| \B{b} \|_p} && \quad \text{since} \; \; \B{b}=A\B{x} \; \text{then} \; \; \| \B{b} \|_p \leq \| A \|_p \| \B{x} \|_p \\
+\frac{\Norm{\delta \B{x}}{p}}{\Norm{\B{x}}{p}} & = \frac{ \Norm{A^{-1} \delta \B{b}}{p}}{\Norm{\B{x}}{p}} && \quad \text{since} \quad \delta \B{x}=A^{-1} \delta \B{b}\\
+& \leq \frac{ \Norm{A^{-1}}{p} \Norm{\delta \B{b}}{p}}{\Norm{\B{x}}{p}} && \quad \text{by the \emph{Submultiplicative Property}} \\
+& = \frac{ \Norm{A^{-1}}{p} \Norm{\delta \B{b}}{p}}{\Norm{\B{x}}{p}} \times \frac{\Norm{A}{p}}{\Norm{A}{p}} && \quad \text{multiplying by} \quad 1=\frac{\Norm{A}{p}}{\Norm{A}{p}} \\
+& =\Norm{A}{p} \Norm{A^{-1}}{p} \frac{\Norm{\delta \B{b}}{p}}{\Norm{A}{p} \Norm{\B{x}}{p}} && \quad \text{rearranging} \\
+& \leq \Norm{A}{p} \Norm{A^{-1}}{p} \frac{\Norm{\delta \B{b}}{p}}{\Norm{\B{b}}{p}} && \quad \text{since} \; \; \B{b}=A\B{x} \; \text{then} \; \; \Norm{\B{b}}{p} \leq \Norm{A}{p} \Norm{\B{x}}{p} \\
 &&& \quad \text{by the Submultiplicative Property,} \\
-&&& \quad \text{meaning that}\; \; \frac{1}{\| \B{b} \|_p} \geq \frac{1}{\| A \|_p \| \B{x} \|_p}
+&&& \quad \text{meaning that}\; \; \frac{1}{\Norm{\B{b}}{p}} \geq \frac{1}{\Norm{A}{p} \Norm{\B{x}}{p}}
 \end{align*}
 
 :::{#nte-SubMult .callout-note title="Submultiplicative Property of Matrix Norms"}
@@ -103,15 +66,15 @@ For a matrix $A$ and a vector $\B{x}$,
 $$\| A\B{x} \| \leq \| A \| \| \B{x} \|.$$
 :::
 
-Let $\kappa_p(A)=\| A^{-1} \|_p \| A \|_p$, then
-$$\frac{\| \delta \B{x} \|_p}{\| \B{x} \|_p } \leq \kappa_p(A) \frac{\| \delta \B{b} \|_p}{\| \B{b} \|_p}$$
+Let $\kappa_p(A)=\Norm{A^{-1}}{p} \Norm{A}{p}$, then
+$$\frac{\Norm{\delta \B{x}}{p}}{\Norm{\B{x}}{p} } \leq \kappa_p(A) \frac{\Norm{\delta \B{b}}{p}}{\Norm{\B{b}}{p}}$$
 
 The quantity $\kappa_p(A)$ is called the ***Condition Number***[^Cond] and it can be regarded as a measure of how sensitive a matrix is to perturbations, in other words, it gives an indication as to the stability of the matrix system.  A problem is ***Well-Conditioned*** if the condition number is small, and is ***Ill-Conditioned*** if the condition number is large (the terms "*small*" and "*large*" are somewhat subjective here and will depend on the context).  Bear in mind that in practice, calculating the condition number may be computationally expensive since it requires inverting the matrix $A$.
 
 [^Cond]:  Note that $A^{-1}$ exists only if $A$ is non-singular, meaning that the condition number number only exists if $A$ is non-singular.
 
 The condition number derived above follows the assumption that the error only occurs in $\B{b}$ which then results in an error in $\B{x}$.  If an error $\delta A$ is also committed in $A$, then for sufficiently small $\delta  A$, the error bound for the ratio is
-$$\frac{\| \delta \B{x} \|_p}{\| \B{x} \|_p} \leq \frac{\kappa_p(A)}{ 1 - \kappa_p(A) \frac{\| \delta A \|_p}{\| A \|_p}} \left( \frac{\| \delta \B{b} \|_p}{\| \B{b} \|_p} + \frac{\| \delta A \|_p}{\| A \|_p} \right).$$
+$$\frac{\Norm{\delta \B{x}}{p}}{\Norm{\B{x}}{p}} \leq \frac{\kappa_p(A)}{ 1 - \kappa_p(A) \frac{\Norm{\delta A}{p}}{\Norm{A}{p}}} \left( \frac{\Norm{\delta \B{b}}{p}}{\Norm{\B{b}}{p}} + \frac{\Norm{\delta A}{p}}{\Norm{A}{p}} \right).$$
 
 An example for which $A$ is large is a discretisation matrix of a PDE, in this case, the condition number of $A$ can be very large and increases rapidly as the number of mesh points increases.  For example, for a PDE with $N$ mesh points in 2-dimensions, the condition number $\kappa_2(A)$ is of order $\OO{N}$ and it is not uncommon to have $N$ between $10^6$ and $10^8$.  In this case, errors in $\B{b}$ may be amplified enormously in the solution process.  Thus, if $\kappa_p(A)$ is large, there may be difficulties in solving the system reliably, a problem which plagues calculations with partial differential equations. 
 
@@ -145,7 +108,9 @@ $$\iq \mat{a_1 x_1 = b_1 \\ a_2 x_2 = b_2 \\ \vdots \\ a_{N-1}x_{N-1}=b_{N-1} \\
 
 The solution can be written explicitly as $x_n=\frac{b_n}{a_n}$ for all $n=1,2,\dots,N$.  Every step can done independently, meaning that direct substitution lends itself well to parallel computing.  In total, direct substitution requires exactly $N$ computations (all being division).
 
-:::{.callout-caution title="Example of Direct Substituion"}
+:::{.callout-caution icon=false}
+## Example of Direct Substituion
+
 Consider the system $A\B{x}=\B{b}$ where
 $$A=\Mat{1 & 0 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & -1}, \quad \B{x}=\Mat{x_1 \\ x_2 \\ x_3} \qtq{and} \B{b}=\Mat{4 \\ 2 \\ 4}.$$
 Solving the system using direct substitution:
@@ -158,8 +123,9 @@ $$\iq \Mat{x_1 \\ 2x_2 \\ -x_3}=\Mat{4 \\ 2 \\ 4} \qiq \mat{x_1=4 \\ x_2=1 \\ x_
 Forward/backward substitution require that the matrix $A$ be lower/upper triangular.
 
 Consider the matrix system $A \B{x}=\B{b}$ where
-$$A=\Mat{a_{11} & a_{12} & \dots & a_{1,N-1} & a_{1N} \\ & a_{22} & \dots & a_{2,N-1} & a_{2N} \\ && \ddots & \vdots \\ &&& a_{N-1,N-1} & a_{N-1,N} \\ &&&& a_{NN}}, \quad \B{x}=\Mat{x_1 \\ x_2 \\ \vdots \\ x_{N-1} \\ x_N} \qtq{and} \B{b}=\Mat{b_1 \\ b_2 \\ \vdots \\ b_{N-1} \\ b_N}$$
-and $a_1, a_2, \dots, a_N \neq 0$ (so that the determinant is non-zero).  The matrix $A$ is upper triangular in this case and will require backwards substitution:
+$$A=\Mat{a_{11} & a_{12} & \dots & a_{1,N-1} & a_{1N} \\ & a_{22} & \dots & a_{2,N-1} & a_{2N} \\ && \ddots & \vdots \\ &&& a_{N-1,N-1} & a_{N-1,N} \\ &&&& a_{NN}},$$
+$$\B{x}=\Mat{x_1 \\ x_2 \\ \vdots \\ x_{N-1} \\ x_N} \qtq{and} \B{b}=\Mat{b_1 \\ b_2 \\ \vdots \\ b_{N-1} \\ b_N}$$
+and $a_{11}, a_{22}, \dots, a_{NN} \neq 0$ (so that the determinant is non-zero).  The matrix $A$ is upper triangular in this case and will require backwards substitution:
 $$A\B{x}=\B{b} \qiq \Mat{a_{11} & a_{12} & \dots & a_{1,N-1} & a_{1N} \\ & a_{22} & \dots & a_{2,N-1} & a_{2N} \\ && \ddots & \vdots \\ &&& a_{N-1,N-1} & a_{N-1,N} \\ &&&& a_{NN}}\Mat{x_1 \\ x_2 \\ \vdots \\ x_{N-1} \\ x_N}=\Mat{b_1 \\ b_2 \\ \vdots \\ b_{N-1} \\ b_N.}$$
 
 $$\iq \begin{matrix}
@@ -179,12 +145,20 @@ $$x_1=\frac{b_1-a_{1N}x_N-a_{1,N-1}x_{N-1}-\dots-a_{12}x_2}{a_{11}}.$$
 
 This can be written more explicitly as:
 $$x_n=\begin{cases}
-\frac{1}{a_{nn}}\nbr{b_n - \sum_{i=n+1}^{N}{a_{ni}x_i}} & \qtq{for} n=1,2,\dots,N-1 \\
-\frac{b_N}{a_{NN}} & \qtq{for} n=N.
+\frac{b_N}{a_{NN}} & \qtq{for} n=N \\
+\frac{1}{a_{nn}}\nbr{b_n - \sum_{i=n+1}^{N}{a_{ni}x_i}} & \qtq{for} n=N-1, \dots, 2, 1.
 \end{cases}$$
-A similar version can be obtained for the forward substitution for lower triangular matrices.  For any $n=1,2,\dots,N-1$, calculating it requires 1 division, $N-n$ multiplications and $N-n$ subtractions.  Therefore cumulatively, $x_1, x_2, \dots, x_{N-1}$ require $N$ divisions, $\frac{1}{2}\nbr{N^2-N}$ multiplications and $\frac{1}{2}\nbr{N^2-N}$ additions with one more division required for $x_N$, meaning that in total, backward (and forward) substitution requires $N^2+1$ computations.
+A similar version can be obtained for the forward substitution for lower triangular matrices as follows:
+$$x_n=\begin{cases}
+\frac{b_1}{a_{11}} & \qtq{for} n=1 \\
+\frac{1}{a_{nn}}\nbr{b_n - \sum_{i=1}^{n-1}{a_{ni}x_i}} & \qtq{for} n= 2, 3, \dots, N-1.
+\end{cases}$$
 
-:::{.callout-caution title="Example of Backward Substituion"}
+For any $n=1,2,\dots,N-1$, calculating it requires 1 division, $N-n$ multiplications and $N-n$ subtractions.  Therefore cumulatively, $x_1, x_2, \dots, x_{N-1}$ require $N$ divisions, $\frac{1}{2}\nbr{N^2-N}$ multiplications and $\frac{1}{2}\nbr{N^2-N}$ additions with one more division required for $x_N$, meaning that in total, backward (and forward) substitution requires $N^2+1$ computations.
+
+:::{.callout-caution icon=false}
+## Example of Backward Substitution
+
 Consider the system $A\B{x}=\B{b}$ where
 $$A=\Mat{1 & 2 & 1 \\ 0 & -1 & 4 \\ 0 & 0 & -1}, \quad \B{x}=\Mat{x_1 \\ x_2 \\ x_3} \qtq{and} \B{b}=\Mat{1 \\ 0 \\ 1}.$$
 This problem can be solved by suing backward substitution:
@@ -198,19 +172,24 @@ $$x_1+2x_2+x_3=1 \mathimplies{x_2=-4, \; x_3=-1} x_1-8-1=1 \qiq x_1=10.$$
 The ***TriDiagonal Matrix Algorithm***, abbreviated as ***TDMA*** (also called the ***Thomas Algorithm***) was developed by Llewellyn Thomas which solves tridiagonal matrix systems.
 
 Consider the matrix system $A \B{x}=\B{b}$ where
-$$A=\Mat{m_1 & r_1 \\ l_2 & m_2 & r_2 \\ & \ddots & \ddots & \ddots \\ && l_{N-1} & m_{N-1} & r_{N-1} \\ &&& l_N & m_N}, \quad \B{x}=\Mat{x_1 \\ x_2 \\ \vdots \\ x_{N-1} \\ x_N} \qtq{and} \B{b}=\Mat{b_1 \\ b_2 \\ \vdots \\ b_{N-1} \\ b_N}.$$
-The $m$ terms denote the diagonal elements, $l$ denote subdiagonal elements (left of the diagonal terms) and $r$ denote the superdiagonal elements (right of the diagonal terms).  The TDMA algorithm has explicit formulas for the solution using a forward and backwards sweep that convert the tridiagonal system into an upper triangular system as follows:
+$$A=\Mat{m_1 & r_1 \\ l_2 & m_2 & r_2 \\ & \ddots & \ddots & \ddots \\ && l_{N-1} & m_{N-1} & r_{N-1} \\ &&& l_N & m_N},$$
+$$\B{x}=\Mat{x_1 \\ x_2 \\ \vdots \\ x_{N-1} \\ x_N} \qtq{and} \B{b}=\Mat{b_1 \\ b_2 \\ \vdots \\ b_{N-1} \\ b_N}.$$
+The $m$ terms denote the diagonal elements, $l$ denote subdiagonal elements (left of the diagonal terms) and $r$ denote the superdiagonal elements (right of the diagonal terms).  The TDMA algorithm works in two steps: first, TDMA performs a forward sweep to eliminate all the subdiagonal terms and rescale the matrix to have 1 as the diagonal (the same can also be done to eliminate the superdiagonal instead).  This give the matrix system
+$$\Mat{1 & R_1 \\ & 1 & R_2 \\ & & \ddots & \ddots \\ && & 1 & R_{N-1} \\ &&& & 1}\Mat{x_1 \\ x_2 \\ \vdots \\ x_{N-1} \\ x_N}=\Mat{B_1 \\ B_2 \\ \vdots \\ B_{N-1} \\ B_N}$$
+where
 $$R_n=
 \begin{cases}
 \frac{r_1}{m_1} & n=1 \\ \frac{r_n}{m_n-l_n R_{n-1}} & n=2,3,\dots,N-1
 \end{cases}$$
 $$B_n=
 \begin{cases}
-\frac{b_1}{m_1} & n=1 \\ \frac{b_n-l_n B_{n-1}}{m_n - l_n R_{n-1}} & n=2,3,\dots,N
+\frac{b_1}{m_1} & n=1 \\ \frac{b_n-l_n B_{n-1}}{m_n - l_n R_{n-1}} & n=2,3,\dots,N.
 \end{cases}$$
+
+This can now be solved with backward substitution:
 $$x_n=
 \begin{cases}
-B_n-R_n x_{n+1} & n=1,2,3,\dots,N-1 \\ B_N & n=N.
+B_N & n=N \\ B_n-R_n x_{n+1} & n=N-1, N-2, \dots, 2, 1.
 \end{cases}$$
 
 The computational complexity can be calculated as follows:
@@ -233,7 +212,7 @@ The computational complexity can be calculated as follows:
 
 This gives a total of $3N-5$ computations for $R$, $5N-4$ computations for $B$ and $2N-2$ computations for $x$ giving a total of $10N-11$ computations.
 
-There are other similar algorithms to the TDMA algorithm, like those the solve pentadiagonal systems and those where the tridiagonal matrix starts or ends with a full row.
+There are similar ways of performing eliminations that be done for pentadiagonal systems as well as tridiagonal systems with a full first row.
 
 ### Cramer's Rule
 
@@ -243,7 +222,9 @@ Cramer's rule states that the elements of the vector $\B{x}$ are given by
 $$x_n = \frac{\text{det}(A_n)}{\text{det}(A)} \qtq{for all} n = 1,2,\dots,N$$
 where $A_n$ is the matrix obtained from $A$ by replacing the $\nth{n}$ column by $\B{b}$.  This method seems very simple to execute thanks to its very simple formula, but in practice, it can be very computationally expensive.
 
-:::{.callout-caution title="Example of Cramer's Rule"}
+:::{.callout-caution icon=false}
+## Example of Cramer's Rule
+
 Consider the system $A\B{x}=\B{b}$ where
 $$A=\Mat{0 & 4 & 7 \\ 1 & 0 & 1 \\ 0 & 1 & 0} \qtq{and} \B{b}=\Mat{14 \\ 1 \\ 7}.$$
 The determinant of $A$ is equal to 7.  Using Cramer's rule, the solution $\B{x}=\Tr{\nbr{x_1, \; x_2, \; x_3}}$ can be calculated as:
@@ -252,156 +233,39 @@ $$x_2=\frac{\det(A_1)}{\det(A)}=\frac{\det \Mat{0 & 14 & 7 \\ 1 & 1 & 1 \\ 0 & 7
 $$x_3=\frac{\det(A_1)}{\det(A)}=\frac{\det \Mat{0 & 4 & 14 \\ 1 & 0 & 1 \\ 0 & 1 & 7}}{7}=\frac{-14}{7}=-2.$$
 :::
 
-Generally, for a matrix of size $N \times N$, the determinant will require $\OO{N!}$ computations (other matrix forms or methods may require fewer, of $\OO{N^3}$ at least).  Cramer's rule requires calculating the determinants of $N+1$ matrices each is size $N \times N$ and performing $N$ divisions, therefore the computational complexity of Cramer's rule is $\OO{N+(N+1) \times N!}=\OO{N+(N+1)!}$.  This means that if a machine runs at 1 Gigaflops per second ($10^9$ flops), then a matrix system of size $20 \times 20$ will require 1620 years to compute. 
+Generally, for a matrix of size $N \times N$, the determinant will require $\OO{N!}$ computations (other matrix forms or methods may require fewer, of $\OO{N^3}$ at least).  Cramer's rule requires calculating the determinants of $N+1$ matrices each is size $N \times N$ and performing $N$ divisions, therefore the computational complexity of Cramer's rule is $\OO{N+(N+1) \times N!}=\OO{N+(N+1)!}$.  This means that if a machine runs at 1 Gigaflops per second ($10^9$ flops), then a matrix system of size $20 \times 20$ will require 1620 years to compute.
 
-### Gaussian Elimination Method {#sec-GE}
+### Other Direct Methods
 
-The ***Gaussian Elimination Method*** is an algorithm that transforms the linear system $A\B{x}=\B{b}$ where $A \in \CC^{N \times N}$ and $\B{b} \in \CC^{N}$ into an equivalent upper triangular system $U\B{x}=\B{g}$ after $N-1$ steps, where $U \in \CC^{N \times N}$ is an upper triangular matrix and $\B{g} \in \CC^{N}$.  This uses ***Elementary Row Operations*** (swapping rows, multiplying a row by a constant, adding two rows), after which point, the system $U\B{x}=\B{g}$ can solved by the backward substitution.  Note that this method is possible when the elementary row operations are performed on both $A$ and $\B{b}$ simultaneously, so if rows $i$ and $j$ are swapped in $A$, the rows $i$ and $j$ must also be swapped in $\B{b}$, simialry for the other operations.
-
-The Gaussian elimination method can be performed as follows (the superscripts in brackets will be the step number):
-
-:::{.callout-caution title="Parallel Example"}
-The algorithm will be explained and an example will be done in parallel to explain the steps with the matrix system $A\B{x}=\B{b}$ where
-$$A=\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1} \qtq{and} \B{b}=\Mat{1 \\ 1 \\ 2}.$$
-:::
-
-1. **Establish the starting matrix**:  If $a_{11} \neq 0$, then set $A^{(1)}=A$ and $\B{b}^{(1)}=\B{b}$ as
-$$A^{(1)}=\Mat{a_{11}^{(1)} & a_{12}^{(1)} & \dots & a_{1j}^{(1)} & \dots & a_{1N}^{(1)} \\ a_{21}^{(1)} & a_{22}^{(1)} & \dots & a_{2j}^{(1)} & \dots & a_{2N}^{(1)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{j1}^{(1)} & a_{j2}^{(1)} & \dots & a_{jj}^{(1)} & \dots & a_{jN}^{(1)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{N1}^{(1)} & a_{N2}^{(1)} & \dots & a_{Nj}^{(1)} & \dots & a_{NN}^{(1)}} \in \mathbb{R}^{N \times N} \qtq{where} a_{11}^{(1)} \neq 0$$
-$$\tq{and} \B{b}^{(1)}=\Mat{b_1^{(1)} \\ b_2^{(1)} \\ \vdots \\ b_j^{(1)} \\ \vdots \\ b_N^{(1)}}.$$
-If $a_{11} = 0$, then swap the first row with any other row whose first term is not zero and the result will be the starting matrix $A^{(1)}$.
-
-:::{.callout-caution title="$A^{(1)}$"}
-$$A^{(1)}=A=\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1} \qtq{and} \B{b}^{(1)}=\B{b}=\Mat{1 \\ 1 \\ 2}.$$
-:::
-
-2. **Form the multiplier vector**:  The desired outcome is to have the matrix $A$ be upper triangular, i.e. all the terms below the diagonal should be 0.  To achieve this, introduce a vector $\B{m}_1$ of multipliers, whose $\nth{i}$ entry is given by
-$$ m_{i1}=\frac{a_{i1}^{(1)}}{a_{11}^{(1)}} \qtq{for all} i=1,2,\dots,N,$$
-hence the reason why the assumption $a_{11}^{(1)} \neq 0$ must be imposed.  Essentially, the vector $\B{m}_1$ is the first column of $A$ divided the the first element of $A$.
-
-:::{.callout-caution title="$\boldsymbol{m}_1$"}
-$$\B{m}_1=\frac{1}{a_{11}^{(1)}}\Mat{a_{11}^{(1)} \\ a_{21}^{(1)} \\ a_{31}^{(1)}}=\Mat{1 \\ -\frac{1}{2} \\ \frac{1}{2}}$$
-:::
-
-3. **Elimination terms in the first column**:  For $j=2,3,\dots,N$, multiply row 1 by $-m_{j1}$ and add it to row $j$ to give the new row $j$:
-$$\Mat{
-a_{11}^{(1)} & a_{12}^{(1)} & \dots & a_{1j}^{(1)} & \dots & a_{1N}^{(1)} \\ 
-a_{21}^{(1)}-m_{21}a_{11}^{(1)} & a_{22}^{(1)}-m_{21}a_{12}^{(1)} & \dots & a_{2j}^{(1)}-m_{21}a_{1j}^{(1)} & \dots & a_{2N}^{(1)}-m_{21}a_{1N}^{(1)} \\
-\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-a_{j1}^{(1)}-m_{j1}a_{11}^{(1)} & a_{j2}^{(1)}-m_{j1}a_{12}^{(1)} & \dots & a_{jj}^{(1)}-m_{j1}a_{1j}^{(1)} & \dots & a_{jN}^{(1)}-m_{j1}a_{1N}^{(1)} \\
-\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-a_{N1}^{(1)}-m_{N1}a_{11}^{(1)} & a_{N2}^{(1)}-m_{N1}a_{12}^{(1)} & \dots & a_{Nj}^{(1)}-m_{N1}a_{1j}^{(1)} & \dots & a_{NN}^{(1)}-m_{N1}a_{1N}^{(1)}}.$$
-
-:::{.callout-caution title="Row $\boldsymbol{j}$ Operations"}
-$$\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1}$$
-$$\rarrow{r_2 \to -\nbr{-\frac{1}{2}}r_1+r_2} \Mat{2 & -1 & 1 \\ -\nbr{-\frac{1}{2}}(2)-1 & -\nbr{-\frac{1}{2}}(-1)+1 & -\nbr{-\frac{1}{2}}(1)+2 \\ 1 & 2 & -1}$$
-$$=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 1 & 2 & -1}$$
-$$\rarrow{r_3 \to -\nbr{\frac{1}{2}}r_1+r_3} \Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ -\nbr{\frac{1}{2}}(2)+1 & -\nbr{\frac{1}{2}}(-1)+2 & -\nbr{\frac{1}{2}}(1)-1}$$
-$$=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}$$
-:::
-
-Notice that by the definition of $m_{j1}$, the first element in every row must be equal to 0, therefore, this set of operation makes all the terms in the first column equal to 0 except the first.  Define this new matrix as the second term in the iteration:
-\begin{multline*}
-\Mat{
-a_{11}^{(1)} & a_{12}^{(1)} & \dots & a_{1j}^{(1)} & \dots & a_{1n}^{(1)} \\ 
-0 & a_{22}^{(1)}-m_{21}a_{12}^{(1)} & \dots & a_{2j}^{(1)}-m_{21}a_{1j}^{(1)} & \dots & a_{2n}^{(1)}-m_{21}a_{1n}^{(1)} \\
-\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-0 & a_{j2}^{(1)}-m_{j1}a_{12}^{(1)} & \dots & a_{jj}^{(1)}-m_{j1}a_{1j}^{(1)} & \dots & a_{jn}^{(1)}-m_{j1}a_{1n}^{(1)} \\
-\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
-0 & a_{n2}^{(1)}-m_{n1}a_{12}^{(1)} & \dots & a_{nj}^{(1)}-m_{n1}a_{1j}^{(1)} & \dots & a_{nn}^{(1)}-m_{n1}a_{1n}^{(1)}} \\ \implies \quad \Mat{a_{11}^{(2)} & a_{12}^{(2)} & \dots & a_{1j}^{(2)} & \dots & a_{1n}^{(2)} \\ a_{21}^{(2)} & a_{22}^{(2)} & \dots & a_{2j}^{(2)} & \dots & a_{2n}^{(2)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{j1}^{(2)} & a_{j2}^{(2)} & \dots & a_{jj}^{(2)} & \dots & a_{jn}^{(2)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{n1}^{(2)} & a_{n2}^{(2)} & \dots & a_{nj}^{(2)} & \dots & a_{nn}^{(2)}}=A^{(2)}
-\end{multline*}
-where for all $i,j=2,3,\dots,N$
-$$a_{11}^{(2)}=a_{11}^{(1)} \qtq{;} a_{1i}^{(2)}=a_{1i}^{(1)} \qtq{;} a_{i1}^{(2)}=0 \qtq{;} a_{ij}^{(2)}=a_{ij}^{(1)}-m_{i1}a_{1j}^{(1)}$$
-
-:::{.callout-caution title="$A^{(2)}$"}
-$$A^{(2)}=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}$$
-:::
-
-4. **Modification of the right hand side**:  The vector $\B{b}$ has to also undergo the same operations as $A$, i.e. for $j=2,\dots,N$, let row $j$ of $\B{b}^{(1)}$ be row 1 multiplied by $-m_{j1}$ plus row $j$ and the final vector is the vector $\B{b}^{(2)}$.
-
-:::{.callout-caution title="$\boldsymbol{b}^{(1)}$"}
-$$\B{b}^{(1)}=\Mat{1 \\ 1 \\ 2} \rarrow{\mat{r_2 \to -\nbr{-\frac{1}{2}}r_1+r_2 \\ r_3 \to -\nbr{\frac{1}{2}}r_1+r_3}} \Mat{1 \\ -\nbr{-\frac{1}{2}}(1)+1 \\ -\nbr{\frac{1}{2}}(1)+2}=\Mat{1 \\ \frac{3}{2} \\ \frac{3}{2}}=\B{b}^{(2)}.$$
-:::
-
-5. **Matrix representation of elimination**:  This whole procedure can be written as $A^{(2)}=M^{(1)} A^{(1)}$ and $\B{b}^{(2)}=M^{(1)}\B{b}^{(1)}$ where
-$$M^{(1)}=\Mat{1 & 0 & 0 & \dots & 0 \\ -m_{21} & 1 & 0 & \dots & 0 \\ -m_{31} & 0 & 1 & \dots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ -m_{n1} & 0 & 0 & \dots & 1}.$$
-
-:::{.callout-caution title="$M^{(1)}$"}
-$$M^{(1)}=\Mat{1 & 0 & 0 \\ \frac{1}{2} & 1 & 0 \\ -\frac{1}{2} & 0 & 1}$$
-To check:
-$$M^{(1)}A^{(1)}=\Mat{1 & 0 & 0 \\ \frac{1}{2} & 1 & 0 \\ -\frac{1}{2} & 0 & 1}\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1}=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}=A^{(2)}$$
-$$M^{(1)}\B{b}^{(1)}=\Mat{1 & 0 & 0 \\ \frac{1}{2} & 1 & 0 \\ -\frac{1}{2} & 0 & 1}\Mat{1 \\ 1 \\ 2}=\Mat{1 \\ \frac{3}{2} \\ \frac{3}{2}}=\B{b}^{(2)}$$
-:::
-
-6. **Repeat for other columns**:  The process must now be repeated for the rest of the rows, specifically, those that have non-zero pivot points, i.e. the first point in a row that is non-zero.  This process can be done more simply by generating the $M$ matrices in the same way as before without going through the starting steps.  This process should be reapeated until the last row is reached.
-
-:::{.callout-caution title="Multiplier Matrices"}
-The matrix $M^{(2)}$ can be generated in the same way as $M^{(1)}$, so
-$$M^{(2)}=\Mat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -5 & 1}.$$
-To check:
-$$M^{(2)}A^{(2)}=\Mat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -5 & 1}\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & 0 & -14}=A^{(3)}$$
-$$M^{(2)}\B{b}^{(2)}=\Mat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -5 & 1}\Mat{1 \\ \frac{3}{2} \\ \frac{3}{2}}=\Mat{1 \\ \frac{3}{2} \\ -6}=\B{b}^{(3)}$$
-:::
-
-7. **Solve using backwards substitution**:  After repeating for all other columns (a total of $N-1$ times), the final matrix $A^{(N)}$ will be an upper triangular matrix with non-zero terms on the diagonal and the system can then be solved by backwards substitution.
-
-:::{.callout-caution title="Backwards Substitution"}
-$$A^{(1)}\B{x}=\B{b}^{(1)} \qiq A^{(2)}\B{x}=\B{b}^{(2)} \qiq A^{(3)}\B{x}=\B{b}^{(3)}$$
-$$\iq \Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & 0 & -14}\Mat{x_1 \\ x_2 \\ x_3}=\Mat{1 \\ \frac{3}{2} \\ -6} \qiq \mat{2x_1-x_2+x_3=1 \\ \frac{1}{2}x_2+\frac{5}{2}x_3=\frac{3}{2} \\ -14x_3=-6}$$
-$$\iq \B{x}=\frac{1}{7}\Mat{5 \\ 6 \\ 3}.$$
-:::
-
-The total number of operations in every step is given in the table below (the "steps" here refer to the matrix manipulation step and not exactly to the step numbers of the algorithm):
-
-| Step     | Multiplications | Additions | Divisions |
-|:--------:|:---------------:|:---------:|:---------:|
-| 1        | $(N-1)^2$       | $(N-1)^2$ | $N-1$     |
-| 2        | $(N-2)^2$       | $(N-2)^2$ | $N-2$     |
-| 3        | $(N-3)^2$       | $(N-3)^2$ | $N-3$     |
-| $\vdots$ | $\vdots$        | $\vdots$  | $\vdots$  |
-| $N-2$    | $4$             | $4$       | $2$       |
-| $N-1$    | $1$             | $1$       | $1$       |
-
-This means that the total number of multiplications is
-$$1+4+\dots+(N-3)^2+(N-2)^2+(N-1)^2=\sum_{n=1}^{N-1}{n^2}=\frac{N(N-1)(2N-1)}{6},$$
-similarly for the additions.  Whereas the total number of divisions is
-$$1+2+\dots+(N-3)+(N-2)+(N-1)=\sum_{n=1}^{N-1}{n}=\frac{N(N-1)}{2}.$$
-Therefore the total number of operations is
-$$\frac{N(N-1)(2N-1)}{6}+\frac{N(N-1)(2N-1)}{6}+\frac{N(N-1)}{2}=\frac{2}{3}N^3-\frac{1}{2}N^2-\frac{1}{6}N.$$
-This means that for large $N$, the Gaussian elimination algorithm requires $\OO{\frac{2}{3}N^3}$ operations when $A$ is a non-sparse matrix.  This procedure is computationally expensive even for moderate sized matrices, this also assumes that the pivot points are non-zero, or more specifically, that the matrix has non-zero determinant.  As an illustration of this computational complexity, if $N=10^6$ (which not atypical), then for a computer with the computing power of 1 Gigaflops per second, an $N \times N$ system will need 21 years to find a solution.  A lot of more modern computational techniques are based on attempting to reduce this computational complexity, either by eliminating terms in some suitable way or chnaging the matrix in a more pallatable form.
-
-Overall, every step of this process can be represented by a matrix transformation $M^{(n)}$.  This means that in order to convert the matrix $A$ into an upper triangular matrix $U$, the matrix transformations $M^{(1)}, M^{(2)}, \dots, M^{(N-1)}$ have to be applied reverse order as
-$$U=M^{(N-1)} M^{(N-2)} \dots M^{(1)} A.$$
-This can be written as
-$$U=MA \qtq{where} M=M^{(N-1)} M^{(N-2)} \dots M^{(1)}.$${#eq-UMA}
-
-Notice that every matrix $M^{(n)}$ is lower triangular and this fact will be used later on in @sec-LU.
+There are many other direct methods with more involved calculations like *Gaussian Elimination*, *LU factorisation*, *QR decomposition*, *Singular Value Decomposition* amongst others.  All these methods will be placed in the appendix.
 
 ## Iterative Methods
 
-For a large matrix $A$, solving the system $A\B{x} = \B{b}$ directly can be computationally restrictive as seen in the different methods shown in @sec-Dir.  An alternative would be to use *iterative* methods which generate a sequence of approximations $\B{x}_k$ to the exact solution $\B{x}$.  The hope is that the iterative method converges to the exact solution, i.e.
+For a large matrix $A$, solving the system $A\B{x} = \B{b}$ directly can be computationally restrictive as seen in the different methods shown in @sec-Dir.  An alternative would be to use *iterative* methods which generate a sequence of approximations $\B{x}^{(k)}$ to the exact solution $\B{x}$.  The hope is that the iterative method converges to the exact solution, i.e.
 $$\lim_{k \to \infty}\B{x}^{(k)}=\B{x}.$$
 
 A possible strategy to realise this process is to consider the following recursive definition
-$$\B{x}^{(k+1)} = B\B{x}^{(k)}+\B{g} \qtq{for} k\geq 0,$$
+$$\B{x}^{(k)} = B\B{x}^{(k-1)}+\B{g} \qtq{for} k\geq 1,$$
 where $B$ is a suitable matrix called the ***Iteration Matrix*** (which would generally depend on $A$) and $\B{g}$ is a suitable vector (depending on $A$ and $\B{b}$).  Since the iterations $\B{x}^{(k)}$ must tend to $\B{x}$ as $k$ tends to infinity, then
-$$\B{x}^{(k+1)} = B\B{x}^{(k)}+\B{g}$${#eq-Bxgk}
-$$\mathimplies{k \to \infty} \B{x}=B\B{x}+\B{g}.$${#eqn-Bxg}
+$$\B{x}^{(k)} = B\B{x}^{(k-1)}+\B{g}$${#eq-Bxgk}
+$$\mathimplies{k \to \infty} \B{x}=B\B{x}+\B{g}.$${#eq-Bxg}
+
 Next, a sufficient condition needs to be derived; define $\B{e}^{(k)}$ as the error incurred from iteration $k$, i.e. $\B{e}^{(k)} := \B{x} - \B{x}^{(k)}$ and consider the linear systems
-$$\B{x} = B\B{x}+\B{g} \qtq{and} \B{x}^{(k+1)} = B\B{x}^{(k)}+\B{g}.$$
+$$\B{x} = B\B{x}+\B{g} \qtq{and} \B{x}^{(k)} = B\B{x}^{(k-1)}+\B{g}.$$
 Subtracting these gives
 \begin{align*}
-& \quad \B{x}-\B{x}^{(k+1)} = \nbr{B\B{x}+\B{g}}-\nbr{B\B{x}^{(k)}+\B{g}} \\
-\implies & \quad \B{x}-\B{x}^{(k+1)} = B\nbr{\B{x}-\B{x}^{(k)}} \\
-\implies & \quad \B{e}^{(k+1)}=B\B{e}^{(k)}.
+& \quad \B{x}-\B{x}^{(k)} = \nbr{B\B{x}+\B{g}}-\nbr{B\B{x}^{(k-1)}+\B{g}} \\
+\implies & \quad \B{x}-\B{x}^{(k)} = B\nbr{\B{x}-\B{x}^{(k-1)}} \\
+\implies & \quad \B{e}^{(k)}=B\B{e}^{(k-1)}.
 \end{align*}
 
-For the sake of argument, consider the case when the matrix $B$ is symmetric.  In order to find a bound for the error, take the 2-norm of the error equation
-$$\B{e}^{(k+1)}=B\B{e}^{(k)} \mathimplies{\| \cdot \|_2} \|\B{e}^{(k+1)}\|_2 = \|B\B{e}^{(k)}\|_2.$$
-By the submultiplicative property of matrix norms given in @nte-SubMult and the fact that the 2-norm of a symmetric matrix is equal to the spectral radius (largest eigenvalue in absolute terms), the error $\| \B{e}^{(k+1)} \|$ can be bounded above
-$$\|\B{e}^{(k+1)}\|_2 = \|B\B{e}^{(k)}\|_2 \leq \|B\| \| \B{e}^{(k)} \|_2 =\rho(B)\|\B{e}^{(k)}\|_2.$$
-This can be iterated backwards, so for $k \geq 0$,
-$$\|\B{e}^{(k+1)}\|_2 \leq \rho(B) \|\B{e}^{(k)}\|_2 \leq \rho(B)^2 \|\B{e}^{(k-1)}\|_2 \leq \dots \leq \rho(B)^{k+1} \|\B{e}^{(0)}\|_2.$$
-Generally, this means that the error at any iteration $k$ can be bounded above by the error at the initial iteration $\B{e}^{(0)}$.  Therefore, since $\B{e}^{(0)}$ is arbitrary, if $\rho(B)<1$ then the set of vectors $\cbr{\B{x}^{(k)}}_{k \in \mathbb{N}}$ generated by the iterative scheme $\B{x}^{(k+1)}=B\B{x}^{(k)}+\B{g}$ will converge to the exact solution $\B{x}$ which solves $A\B{x}=\B{b}$, hence giving a sufficient condition for convergence.
+In order to find a bound for the error, take the 2-norm of the error equation
+$$\B{e}^{(k)}=B\B{e}^{(k-1)} \mathimplies{\Norm{\cdot}{2}} \|\B{e}^{(k)}\|_2 = \|B\B{e}^{(k-1)}\|_2.$$
+By the submultiplicative property of matrix norms given in @nte-SubMult, the error $\| \B{e}^{(k)} \|$ can be bounded above as
+$$\Norm{\B{e}^{(k)}}{2} = \Norm{B\B{e}^{(k-1)}}{2} \leq \Norm{B}{2} \Norm{\B{e}^{(k-1)}}{2}.$$
+This can be iterated backwards, so for $k \geq 1$,
+$$\|\B{e}^{(k)}\|_2 \leq \| B \|_2 \|\B{e}^{(k-1)}\|_2 \leq \| B \|_2^2 \|\B{e}^{(k-2)}\|_2 \leq \dots \leq \| B \|_2^{k} \|\B{e}^{(0)}\|_2.$$
+Generally, this means that the error at any iteration $k$ can be bounded above by the error at the initial iteration $\B{e}^{(0)}$.  Therefore, since $\B{e}^{(0)}$ is arbitrary, if $\| B \|_2<1$ then the set of vectors $\cbr{\B{x}^{(k)}}_{k \in \mathbb{N}}$ generated by the iterative scheme $\B{x}^{(k)}=B\B{x}^{(k-1)}+\B{g}$ will converge to the exact solution $\B{x}$ which solves $A\B{x}=\B{b}$, hence giving a sufficient condition for convergence.
 
 ### Constructing an Iterative Method
 
@@ -419,14 +283,12 @@ $$\B{x}^{(k)}=P^{-1}(P-A)\B{x}^{(k-1)}+P^{-1}\B{b}$$
 (as in @eq-Bxgk), then the method should converge to the exact solution (provided a suitable choice for $P$).  Of course, for the iterative procedure, the iteration needs an initial vector to start which will be
 $$\B{x}^{(0)}=\Mat{x_1^{(0)} \\ x_2^{(0)} \\ \vdots \\ x_N^{(0)}}.$$
 
-The choice of the matrix $P$ should depend on $A$ in some way.  So suppose that the matrix $A$ is broken down into three parts, $A=D+L+U$ where $D$ is the matrix of the diagonal entries of $A$, $L$ is the strictly lower triangular part or $A$ (i.e. not including the diagonal) and $U$ is the strictly upper triangular part of $A=D+L+U$.
+The choice of the matrix $P$ should depend on $A$ in some way.  So suppose that the matrix $A$ is broken down into three parts, $A=D+L+U$ where $D$ is the matrix of the diagonal entries of $A$, $L$ is the strictly lower triangular part or $A$ (i.e. not including the diagonal) and $U$ is the strictly upper triangular part of $A$.
 
 :::{.callout-note}
 For example
-$$\underbrace{\Mat{a & b & c \\ d & e & f \\ g & h & i}}_{A}=\underbrace{\Mat{a &  & \\  & e &  \\  &  & i}}_{D}+\underbrace{\Mat{ &  &  \\ d &  &  \\ g & h & }}_{L}+\underbrace{\Mat{ & b & c \\  &  & f \\  &  & }}_{U}.$$
+$$\underbrace{\Mat{a & b & c \\ d & e & f \\ g & h & i}}_{A}=\underbrace{\Mat{a & 0 & 0 \\ 0 & e & 0 \\ 0 & 0 & i}}_{D}+\underbrace{\Mat{ 0 & 0 & 0 \\ d & 0 & 0 \\ g & h & 0}}_{L}+\underbrace{\Mat{ 0 & b & c \\ 0 & 0 & f \\ 0 & 0 & 0}}_{U}.$$
 :::
-
-The matrix $P$ can be chosen as a combination of $D,L$ and $U$ in some way to generate the matrix $B$.  There are many ways in which this can be done, each with their own advantages:
 
 - ***Jacobi Method***: $\B{P=D}$
 
@@ -502,4 +364,65 @@ The [MATLAB website](https://uk.mathworks.com/help/matlab/ref/double.mldivide.ht
 ![If the matrix $A$ is full.](figures/mldivide_full.png)
 
 ![If the matrix $A$ is sparse.](figures/mldivide_sparse.png)
+:::
+
+## Exersises
+
+:::{.callout-important icon=false}
+## Exersise 2.1
+
+Let $A$ and $B$ be invertible matrices, $p \in \mathbb{N}$ and $\lambda \in \mathbb{R}$.  The condition number $\kappa_p$ has the following properties:
+
+i. $\kappa_p(A) \geq 1$;
+ii. $\kappa_p(A)=1$ if and only if $A$ is an orthogonal matrix, i.e. $A^{-1}=A^{\mathrm{T}}$;
+iii. $\kappa_p(\Tr{A})=\kappa_p(A^{-1})=\kappa_p(A)$;
+iv. $\kappa_p(\lambda A)=\kappa_p(A)$;
+v. $\kappa_p(AB) \leq \kappa_p(A)\kappa_p(B)$.
+
+:::
+
+:::{.callout-tip icon=false collapse=true}
+## Solution 2.1
+
+i.
+ii.
+iii.
+iv.
+v.
+
+:::
+
+:::{.callout-important icon=false}
+## Exersise 2.2
+
+Solve the following linear systems of the form $A \B{x}=\B{b}$ using the following direct methods:
+
+i. Direct substitution
+$$A=\Mat{1 & 0 & 0 \\ 0 & -2 & 0 \\ 0 & 0 & 5}, \quad \B{b}=\Mat{3 \\ 9 \\ 0}$$
+
+ii. Backward substitution
+$$A=\Mat{7 & 2 & 1 \\ 0 & 2 & -1 \\ 0 & 0 & 3}, \quad \B{b}=\Mat{0 \\ 1 \\ 1}$$
+
+iii. Direct substitution
+$$A=\Mat{1 & 0 & 0 \\ 0 & 2 & 0 \\ 1 & 1 & -1}, \quad \B{b}=\Mat{3 \\ 0 \\ 5}$$
+
+iv. TDMA
+$$A=\Mat{2 & -1 & 0 & 0 & 0 \\ -1 & 2 & -1 & 0 & 0 \\ 0 & -1 & 2 & -1 & 0 \\ 0 & 0 & -1 & 2 & -1 \\ 0 & 0 & 0 & -1 & 2}, \quad \B{b}=\Mat{1 \\ 0 \\ 0 \\ 0 \\ 1}$$
+
+v. Cramer's Rule
+$$A=\Mat{1 & 4 & 1 \\ 1 & 2 & 0 \\ 1 & -1 & 2}, \quad \B{b}=\Mat{1 \\ 0 \\ 0}$$
+:::
+
+:::{.callout-important icon=false}
+## Exersise 2.3
+
+Using the formulas derived, write MATLAB codes that can perform:
+
+- Direct substitution
+- Backward substitution
+- Forward substitution
+- TDMA
+
+Use the examples in Exersise 2.2 as test cases.
+
 :::

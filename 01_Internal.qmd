@@ -17,7 +17,7 @@ where:
 - $E\in\mathbb{Z}$ is the exponent.
 - $a_1a_2\dots a_t$ is the mantissa (or significand).  The mantissa has length $t$ which is the maximum number of digits that can be stored.  Each term in the mantissa must satisfy $0\leq a_i\leq\beta-1$ for all $i=1,2,\dots,t$ and $a_1 \neq 0$ (to ensure that the same number cannot have different representations).  The digits $a_1a_2\dots a_p$ (with $p\leq t$) are often called the $p$ first significant digits of $x$.
 
-The set $\mathcal{F}$ is therefore fully characterised by the basis $\beta$, the number of significant digits $t$ and the range of values that $E$ can take which is $E \in (L,U)$ with $L < 0$ and $U > 0$.
+The set $\mathcal{F}$ is therefore fully characterised by the basis $\beta$, the number of significant digits $t$ and the range of values that $E$ can take.
 
 A computer typically uses binary representation, meaning that the base is $\beta=2$ with the available digits $\{0,1\}$ (also known as bits) and each digit is the coefficient of a power of 2.  Available platforms (like MATLAB and Python) typically use the IEEE754 double precision format for $\mathcal{F}$, which uses 64-bits as follows:
 
@@ -25,14 +25,9 @@ A computer typically uses binary representation, meaning that the base is $\beta
 - 11 bits for $E$ (which can be $0,1,2,\dots,10$);
 - 52 bits for $a_2 a_3 \dots a_{53}$ (since $a_1\neq 0$, it has to be equal to 1).
 
-This gives a total of 64-bits with $L=-1022$ and $U=1023$.  For 32-bit storage, the exponent is at most 7 and the mantissa has 23 digits.  Note that 0 does not belong to $\mathcal{F}$ since it cannot be represented in the form shown in @eq-float and it is therefore handled separately.
+For 32-bit storage, the exponent is at most 7 and the mantissa has 23 digits.  Note that 0 does not belong to $\mathcal{F}$ since it cannot be represented in the form shown in @eq-float and it is therefore handled separately.
 
-If a non-zero real number $x$ is replaced by its floating-point representation $fl(x)\in\mathcal{F}$, then there will inevitably be a round-off error which is given by
-$$\frac{|x-fl(x)|}{|x|}\leq \frac{1}{2}\varepsilon_M$$
-where $\varepsilon_M=\beta^{1-t}$ is the machine epsilon and provides the distance between 1 and its closest floating-point number greater than 1.  In the binary case, $\varepsilon_M \approx 2.2204\cdot 10^{-16}$ (this can be found using `eps(1)`).  In other words, the number $u = \frac{1}{2}\varepsilon_M$ is the maximum relative error that the computer can make while representing a real number by finite arithmetic.
-
-Moreover, since $L$ and $U$ are finite, one cannot represent numbers whose absolute value is either arbitrarily large or arbitrarily small.  Precisely, the smallest and the largest positive real numbers of $\mathcal{F}$ are given by
-$x_{\min} =\beta^{L-1}$ and $x_{\max} = \beta^{U}(1-\beta^{-t})$, respectively. A positive number smaller than $x_{\min}$ yields under-flow and a positive number greater than $x_{\max}$ yields over-flow. The elements in $\mathcal{F}$ are more dense near $x_{\min}$, and less dense while approaching $x_{\max}$. However, the relative distance is small in both cases.  The largest and smallest values that can be represented as floating-point numbers in MATLAB can be found using the `realmin` and `realmax` commands.
+The smallest and the largest positive real numbers that can be written in floating points can be found by using the `realmin` and `realmax` commands.  A positive number smaller than $x_{\min}$ yields underflow and a positive number greater than $x_{\max}$ yields overflow. The elements in $\mathcal{F}$ are more dense near $x_{\min}$, and less dense while approaching $x_{\max}$.  However, the relative distance is small in both cases.  Note that any number bigger than `realmax` or smaller than `-realmax` will be assigned the values $\infty$ and $-\infty$ respectively.
 
 ```matlab
 >> realmin
@@ -43,15 +38,37 @@ ans =
      1.7977e308
 ```
 
+If a non-zero real number $x$ is replaced by its floating-point representation $fl(x)\in\mathcal{F}$, then there will inevitably be a round-off error, especially if the number is either too large or too small relative to the other numbers involved.  For a floating point number $x$, there is a distance $\varepsilon_x$ where any value in the interval $(x-\varepsilon_x,x+\varepsilon_x)$ cannot be written as a floating point and will therefore be assigned the value $x$.  This interval width is called the ***Machine Epsilon*** and can be found for any floating point number $x$ by using the command `eps(x)`.
+
+```matlab
+>> ep1=eps(1)
+ep1 =
+     2.2204e-16
+>> 1-(1+ep1/2)
+ans =
+     0
+```
+
+The larger the floating number is, the larger the machine epsilon will be, meaning that larger numbers will have much greater tolerances of error.  The smaller the number is, the larger the relative size will be, rendering the numbers insginifciant overall.
+
+```matlab
+>> eps(2^100)
+ans =
+     2.8147e+14
+>> eps(2^-50)
+ans =
+     1.9722e-31
+```
+
 Since $\mathcal{F}$ is a strict subset of $\RR$, elementary algebraic operations on floating-point numbers do not inherit all the properties of analogous operations on $\RR$.  Precisely, commutativity still holds for addition and multiplication, i.e. $fl(x + y) = fl(y + x)$ and $fl(xy) = fl(yx)$. Associativity is violated whenever a situation of overflow or underflow occurs or, similarly, whenever two numbers with opposite signs but similar absolute values are added, the result may be quite inexact and the situation is referred to as loss of significant digits.
 
-Properly handling floating point computations can be tricky sometimes and, if not correctly done, may have serious consequences.  There are many webpages (and books) collecting examples of different disasters caused by a poor handling of computer arithmetic or a bad algorithmic implementation. See, for instance, see [Software Bugs](https://www5.in.tum.de/~huckle/bugse.html) and the [Patriot Missile Fail](http://ta.twi.tudelft.nl/users/vuik/wi211/disasters.html) among others.
+Properly handling floating point computations can be tricky sometimes and, if not correctly done, may have serious consequences.  There are many webpages (and books) collecting examples of different disasters caused by a poor handling of computer arithmetic or a bad algorithmic implementation. See, for instance, [Software Bugs](https://www5.in.tum.de/~huckle/bugse.html) and the [Patriot Missile Fail](http://ta.twi.tudelft.nl/users/vuik/wi211/disasters.html) among others.
 
 ## Computational Complexity
 
-The ***Computational Complexity*** of a function can be defined as the relationship between the size of the input and the difficulty of running the function to completion.  The size (or at least, an attribute of the size) of the input is usually denoted $n$, for instance, for a 1-D array, $n$ can be its length. 
+The ***Computational Complexity*** of an algorithm can be defined as the relationship between the size of the input and the difficulty of running the algorithm to completion.  The size (or at least, an attribute of the size) of the input is usually denoted $n$, for instance, for a 1-D array, $n$ can be its length. 
 
-The difficulty of a problem can be measured in several ways. One suitable way to describe the difficulty of the problem is to count the number of basic, or ***Floating-Point Operations***, such as additions, subtractions, multiplications, divisions and assignments.  Floating-point operations, also called *flops*, usually measure the speed of a computer, measured as the maximum number of floating-point operations which the computer can execute in one second.  Although each basic operation takes a different amount of time, the number of basic operations needed to complete a function is sufficiently related to the running time to be useful, and it is usually easy to count and less dependent on the specific machine (hardware) that is used to perform the computations. 
+The difficulty of a problem can be measured in several ways. One suitable way to describe the difficulty of the problem is to count the number of ***Floating-Point Operations***, such as additions, subtractions, multiplications, divisions and assignments.  Floating-point operations, also called ***flops***, usually measures the speed of a computer, measured as the maximum number of floating-point operations which the computer can execute in one second.  Although each basic operation takes a different amount of time, the number of basic operations needed to complete a function is sufficiently related to the running time to be useful, and it is usually easy to count and less dependent on the specific machine (hardware) that is used to perform the computations. 
 
 A common notation for complexity is the ***Big-O*** notation (denoted $\mathcal{O}$), which establishes the relationship in the growth of the number of basic operations with respect to the size of the input as the input size becomes very large. In general, the basic operations grow in direct response to the increase in the size $n$ of the input and, as $n$ gets large, the highest power dominates. Therefore, only the highest power term is included in Big-O notation; moreover, coefficients are not required to characterise growth and are usually dropped (although this will also depend on the precision of the estimates).
 
@@ -59,7 +76,9 @@ Formally, a function $f$ behaves as $f(x) \sim \OO{p(x)}$ as $x$ tends to infini
 $$\lim_{x \to \infty}\frac{f(x)}{p(x)}=\text{constant}.$$
 For example, the polynomial $f(x)=x^4+2x^2+x+5$ behaves like $x^4$ as $x$ tends to infinity since this term will be the fastest to grow.  This can be written as $f(x) \sim \OO{x^4}$ as $x \to \infty$. 
 
-:::{.callout-caution title="Couting flops"}
+:::{.callout-caution icon=false}
+## Couting flops
+
 Let $f:\mathbb{N} \to \mathbb{N}$ be given by
 $$f(n)=\left( \sum\limits_{j=1}^{n} j\right)^2$$
 
@@ -112,7 +131,9 @@ This will produce a simple time in seconds that MATLAB took from `tic` until `to
 
 For more advanced analysis, MATLAB uses a **Code Profiler** to analyse code which includes run times for each iteration, times a code has been called and a lot more.
 
-:::{.callout-caution title="Code Profiling"}
+:::{.callout-caution icon=false}
+## Iterative vs Recursive
+
 Suppose that a code needs to be written that finds the $\nth{N}$ Fibonacci number starting the sequence with (1,1).  This can be done in two ways:
 
 - **Iteratively** by having a self-contained code that generates all the terms of the sequence up to $N$ and displays the last term.
@@ -133,7 +154,7 @@ F=S(end);
 end
 ```
 
-- **Recursively** by have a self-referential code that keeps referring back to itself to generate last term in the sequence from the previous terms.
+- **Recursively** by have a self-referential code that keeps referring back to itself to generate the last term in the sequence from the previous terms.
 
 ```matlab
 function [F]=Fib_Rec(N)

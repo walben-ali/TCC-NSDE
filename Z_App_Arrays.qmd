@@ -2,7 +2,7 @@
 {{< include _macros.qmd >}}
 :::
 
-# Appendix B:  Arrays in MATLAB {.unnumbered}
+# Arrays in MATLAB
 
 MATLAB is one of the most versatile programming languages when it comes to working with vectors and matrices, hence the name MATLAB, particularly MATrix LABoratory.  In MATLAB, vectors essentially represent lists and matrices represent tables.
 

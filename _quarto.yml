@@ -8,46 +8,49 @@ book:
      chapters:
           - index.qmd
           - 01_Internal.qmd
-     #      - part: Part_LinAlg.qmd
-     #        chapters:
-     #           - 02_LinAlg.qmd
-     #           - 03_MatDeco.qmd
+          - part: Part_LinAlg.qmd
+            chapters:
+               - 02_LinAlg.qmd
      #           - 04_DataFit.qmd
      #           - 05_Eigen.qmd
      #           - 06_Root.qmd
-     #      - part: Part_IVPs.qmd
-     #        chapters:
-     #           - 07_IVP_Euler.qmd
-     #           - 08_IVP_ModEuler.qmd
-     #           - 09_IVP_RK4.qmd
-     #           - 10_IVP_InBuilt.qmd
-     #           - 11_IVP_Implicit.qmd
-     #      - part: Part_BVPs.qmd
-     #        chapters:
-     #           - 12_BVP.qmd
-     #           - 13_MVP.qmd
-     #           - 14_SBVP.qmd
-     #      - part: Part_PDEs.qmd
-     #        chapters:
-     #           - 15_PDE.qmd
-     # appendices:
-     #      - 91_AppA.qmd
-     #      - 92_AppB.qmd
-     #      - 93_AppC.qmd
-     #      - 94_AppD.qmd
-     #      - 95_AppE.qmd
-     #      - 96_AppF.qmd
+          - part: Part_IVPs.qmd
+            chapters:
+               - 07_IVP_Euler.qmd
+               - 08_IVP_ModEuler.qmd
+               - 09_IVP_RK4.qmd
+               - 10_IVP_InBuilt.qmd
+               - 11_IVP_Implicit.qmd
+          - part: Part_BVPs.qmd
+            chapters:
+               - 12_BVP.qmd
+               - 13_MVP.qmd
+               - 14_SBVP.qmd
+          - part: Part_PDEs.qmd
+            chapters:
+               - 15_PDE.qmd
+     appendices:
+           - Z_App_Basic.qmd
+           - Z_App_Arrays.qmd
+           - Z_App_Loops.qmd
+           - Z_App_Plot.qmd
+           - Z_App_ReadWrite.qmd
+           - Z_App_GE.qmd
+           - Z_App_MatDeco.qmd
      downloads: [pdf,docx,epub]
 
 format:
      html:
-          css: custom.scss
-          fontsize: 14pt
-          mainfont: Times New Roman
+          theme:
+               light: [flatly,styleL.scss]
+               dark: [darkly,styleD.scss]
+          respect-user-color-scheme: true
+          mainfont: Computer Modern Roman
+          fontsize: 1rem
+          page-layout: full
+          code-link: true
+          footnotes-hover: true
           code-line-numbers: true
-          theme: 
-               light: cosmo
-               dark: darkly
      pdf:
           toc: true
           documentclass: scrreport

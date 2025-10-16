@@ -53,7 +53,8 @@
 \newcommand{\cbr}[1]{\left\{ #1 \right\}}
 \newcommand{\abr}[1]{\langle #1 \rangle}
 \newcommand{\abs}[1]{\left| #1 \right|}
-\newcommand{\INorm}[1]{|| #1 ||_{\infty}}
+\newcommand{\Norm}[2]{\left\| #1 \right\|_{#2}}
+\newcommand{\INorm}[1]{\left\| #1 \right\|_{\infty}}
 
 <!--- Calculus --->
 

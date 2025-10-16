@@ -139,5 +139,32 @@
   },
   "Part_PDEs.qmd": {
     "Part_PDEs.html": "2997dba6"
+  },
+  "97_AppG.qmd": {
+    "97_AppG.html": "a009cb53"
+  },
+  "98_AppH.qmd": {
+    "98_AppH.html": "6924d5ec"
+  },
+  "Z_App_GE.qmd": {
+    "Z_App_GE.html": "d7903958"
+  },
+  "Z_App_MatDeco.qmd": {
+    "Z_App_MatDeco.html": "c772ee6b"
+  },
+  "Z_App_Basic.qmd": {
+    "Z_App_Basic.html": "2d0c8a8c"
+  },
+  "Z_App_Arrays.qmd": {
+    "Z_App_Arrays.html": "e60c04c3"
+  },
+  "Z_App_Loops.qmd": {
+    "Z_App_Loops.html": "75fdcab2"
+  },
+  "Z_App_Plot.qmd": {
+    "Z_App_Plot.html": "949fbdb4"
+  },
+  "Z_App_ReadWrite.qmd": {
+    "Z_App_ReadWrite.html": "0a02dde0"
   }
 }

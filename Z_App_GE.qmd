@@ -1,0 +1,125 @@
+:::{.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+# Gaussian Elimination Method {#sec-GE}
+
+The ***Gaussian Elimination Method*** is an algorithm that transforms the linear system $A\B{x}=\B{b}$ where $A \in \CC^{N \times N}$ and $\B{b} \in \CC^{N}$ into an equivalent upper triangular system $U\B{x}=\B{g}$ after $N-1$ steps, where $U \in \CC^{N \times N}$ is an upper triangular matrix and $\B{g} \in \CC^{N}$.  This uses ***Elementary Row Operations*** (swapping rows, multiplying a row by a constant, adding two rows), after which point, the system $U\B{x}=\B{g}$ can solved by the backward substitution.  Note that this method is possible when the elementary row operations are performed on both $A$ and $\B{b}$ simultaneously, so if rows $i$ and $j$ are swapped in $A$, the rows $i$ and $j$ must also be swapped in $\B{b}$, simialry for the other operations.
+
+The Gaussian elimination method can be performed as follows (the superscripts in brackets will be the step number):
+
+:::{.callout-caution title="Parallel Example"}
+The algorithm will be explained and an example will be done in parallel to explain the steps with the matrix system $A\B{x}=\B{b}$ where
+$$A=\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1} \qtq{and} \B{b}=\Mat{1 \\ 1 \\ 2}.$$
+:::
+
+1. **Establish the starting matrix**:  If $a_{11} \neq 0$, then set $A^{(1)}=A$ and $\B{b}^{(1)}=\B{b}$ as
+$$A^{(1)}=\Mat{a_{11}^{(1)} & a_{12}^{(1)} & \dots & a_{1j}^{(1)} & \dots & a_{1N}^{(1)} \\ a_{21}^{(1)} & a_{22}^{(1)} & \dots & a_{2j}^{(1)} & \dots & a_{2N}^{(1)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{j1}^{(1)} & a_{j2}^{(1)} & \dots & a_{jj}^{(1)} & \dots & a_{jN}^{(1)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{N1}^{(1)} & a_{N2}^{(1)} & \dots & a_{Nj}^{(1)} & \dots & a_{NN}^{(1)}} \in \mathbb{R}^{N \times N} \qtq{where} a_{11}^{(1)} \neq 0$$
+$$\tq{and} \B{b}^{(1)}=\Mat{b_1^{(1)} \\ b_2^{(1)} \\ \vdots \\ b_j^{(1)} \\ \vdots \\ b_N^{(1)}}.$$
+If $a_{11} = 0$, then swap the first row with any other row whose first term is not zero and the result will be the starting matrix $A^{(1)}$.
+
+:::{.callout-caution title="$A^{(1)}$"}
+$$A^{(1)}=A=\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1} \qtq{and} \B{b}^{(1)}=\B{b}=\Mat{1 \\ 1 \\ 2}.$$
+:::
+
+2. **Form the multiplier vector**:  The desired outcome is to have the matrix $A$ be upper triangular, i.e. all the terms below the diagonal should be 0.  To achieve this, introduce a vector $\B{m}_1$ of multipliers, whose $\nth{i}$ entry is given by
+$$ m_{i1}=\frac{a_{i1}^{(1)}}{a_{11}^{(1)}} \qtq{for all} i=1,2,\dots,N,$$
+hence the reason why the assumption $a_{11}^{(1)} \neq 0$ must be imposed.  Essentially, the vector $\B{m}_1$ is the first column of $A$ divided the the first element of $A$.
+
+:::{.callout-caution title="$\boldsymbol{m}_1$"}
+$$\B{m}_1=\frac{1}{a_{11}^{(1)}}\Mat{a_{11}^{(1)} \\ a_{21}^{(1)} \\ a_{31}^{(1)}}=\Mat{1 \\ -\frac{1}{2} \\ \frac{1}{2}}$$
+:::
+
+3. **Elimination terms in the first column**:  For $j=2,3,\dots,N$, multiply row 1 by $-m_{j1}$ and add it to row $j$ to give the new row $j$:
+$$\Mat{
+a_{11}^{(1)} & a_{12}^{(1)} & \dots & a_{1j}^{(1)} & \dots & a_{1N}^{(1)} \\ 
+a_{21}^{(1)}-m_{21}a_{11}^{(1)} & a_{22}^{(1)}-m_{21}a_{12}^{(1)} & \dots & a_{2j}^{(1)}-m_{21}a_{1j}^{(1)} & \dots & a_{2N}^{(1)}-m_{21}a_{1N}^{(1)} \\
+\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+a_{j1}^{(1)}-m_{j1}a_{11}^{(1)} & a_{j2}^{(1)}-m_{j1}a_{12}^{(1)} & \dots & a_{jj}^{(1)}-m_{j1}a_{1j}^{(1)} & \dots & a_{jN}^{(1)}-m_{j1}a_{1N}^{(1)} \\
+\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+a_{N1}^{(1)}-m_{N1}a_{11}^{(1)} & a_{N2}^{(1)}-m_{N1}a_{12}^{(1)} & \dots & a_{Nj}^{(1)}-m_{N1}a_{1j}^{(1)} & \dots & a_{NN}^{(1)}-m_{N1}a_{1N}^{(1)}}.$$
+
+:::{.callout-caution title="Row $\boldsymbol{j}$ Operations"}
+$$\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1}$$
+$$\rarrow{r_2 \to -\nbr{-\frac{1}{2}}r_1+r_2} \Mat{2 & -1 & 1 \\ -\nbr{-\frac{1}{2}}(2)-1 & -\nbr{-\frac{1}{2}}(-1)+1 & -\nbr{-\frac{1}{2}}(1)+2 \\ 1 & 2 & -1}$$
+$$=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 1 & 2 & -1}$$
+$$\rarrow{r_3 \to -\nbr{\frac{1}{2}}r_1+r_3} \Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ -\nbr{\frac{1}{2}}(2)+1 & -\nbr{\frac{1}{2}}(-1)+2 & -\nbr{\frac{1}{2}}(1)-1}$$
+$$=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}$$
+:::
+
+Notice that by the definition of $m_{j1}$, the first element in every row must be equal to 0, therefore, this set of operation makes all the terms in the first column equal to 0 except the first.  Define this new matrix as the second term in the iteration:
+\begin{multline*}
+\Mat{
+a_{11}^{(1)} & a_{12}^{(1)} & \dots & a_{1j}^{(1)} & \dots & a_{1n}^{(1)} \\ 
+0 & a_{22}^{(1)}-m_{21}a_{12}^{(1)} & \dots & a_{2j}^{(1)}-m_{21}a_{1j}^{(1)} & \dots & a_{2n}^{(1)}-m_{21}a_{1n}^{(1)} \\
+\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+0 & a_{j2}^{(1)}-m_{j1}a_{12}^{(1)} & \dots & a_{jj}^{(1)}-m_{j1}a_{1j}^{(1)} & \dots & a_{jn}^{(1)}-m_{j1}a_{1n}^{(1)} \\
+\vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+0 & a_{n2}^{(1)}-m_{n1}a_{12}^{(1)} & \dots & a_{nj}^{(1)}-m_{n1}a_{1j}^{(1)} & \dots & a_{nn}^{(1)}-m_{n1}a_{1n}^{(1)}} \\ \implies \quad \Mat{a_{11}^{(2)} & a_{12}^{(2)} & \dots & a_{1j}^{(2)} & \dots & a_{1n}^{(2)} \\ a_{21}^{(2)} & a_{22}^{(2)} & \dots & a_{2j}^{(2)} & \dots & a_{2n}^{(2)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{j1}^{(2)} & a_{j2}^{(2)} & \dots & a_{jj}^{(2)} & \dots & a_{jn}^{(2)} \\ \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{n1}^{(2)} & a_{n2}^{(2)} & \dots & a_{nj}^{(2)} & \dots & a_{nn}^{(2)}}=A^{(2)}
+\end{multline*}
+where for all $i,j=2,3,\dots,N$
+$$a_{11}^{(2)}=a_{11}^{(1)} \qtq{;} a_{1i}^{(2)}=a_{1i}^{(1)} \qtq{;} a_{i1}^{(2)}=0 \qtq{;} a_{ij}^{(2)}=a_{ij}^{(1)}-m_{i1}a_{1j}^{(1)}$$
+
+:::{.callout-caution title="$A^{(2)}$"}
+$$A^{(2)}=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}$$
+:::
+
+4. **Modification of the right hand side**:  The vector $\B{b}$ has to also undergo the same operations as $A$, i.e. for $j=2,\dots,N$, let row $j$ of $\B{b}^{(1)}$ be row 1 multiplied by $-m_{j1}$ plus row $j$ and the final vector is the vector $\B{b}^{(2)}$.
+
+:::{.callout-caution title="$\boldsymbol{b}^{(1)}$"}
+$$\B{b}^{(1)}=\Mat{1 \\ 1 \\ 2} \rarrow{\mat{r_2 \to -\nbr{-\frac{1}{2}}r_1+r_2 \\ r_3 \to -\nbr{\frac{1}{2}}r_1+r_3}} \Mat{1 \\ -\nbr{-\frac{1}{2}}(1)+1 \\ -\nbr{\frac{1}{2}}(1)+2}=\Mat{1 \\ \frac{3}{2} \\ \frac{3}{2}}=\B{b}^{(2)}.$$
+:::
+
+5. **Matrix representation of elimination**:  This whole procedure can be written as $A^{(2)}=M^{(1)} A^{(1)}$ and $\B{b}^{(2)}=M^{(1)}\B{b}^{(1)}$ where
+$$M^{(1)}=\Mat{1 & 0 & 0 & \dots & 0 \\ -m_{21} & 1 & 0 & \dots & 0 \\ -m_{31} & 0 & 1 & \dots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ -m_{n1} & 0 & 0 & \dots & 1}.$$
+
+:::{.callout-caution title="$M^{(1)}$"}
+$$M^{(1)}=\Mat{1 & 0 & 0 \\ \frac{1}{2} & 1 & 0 \\ -\frac{1}{2} & 0 & 1}$$
+To check:
+$$M^{(1)}A^{(1)}=\Mat{1 & 0 & 0 \\ \frac{1}{2} & 1 & 0 \\ -\frac{1}{2} & 0 & 1}\Mat{2 & -1 & 1 \\ -1 & 1 & 2 \\ 1 & 2 & -1}=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}=A^{(2)}$$
+$$M^{(1)}\B{b}^{(1)}=\Mat{1 & 0 & 0 \\ \frac{1}{2} & 1 & 0 \\ -\frac{1}{2} & 0 & 1}\Mat{1 \\ 1 \\ 2}=\Mat{1 \\ \frac{3}{2} \\ \frac{3}{2}}=\B{b}^{(2)}$$
+:::
+
+6. **Repeat for other columns**:  The process must now be repeated for the rest of the rows, specifically, those that have non-zero pivot points, i.e. the first point in a row that is non-zero.  This process can be done more simply by generating the $M$ matrices in the same way as before without going through the starting steps.  This process should be reapeated until the last row is reached.
+
+:::{.callout-caution title="Multiplier Matrices"}
+The matrix $M^{(2)}$ can be generated in the same way as $M^{(1)}$, so
+$$M^{(2)}=\Mat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -5 & 1}.$$
+To check:
+$$M^{(2)}A^{(2)}=\Mat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -5 & 1}\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & \frac{5}{2} & -\frac{3}{2}}=\Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & 0 & -14}=A^{(3)}$$
+$$M^{(2)}\B{b}^{(2)}=\Mat{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -5 & 1}\Mat{1 \\ \frac{3}{2} \\ \frac{3}{2}}=\Mat{1 \\ \frac{3}{2} \\ -6}=\B{b}^{(3)}$$
+:::
+
+7. **Solve using backwards substitution**:  After repeating for all other columns (a total of $N-1$ times), the final matrix $A^{(N)}$ will be an upper triangular matrix with non-zero terms on the diagonal and the system can then be solved by backwards substitution.
+
+:::{.callout-caution title="Backwards Substitution"}
+$$A^{(1)}\B{x}=\B{b}^{(1)} \qiq A^{(2)}\B{x}=\B{b}^{(2)} \qiq A^{(3)}\B{x}=\B{b}^{(3)}$$
+$$\iq \Mat{2 & -1 & 1 \\ 0 & \frac{1}{2} & \frac{5}{2} \\ 0 & 0 & -14}\Mat{x_1 \\ x_2 \\ x_3}=\Mat{1 \\ \frac{3}{2} \\ -6} \qiq \mat{2x_1-x_2+x_3=1 \\ \frac{1}{2}x_2+\frac{5}{2}x_3=\frac{3}{2} \\ -14x_3=-6}$$
+$$\iq \B{x}=\frac{1}{7}\Mat{5 \\ 6 \\ 3}.$$
+:::
+
+The total number of operations in every step is given in the table below (the "steps" here refer to the matrix manipulation step and not exactly to the step numbers of the algorithm):
+
+| Step     | Multiplications | Additions | Divisions |
+|:--------:|:---------------:|:---------:|:---------:|
+| 1        | $(N-1)^2$       | $(N-1)^2$ | $N-1$     |
+| 2        | $(N-2)^2$       | $(N-2)^2$ | $N-2$     |
+| 3        | $(N-3)^2$       | $(N-3)^2$ | $N-3$     |
+| $\vdots$ | $\vdots$        | $\vdots$  | $\vdots$  |
+| $N-2$    | $4$             | $4$       | $2$       |
+| $N-1$    | $1$             | $1$       | $1$       |
+
+This means that the total number of multiplications is
+$$1+4+\dots+(N-3)^2+(N-2)^2+(N-1)^2=\sum_{n=1}^{N-1}{n^2}=\frac{N(N-1)(2N-1)}{6},$$
+similarly for the additions.  Whereas the total number of divisions is
+$$1+2+\dots+(N-3)+(N-2)+(N-1)=\sum_{n=1}^{N-1}{n}=\frac{N(N-1)}{2}.$$
+Therefore the total number of operations is
+$$\frac{N(N-1)(2N-1)}{6}+\frac{N(N-1)(2N-1)}{6}+\frac{N(N-1)}{2}=\frac{2}{3}N^3-\frac{1}{2}N^2-\frac{1}{6}N.$$
+This means that for large $N$, the Gaussian elimination algorithm requires $\OO{\frac{2}{3}N^3}$ operations when $A$ is a non-sparse matrix.  This procedure is computationally expensive even for moderate sized matrices, this also assumes that the pivot points are non-zero, or more specifically, that the matrix has non-zero determinant.  As an illustration of this computational complexity, if $N=10^6$ (which not atypical), then for a computer with the computing power of 1 Gigaflops per second, an $N \times N$ system will need 21 years to find a solution.  A lot of more modern computational techniques are based on attempting to reduce this computational complexity, either by eliminating terms in some suitable way or chnaging the matrix in a more pallatable form.
+
+Overall, every step of this process can be represented by a matrix transformation $M^{(n)}$.  This means that in order to convert the matrix $A$ into an upper triangular matrix $U$, the matrix transformations $M^{(1)}, M^{(2)}, \dots, M^{(N-1)}$ have to be applied reverse order as
+$$U=M^{(N-1)} M^{(N-2)} \dots M^{(1)} A.$$
+This can be written as
+$$U=MA \qtq{where} M=M^{(N-1)} M^{(N-2)} \dots M^{(1)}.$${#eq-UMA}
+
+Notice that every matrix $M^{(n)}$ is lower triangular and this fact will be used later on in @sec-LU.
