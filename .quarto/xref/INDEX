@@ -166,5 +166,17 @@
   },
   "Z_App_ReadWrite.qmd": {
     "Z_App_ReadWrite.html": "0a02dde0"
+  },
+  "03_IVP_Euler.qmd": {
+    "03_IVP_Euler.html": "696d4f32"
+  },
+  "Z_App_DataFit.qmd": {
+    "Z_App_DataFit.html": "b95804ca"
+  },
+  "Z_App_Eigen.qmd": {
+    "Z_App_Eigen.html": "8e7c5723"
+  },
+  "Z_App_Root.qmd": {
+    "Z_App_Root.html": "0cc46563"
   }
 }

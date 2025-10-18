@@ -237,7 +237,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_IVP_Euler.html" class="sidebar-item-text sidebar-link">
+  <a href="./03_IVP_Euler.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Euler Method</span></span></a>
   </div>
 </li>
@@ -250,7 +250,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./09_IVP_RK4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Runge-Kutta Method</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fourth Order Runge-Kutta Method</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -309,59 +309,6 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="./15_PDE.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Basic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">MATLAB Basics</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Arrays.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Arrays in MATLAB</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Loops.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Loops</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Plot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Plotting in MATLAB</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_ReadWrite.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Reading &amp; Writing Data</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_GE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Gaussian Elimination Method</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_MatDeco.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">Matrix Decompositions</span></span></a>
   </div>
 </li>
       </ul>
@@ -471,7 +418,7 @@ Simple Example of a Linear System
 &amp;&amp;&amp; \quad \text{by the Submultiplicative Property,} \\
 &amp;&amp;&amp; \quad \text{meaning that}\; \; \frac{1}{\left\| \boldsymbol{b} \right\|_{p}} \geq \frac{1}{\left\| A \right\|_{p} \left\| \boldsymbol{x} \right\|_{p}}
 \end{align*}\]</span></p>
-<div id="nte-SubMult" class="callout callout-style-default callout-note callout-titled" title="Submultiplicative Property of Matrix Norms">
+<div id="nte-SubMult" class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -481,7 +428,7 @@ Note&nbsp;2.1: Submultiplicative Property of Matrix Norms
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For a matrix <span class="math inline">\(A\)</span> and a vector <span class="math inline">\(\boldsymbol{x}\)</span>, <span class="math display">\[\| A\boldsymbol{x} \| \leq \| A \| \| \boldsymbol{x} \|.\]</span></p>
+<p>For matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> and a vector <span class="math inline">\(\boldsymbol{x}\)</span>, <span class="math display">\[\| A\boldsymbol{x} \| \leq \| A \| \| \boldsymbol{x} \|,\]</span> <span class="math display">\[\| AB \| \leq \|A\| \|B\|.\]</span> In both cases, the equality holds when either <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> are orthogonal.</p>
 </div>
 </div>
 <p>Let <span class="math inline">\(\kappa_p(A)=\left\| A^{-1} \right\|_{p} \left\| A \right\|_{p}\)</span>, then <span class="math display">\[\frac{\left\| \delta \boldsymbol{x} \right\|_{p}}{\left\| \boldsymbol{x} \right\|_{p} } \leq \kappa_p(A) \frac{\left\| \delta \boldsymbol{b} \right\|_{p}}{\left\| \boldsymbol{b} \right\|_{p}}\]</span></p>
@@ -725,8 +672,8 @@ Note
 <ul>
 <li><strong><em>Jacobi Method</em></strong>: <span class="math inline">\(\boldsymbol{P=D}\)</span></li>
 </ul>
-<p>The matrix <span class="math inline">\(P\)</span> is chosen to be equal to the diagonal part of <span class="math inline">\(A\)</span>, then the splitting procedure gives the iteration matrix <span class="math inline">\(B=I-D^{-1}A\)</span> and the iteration itself is <span class="math inline">\(\boldsymbol{x}^{(k+1)} = B\boldsymbol{x}^{(k)}+D^{-1}\boldsymbol{b}\)</span> for <span class="math inline">\(k \geq 0\)</span>, which can be written component-wise as <span id="eq-Jmethod"><span class="math display">\[x_i^{(k+1)}=\frac{1}{a_{ii}}\left(b_i-\sum_{\substack{j=1 \\ j\neq i}}^{N}a_{ij}x_j^{(k)}\right) \quad \text{for all} \quad i=1,\dots,N. \tag{2.4}\]</span></span></p>
-<p>If <span class="math inline">\(A\)</span> is strictly diagonally dominant by rows<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, then the Jacobi method converges (i.e.&nbsp;<span class="math inline">\(\rho(B)&lt;1\)</span>, where <span class="math inline">\(B=\mathcal{I}-D^{-1}A\)</span>). Note that each component <span class="math inline">\(x_i^{(k+1)}\)</span> of the new vector <span class="math inline">\(\boldsymbol{x}^{(k+1)}\)</span> is computed independently of the others, meaning that the update is simultaneous which makes this method suitable for parallel programming.</p>
+<p>The matrix <span class="math inline">\(P\)</span> is chosen to be equal to the diagonal part of <span class="math inline">\(A\)</span>, then the splitting procedure gives the iteration matrix <span class="math inline">\(B=I-D^{-1}A\)</span> and the iteration itself is <span class="math inline">\(\boldsymbol{x}^{(k)} = B\boldsymbol{x}^{(k-1)}+D^{-1}\boldsymbol{b}\)</span> for <span class="math inline">\(k \geq 0\)</span>, which can be written component-wise as <span id="eq-Jmethod"><span class="math display">\[x_i^{(k)}=\frac{1}{a_{ii}}\left(b_i-\sum_{\substack{j=1 \\ j\neq i}}^{N}a_{ij}x_j^{(k-1)}\right) \quad \text{for all} \quad i=1,\dots,N. \tag{2.4}\]</span></span></p>
+<p>If <span class="math inline">\(A\)</span> is strictly diagonally dominant by rows<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, then the Jacobi method converges. Note that each component <span class="math inline">\(x_i^{(k)}\)</span> of the new vector <span class="math inline">\(\boldsymbol{x}^{(k)}\)</span> is computed independently of the others, meaning that the update is simultaneous which makes this method suitable for parallel programming.</p>
 <ul>
 <li><strong><em>Gauss-Seidel Method</em></strong>: <span class="math inline">\(\boldsymbol{P=D+L}\)</span></li>
 </ul>
@@ -734,7 +681,6 @@ Note
 <p>Contrary to Jacobi method, Gauss-Seidel method updates the components in sequential mode.</p>
 <p>There are many other methods that use splitting like:</p>
 <ul>
-<li>Richardson method: <span class="math inline">\(P=\frac{1}{\omega}\mathcal{I}\)</span> where <span class="math inline">\(\mathcal{I}\)</span> is the identity matrix and <span class="math inline">\(\omega \neq 0\)</span></li>
 <li>Damped Jacobi method: <span class="math inline">\(P=\frac{1}{\omega}D\)</span> for some <span class="math inline">\(\omega \neq 0\)</span></li>
 <li>Successive over-relaxation method: <span class="math inline">\(P=\frac{1}{\omega}D+L\)</span> for some <span class="math inline">\(\omega \neq 0\)</span></li>
 <li>Symmetric successive over-relaxation method: <span class="math inline">\(P=\frac{1}{\omega(2-\omega)}(D+\omega L) D^{-1} (D+\omega U)\)</span> for some <span class="math inline">\(\omega \neq 0,2.\)</span></li>
@@ -743,22 +689,22 @@ Note
 <section id="computational-cost-stopping-criteria" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="computational-cost-stopping-criteria"><span class="header-section-number">2.3.2</span> Computational Cost &amp; Stopping Criteria</h3>
 <p>There are essentially two factors contributing to the effectiveness of an iterative method for <span class="math inline">\(A\boldsymbol{x}=\boldsymbol{b}\)</span>: the computational cost per iteration and the number of performed iterations. The computational cost per iteration depends on the structure and sparsity of the original matrix <span class="math inline">\(A\)</span> and on the choice of the splitting. For both Jacobi and Gauss-Seidel methods, without further assumptions on <span class="math inline">\(A\)</span>, the computational cost per iteration is <span class="math inline">\(\mathcal{O}\left(N^2\right)\)</span>. Iterations should be stopped when one or more stopping criteria are satisfied, as will be discussed below. For both Jacobi and Gauss-Seidel methods, the cost of performing <span class="math inline">\(k\)</span> iterations is <span class="math inline">\(\mathcal{O}\left(kN^2\right)\)</span>; so as long as <span class="math inline">\(k \ll N\)</span>, these methods are much cheaper than Gaussian elimination.</p>
-<p>In theory, iterative methods require an infinite number of iterations to converge to the exact solution of a linear system but in practice, aiming at the exact solution is neither reasonable nor necessary. Indeed, what is actually needed is an approximation <span class="math inline">\(\boldsymbol{x}^{(k)}\)</span> for which the error is guaranteed to be lower than a desired tolerance <span class="math inline">\(\tau&gt;0\)</span>. On the other hand, since the error is itself unknown (as it depends on the exact solution), a suitable <em>a posteriori</em> error estimator is needed which predicts the error starting from quantities that have already been computed. There are two natural estimators one may consider:</p>
+<p>In theory, iterative methods require an infinite number of iterations to converge to the exact solution of a linear system but in practice, aiming for the exact solution is neither reasonable nor necessary. Indeed, what is actually needed is an approximation <span class="math inline">\(\boldsymbol{x}^{(k)}\)</span> for which the error is guaranteed to be lower than a desired tolerance <span class="math inline">\(\tau&gt;0\)</span>. On the other hand, since the error is itself unknown (as it depends on the exact solution), a suitable <em>a posteriori</em> error estimator is needed which predicts the error starting from quantities that have already been computed. There are two natural estimators one may consider:</p>
 <ul>
-<li>The residual at the <span class="math inline">\({k}^{\mathrm{th}}\)</span> iteration, i.e.&nbsp;<span class="math inline">\(\boldsymbol{r}^{(k)}=\boldsymbol{b}-A\boldsymbol{x}^{(k)}\)</span>. More precisely, an iterative method can be stopped at the first iteration step <span class="math inline">\(k=k_{\min}\)</span> for which <span class="math display">\[\|\boldsymbol{r}^{(k)}\|\leq\tau \|\boldsymbol{b}\|.\]</span> When the above estimate is satisfied, it is guaranteed that <span class="math display">\[\frac{\|\boldsymbol{e}^{(k)}\|}{\|\boldsymbol{x}\|}\leq\tau \kappa(A),\]</span> i.e.&nbsp;the control on the residual is meaningful only for those matrices whose condition number is reasonably small; in this way the relative error will be of the same size as the relative residual.</li>
-<li>The increment at the <span class="math inline">\((k+1)^{\mathrm{st}}\)</span> iteration, i.e.&nbsp;<span class="math inline">\(\boldsymbol{\delta}^{(k)}=\boldsymbol{x}^{(k+1)}-\boldsymbol{x}^{(k)}\)</span>. More precisely, iterative method would stop after the first iteration step <span class="math inline">\(k=k_{\min}\)</span> for which <span class="math display">\[\|\boldsymbol{\delta}^{(k)}\|\leq\tau.\]</span> If <span class="math inline">\(B\)</span> is symmetric and positive definite, then <span class="math display">\[\|\boldsymbol{e}^{(k+1)}\|=\|\boldsymbol{e}^{(k)}+ \boldsymbol{\delta}^{(k)}\|\leq \rho(B)\|\boldsymbol{e}^{(k)}\|+\|\boldsymbol{\delta}^{(k)}\|.\]</span></li>
+<li><strong>Residual</strong>: The residual error at the <span class="math inline">\({k}^{\mathrm{th}}\)</span> iteration, denoted <span class="math inline">\(\boldsymbol{r}^{(k)}\)</span> is given by the error between <span class="math inline">\(A\boldsymbol{x}^{(k)}\)</span> and <span class="math inline">\(\boldsymbol{b}\)</span>, namely <span class="math inline">\(\boldsymbol{r}^{(k)}=\boldsymbol{b}-A\boldsymbol{x}^{(k)}\)</span>. An iterative method can be stopped at the first iteration step <span class="math inline">\(k=k_{\min}\)</span> for which <span class="math display">\[\|\boldsymbol{r}^{(k)}\|\leq\tau \|\boldsymbol{b}\|.\]</span></li>
+<li><strong>Increment</strong>: The incremental error at the <span class="math inline">\(k^{\mathrm{th}}\)</span> iteration, denoted <span class="math inline">\(\boldsymbol{\delta}^{(k)}\)</span> is the error between consecutive approximations, namely <span class="math inline">\(\boldsymbol{\delta}^{(k)}=\boldsymbol{x}^{(k)}-\boldsymbol{x}^{(k-1)}\)</span>. An iterative method can be stopped after the first iteration step <span class="math inline">\(k=k_{\min}\)</span> for which <span class="math display">\[\|\boldsymbol{\delta}^{(k)}\|\leq\tau.\]</span></li>
 </ul>
-<p>Recalling that <span class="math inline">\(\rho(B)\)</span> should be less than 1 in order for the iterative method to converge, we deduce <span class="math display">\[\|\boldsymbol{e}^{(k)}\|\leq\frac{1}{1-\rho(B)}\|\boldsymbol{\delta}^{(k)}\|,\]</span> i.e.&nbsp;the control on the increment is meaningful only if <span class="math inline">\(\rho(B) \ll 1\)</span> since in that case the error will be of the same size as the increment.</p>
+<p>Of course, another way to stop the iteration is by imposing a maximum number of allowable iterations <span class="math inline">\(K\)</span>, this is usually a good starting point since it is not possible to know beforehand if the method does indeed converge. Enforcing a maximum number of iterations will determine if the initial guess is suitable, if the method is suitable or indeed if there is any convergence.</p>
 </section>
 </section>
 <section id="in-built-matlab-procedures" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="in-built-matlab-procedures"><span class="header-section-number">2.4</span> In-Built MATLAB Procedures</h2>
 <p>Given that MATLAB is well-suited to dealing with matrices, it has a very powerful method of solving linear systems and it is using the <strong><em>Backslash Operator</em></strong>. This is a powerful in-built method that can solve any square linear system regardless of its form. MATLAB does this by first determining the general form of the matrix (sparse, triangular, Hermitian, etc.) before applying the appropriate optimised method.</p>
 <p>For the linear system <span class="math display">\[A \boldsymbol{x} = \boldsymbol{b} \quad \text{where} \quad A \in \mathbb{R}^{N \times N}, \quad \boldsymbol{x} \in \mathbb{R}^N, \quad \boldsymbol{b} \in \mathbb{R}^N\]</span> MATLAB can solve this using the syntax <code>x=A\b</code>.</p>
-<div class="callout callout-style-default callout-caution callout-titled" title="Starting Example">
+<div class="callout callout-style-default callout-caution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Starting Example
@@ -809,18 +755,19 @@ Note
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exersise 2.1
+Exercise 2.1
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Let <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> be invertible matrices, <span class="math inline">\(p \in \mathbb{N}\)</span> and <span class="math inline">\(\lambda \in \mathbb{R}\)</span>. The condition number <span class="math inline">\(\kappa_p\)</span> has the following properties:</p>
 <ol type="i">
 <li><span class="math inline">\(\kappa_p(A) \geq 1\)</span>;</li>
-<li><span class="math inline">\(\kappa_p(A)=1\)</span> if and only if <span class="math inline">\(A\)</span> is an orthogonal matrix, i.e.&nbsp;<span class="math inline">\(A^{-1}=A^{\mathrm{T}}\)</span>;</li>
-<li><span class="math inline">\(\kappa_p({A}^{\mathrm{T}})=\kappa_p(A^{-1})=\kappa_p(A)\)</span>;</li>
+<li>If <span class="math inline">\(A\)</span> is an orthogonal matrix (<span class="math inline">\(A^{-1}=A^{\mathrm{T}}\)</span>), then <span class="math inline">\(\kappa_2(A)=1\)</span>;</li>
+<li><span class="math inline">\(\kappa_2\left( {A}^{\mathrm{T}} \right)=\kappa_2\left( A^{-1} \right)=\kappa_2(A)\)</span>;</li>
 <li><span class="math inline">\(\kappa_p(\lambda A)=\kappa_p(A)\)</span>;</li>
 <li><span class="math inline">\(\kappa_p(AB) \leq \kappa_p(A)\kappa_p(B)\)</span>.</li>
 </ol>
+<p>You may use the fact that <span class="math inline">\(\| A \|_2=\| {A}^{\mathrm{T}} \|_2\)</span>.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
@@ -835,13 +782,27 @@ Solution 2.1
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p><span class="math display">\[\kappa_p(A)=\left\| A \right\|_{p} \left\| A^{-1} \right\|_{p}\]</span></p>
 <ol type="i">
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li><p>Using the submultiplicative property of matrices <span class="math display">\[\kappa_p(A)=\left\| A \right\|_{p} \left\| A^{-1} \right\|_{p} \geq \left\| A A^{-1} \right\|_{p} = \left\| \mathcal{I} \right\|_{p}=1.\]</span></p></li>
+<li><p>If <span class="math inline">\(A\)</span> is orthogonal (<span class="math inline">\(A^{-1}={A}^{\mathrm{T}}\)</span>), then the submultiplicative property of matrices becomes an equality, so <span class="math display">\[\kappa_2(A)=\left\| A \right\|_{2} \left\| A^{-1} \right\|_{2} = \left\| A A^{-1} \right\|_{2} = \left\| \mathcal{I} \right\|_{2}=1.\]</span></p></li>
 <li></li>
 </ol>
+<p><span class="math display">\[\begin{multline}
+\bullet \; \kappa_2\left( {A}^{\mathrm{T}} \right)=\left\| {A}^{\mathrm{T}} \right\|_{2}\left\| {\left( A^{-1} \right)}^{\mathrm{T}} \right\|_{2}=\left\| {A}^{\mathrm{T}} \right\|_{2}\left\| {A^{-1}}^{\mathrm{T}} \right\|_{2} \\ =\left\| A \right\|_{2}\left\| A^{-1} \right\|_{2}=\kappa_2(A).
+\end{multline}\]</span> <span class="math display">\[\bullet \; \kappa_2\left( A^{-1} \right)=\left\| A^{-1} \right\|_{2}=\left\| \left( A^{-1} \right)^{-1} \right\|_{2}=\left\| A \right\|_{2}\left\| A^{-1} \right\|_{2}=\kappa_2(A).\]</span></p>
+<ol start="4" type="i">
+<li></li>
+</ol>
+<p><span class="math display">\[\begin{multline}
+\kappa_p(\lambda A)=\left\| \lambda A \right\|_{p} \left\| (\lambda A)^{-1} \right\|_{p}=\left\| \lambda A \right\|_{p} \left\| \frac{1}{\lambda}A^{-1} \right\|_{p}= \\ |\lambda| \left\| A \right\|_{p} \frac{1}{|\lambda|}\left\| A^{-1} \right\|_{p}=\left\| A \right\|_{p} \left\| A^{-1} \right\|_{p}=\kappa_p(A).
+\end{multline}\]</span></p>
+<ol start="22" type="a">
+<li></li>
+</ol>
+<p><span class="math display">\[\begin{multline}
+\kappa_p(AB)=\left\| AB \right\|_{p} \left\| (AB)^{-1} \right\|_{p}=\left\| AB \right\|_{p} \left\| A^{-1} B^{-1} \right\|_{p} \\ \leq \left\| A \right\|_{p} \left\| B \right\|_{p} \left\| B^{-1} \right\|_{p} \left\| A^{-1} \right\|_{p}=\kappa_p(A)\kappa_p(B).
+\end{multline}\]</span></p>
 </div>
 </div>
 </div>
@@ -851,18 +812,35 @@ Solution 2.1
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exersise 2.2
+Exercise 2.2
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Solve the following linear systems of the form <span class="math inline">\(A \boldsymbol{x}=\boldsymbol{b}\)</span> using the following direct methods:</p>
 <ol type="i">
 <li><p>Direct substitution <span class="math display">\[A=\begin{pmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; -2 &amp; 0 \\ 0 &amp; 0 &amp; 5 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 3 \\ 9 \\ 0 \end{pmatrix}\]</span></p></li>
-<li><p>Backward substitution <span class="math display">\[A=\begin{pmatrix} 7 &amp; 2 &amp; 1 \\ 0 &amp; 2 &amp; -1 \\ 0 &amp; 0 &amp; 3 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 0 \\ 1 \\ 1 \end{pmatrix}\]</span></p></li>
-<li><p>Direct substitution <span class="math display">\[A=\begin{pmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 2 &amp; 0 \\ 1 &amp; 1 &amp; -1 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 3 \\ 0 \\ 5 \end{pmatrix}\]</span></p></li>
-<li><p>TDMA <span class="math display">\[A=\begin{pmatrix} 2 &amp; -1 &amp; 0 &amp; 0 &amp; 0 \\ -1 &amp; 2 &amp; -1 &amp; 0 &amp; 0 \\ 0 &amp; -1 &amp; 2 &amp; -1 &amp; 0 \\ 0 &amp; 0 &amp; -1 &amp; 2 &amp; -1 \\ 0 &amp; 0 &amp; 0 &amp; -1 &amp; 2 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \\ 1 \end{pmatrix}\]</span></p></li>
-<li><p>Cramer’s Rule <span class="math display">\[A=\begin{pmatrix} 1 &amp; 4 &amp; 1 \\ 1 &amp; 2 &amp; 0 \\ 1 &amp; -1 &amp; 2 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\]</span></p></li>
+<li><p>Backward substitution <span class="math display">\[A=\begin{pmatrix} 4 &amp; 2 &amp; 1 \\ 0 &amp; 2 &amp; 1 \\ 0 &amp; 0 &amp; 10 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix}\]</span></p></li>
+<li><p>Forwards substitution <span class="math display">\[A=\begin{pmatrix} 1 &amp; 0 &amp; 0 \\ 4 &amp; 5 &amp; 0 \\ 9 &amp; 1 &amp; 2 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\]</span></p></li>
+<li><p>TDMA <span class="math display">\[A=\begin{pmatrix} 2 &amp; -1 &amp; 0 &amp; 0 &amp; 0 \\ -1 &amp; 2 &amp; -1 &amp; 0 &amp; 0 \\ 0 &amp; -1 &amp; 2 &amp; -1 &amp; 0 \\ 0 &amp; 0 &amp; -1 &amp; 2 &amp; -1 \\ 0 &amp; 0 &amp; 0 &amp; -1 &amp; 2 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 1 \\ 0 \\ 1 \\ 0 \\ 1 \end{pmatrix}\]</span></p></li>
+<li><p>Cramer’s Rule <span class="math display">\[A=\begin{pmatrix} 1 &amp; 0 &amp; 2 \\ 2 &amp; 1 &amp; 2 \\ -1 &amp; 0 &amp; 0 \end{pmatrix}, \quad \boldsymbol{b}=\begin{pmatrix} 12 \\ 0 \\ 6 \end{pmatrix}\]</span></p></li>
 </ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solutions 2.2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[\mathrm{i.} \quad \boldsymbol{x}=\begin{pmatrix} 3 \\ -4.5 \\ 0 \end{pmatrix}\]</span></p>
+<p><span class="math display">\[\mathrm{ii.} \quad \boldsymbol{x}=\begin{pmatrix} 0 \\ 0.45 \\ 0.1 \end{pmatrix}\]</span></p>
+<p><span class="math display">\[\mathrm{iii.} \quad \boldsymbol{x}=\begin{pmatrix} 0 \\ 0 \\ 0.5 \end{pmatrix}\]</span></p>
+<p><span class="math display">\[\mathrm{iv.} \quad \boldsymbol{x}=\begin{pmatrix} 1.5 \\ 2 \\ 2.5 \\ 2 \\ 1.5 \end{pmatrix}\]</span></p>
+<p><span class="math display">\[\mathrm{v.} \quad \boldsymbol{x}=\begin{pmatrix} 0 \\ -12 \\ 6 \end{pmatrix}\]</span></p>
 </div>
 </div>
 <div class="callout callout-style-default callout-important no-icon callout-titled">
@@ -881,8 +859,174 @@ Exersise 2.3
 <li>Backward substitution</li>
 <li>Forward substitution</li>
 <li>TDMA</li>
+<li>Cramer’s Rule</li>
 </ul>
-<p>Use the examples in Exersise 2.2 as test cases.</p>
+<p>Use the examples in Exercise 2.2 as test cases.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solutions 2.3
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Direct Substitution</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">function</span> <span class="va">D_Sub</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="va">A</span><span class="op">=</span><span class="va">diag</span>([<span class="fl">1</span><span class="op">,-</span><span class="fl">2</span><span class="op">,</span><span class="fl">5</span>])<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="va">b</span><span class="op">=</span>[<span class="fl">3</span><span class="op">;</span><span class="fl">9</span><span class="op">;</span><span class="fl">0</span>]<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="kw">if</span> <span class="va">isdiag</span>(<span class="va">A</span>)<span class="op">~=</span><span class="fl">1</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="va">error</span>(<span class="ss">'A must be a diagonal matrix'</span>)</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="kw">end</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="kw">if</span> <span class="va">any</span>(<span class="va">diag</span>(<span class="va">A</span>)<span class="op">==</span><span class="fl">0</span>)</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="va">error</span>(<span class="ss">'All diagonal terms must be non-zero'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="kw">end</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="va">N</span><span class="op">=</span><span class="va">length</span>(<span class="va">b</span>)<span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="va">x</span><span class="op">=</span><span class="va">zeros</span>(<span class="fl">1</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a>    <span class="va">x</span>(<span class="va">n</span>)<span class="op">=</span><span class="va">b</span>(<span class="va">n</span>)<span class="op">/</span><span class="va">A</span>(<span class="va">n</span><span class="op">,</span><span class="va">n</span>)<span class="op">;</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="kw">end</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="va">disp</span>(<span class="ss">'x='</span>)</span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="va">disp</span>(<span class="va">x</span>)</span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Backward Substitution</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">function</span> <span class="va">B_Sub</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="va">A</span><span class="op">=</span>[<span class="fl">4</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">1</span><span class="op">;</span><span class="fl">0</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">1</span><span class="op">;</span><span class="fl">0</span><span class="op">,</span><span class="fl">0</span><span class="op">,</span><span class="fl">10</span>]<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="va">b</span><span class="op">=</span>[<span class="fl">1</span><span class="op">;</span><span class="fl">1</span><span class="op">;</span><span class="fl">1</span>]<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">if</span> <span class="va">istriu</span>(<span class="va">A</span>)<span class="op">~=</span><span class="fl">1</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="va">error</span>(<span class="ss">'A must be an upper triangluar matrix'</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="kw">end</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="kw">if</span> <span class="va">any</span>(<span class="va">diag</span>(<span class="va">A</span>)<span class="op">==</span><span class="fl">0</span>)</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="va">error</span>(<span class="ss">'All diagonal terms must be non-zero'</span>)</span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="kw">end</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="va">N</span><span class="op">=</span><span class="va">length</span>(<span class="va">b</span>)<span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="va">x</span><span class="op">=</span><span class="va">zeros</span>(<span class="fl">1</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="va">x</span>(<span class="va">N</span>)<span class="op">=</span><span class="va">b</span>(<span class="va">N</span>)<span class="op">/</span><span class="va">A</span>(<span class="va">N</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span><span class="op">:-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a>    <span class="va">S</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="kw">for</span> <span class="va">i</span><span class="op">=</span><span class="va">n</span><span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>        <span class="va">S</span><span class="op">=</span><span class="va">S</span><span class="op">+</span><span class="va">A</span>(<span class="va">n</span><span class="op">,</span><span class="va">i</span>)<span class="op">*</span><span class="va">x</span>(<span class="va">i</span>)<span class="op">;</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a>    <span class="kw">end</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a>    <span class="va">x</span>(<span class="va">n</span>)<span class="op">=</span>(<span class="va">b</span>(<span class="va">n</span>)<span class="op">-</span><span class="va">S</span>)<span class="op">/</span><span class="va">A</span>(<span class="va">n</span><span class="op">,</span><span class="va">n</span>)<span class="op">;</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="kw">end</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="va">disp</span>(<span class="ss">'x='</span>)</span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="va">disp</span>(<span class="va">x</span>)</span>
+<span id="cb3-30"><a href="#cb3-30"></a></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Forward Substitution</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">function</span> <span class="va">F_Sub</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="va">A</span><span class="op">=</span>[<span class="fl">1</span><span class="op">,</span><span class="fl">0</span><span class="op">,</span><span class="fl">0</span><span class="op">;</span><span class="fl">4</span><span class="op">,</span><span class="fl">5</span><span class="op">,</span><span class="fl">0</span><span class="op">;</span><span class="fl">9</span><span class="op">,</span><span class="fl">1</span><span class="op">,</span><span class="fl">2</span>]<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="va">b</span><span class="op">=</span>[<span class="fl">0</span><span class="op">;</span><span class="fl">0</span><span class="op">;</span><span class="fl">1</span>]<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="kw">if</span> <span class="va">istril</span>(<span class="va">A</span>)<span class="op">~=</span><span class="fl">1</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="va">error</span>(<span class="ss">'A must be a lower triangular matrix'</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">end</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="kw">if</span> <span class="va">any</span>(<span class="va">diag</span>(<span class="va">A</span>)<span class="op">==</span><span class="fl">0</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="va">error</span>(<span class="ss">'All diagonal terms must be non-zero'</span>)</span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="kw">end</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="va">N</span><span class="op">=</span><span class="va">length</span>(<span class="va">b</span>)<span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="va">x</span><span class="op">=</span><span class="va">zeros</span>(<span class="fl">1</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="va">x</span>(<span class="fl">1</span>)<span class="op">=</span><span class="va">b</span>(<span class="fl">1</span>)<span class="op">/</span><span class="va">A</span>(<span class="fl">1</span><span class="op">,</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>    <span class="va">S</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>    <span class="kw">for</span> <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>        <span class="va">S</span><span class="op">=</span><span class="va">S</span><span class="op">+</span><span class="va">A</span>(<span class="va">n</span><span class="op">,</span><span class="va">i</span>)<span class="op">*</span><span class="va">x</span>(<span class="va">i</span>)<span class="op">;</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>    <span class="kw">end</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>    <span class="va">x</span>(<span class="va">n</span>)<span class="op">=</span>(<span class="va">b</span>(<span class="va">n</span>)<span class="op">-</span><span class="va">S</span>)<span class="op">/</span><span class="va">A</span>(<span class="va">n</span><span class="op">,</span><span class="va">n</span>)<span class="op">;</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="kw">end</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="va">disp</span>(<span class="ss">'x='</span>)</span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="va">disp</span>(<span class="va">x</span>)</span>
+<span id="cb4-30"><a href="#cb4-30"></a></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>TDMA</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">function</span> <span class="va">TDMA</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="va">m</span><span class="op">=</span>[<span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">2</span>]<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="va">l</span><span class="op">=</span>[<span class="op">-</span><span class="fl">1</span><span class="op">,-</span><span class="fl">1</span><span class="op">,-</span><span class="fl">1</span><span class="op">,-</span><span class="fl">1</span>]<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="va">r</span><span class="op">=</span>[<span class="op">-</span><span class="fl">1</span><span class="op">,-</span><span class="fl">1</span><span class="op">,-</span><span class="fl">1</span><span class="op">,-</span><span class="fl">1</span>]<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="va">A</span><span class="op">=</span><span class="va">diag</span>(<span class="va">m</span>)<span class="op">+</span><span class="va">diag</span>(<span class="va">l</span><span class="op">,-</span><span class="fl">1</span>)<span class="op">+</span><span class="va">diag</span>(<span class="va">r</span><span class="op">,</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="va">b</span><span class="op">=</span>[<span class="fl">1</span><span class="op">;</span><span class="fl">0</span><span class="op">;</span><span class="fl">1</span><span class="op">;</span><span class="fl">0</span><span class="op">;</span><span class="fl">1</span>]<span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="va">N</span><span class="op">=</span><span class="va">length</span>(<span class="va">b</span>)<span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="va">R</span><span class="op">=</span><span class="va">zeros</span>(<span class="fl">1</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="va">B</span><span class="op">=</span><span class="va">zeros</span>(<span class="fl">1</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="va">x</span><span class="op">=</span><span class="va">zeros</span>(<span class="fl">1</span><span class="op">,</span><span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="va">l</span><span class="op">=</span>[<span class="fl">0</span><span class="op">,</span><span class="va">l</span>]<span class="op">;</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="va">r</span><span class="op">=</span>[<span class="va">r</span><span class="op">,</span><span class="fl">0</span>]<span class="op">;</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="va">R</span>(<span class="fl">1</span>)<span class="op">=</span><span class="va">r</span>(<span class="fl">1</span>)<span class="op">/</span><span class="va">m</span>(<span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a>    <span class="va">R</span>(<span class="va">n</span>)<span class="op">=</span><span class="va">r</span>(<span class="va">n</span>)<span class="op">/</span>(<span class="va">m</span>(<span class="va">n</span>)<span class="op">-</span><span class="va">l</span>(<span class="va">n</span>)<span class="op">*</span><span class="va">R</span>(<span class="va">n</span><span class="op">-</span><span class="fl">1</span>))<span class="op">;</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="kw">end</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="va">B</span>(<span class="fl">1</span>)<span class="op">=</span><span class="va">b</span>(<span class="fl">1</span>)<span class="op">/</span><span class="va">m</span>(<span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a>    <span class="va">B</span>(<span class="va">n</span>)<span class="op">=</span>(<span class="va">b</span>(<span class="va">n</span>)<span class="op">-</span><span class="va">l</span>(<span class="va">n</span>)<span class="op">*</span><span class="va">B</span>(<span class="va">n</span><span class="op">-</span><span class="fl">1</span>))<span class="op">/</span>(<span class="va">m</span>(<span class="va">n</span>)<span class="op">-</span><span class="va">l</span>(<span class="va">n</span>)<span class="op">*</span><span class="va">R</span>(<span class="va">n</span><span class="op">-</span><span class="fl">1</span>))<span class="op">;</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="kw">end</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="va">x</span>(<span class="va">N</span>)<span class="op">=</span><span class="va">B</span>(<span class="va">N</span>)<span class="op">;</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span><span class="op">:-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a>    <span class="va">x</span>(<span class="va">n</span>)<span class="op">=</span><span class="va">B</span>(<span class="va">n</span>)<span class="op">-</span><span class="va">R</span>(<span class="va">n</span>)<span class="op">*</span><span class="va">x</span>(<span class="va">n</span><span class="op">+</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="kw">end</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="va">disp</span>(<span class="ss">'x='</span>)</span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="va">disp</span>(<span class="va">x</span>)</span>
+<span id="cb5-36"><a href="#cb5-36"></a></span>
+<span id="cb5-37"><a href="#cb5-37"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Cramer’s Rule</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">function</span> <span class="va">Cramer</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="va">A</span><span class="op">=</span>[<span class="fl">1</span><span class="op">,</span><span class="fl">0</span><span class="op">,</span><span class="fl">2</span><span class="op">;</span><span class="fl">2</span><span class="op">,</span><span class="fl">1</span><span class="op">,</span><span class="fl">2</span><span class="op">;-</span><span class="fl">1</span><span class="op">,</span><span class="fl">0</span><span class="op">,</span><span class="fl">1</span>]<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="va">b</span><span class="op">=</span>[<span class="fl">12</span><span class="op">;</span><span class="fl">0</span><span class="op">;</span><span class="fl">6</span>]<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="va">N</span><span class="op">=</span><span class="va">length</span>(<span class="va">b</span>)<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="va">d</span><span class="op">=</span><span class="va">det</span>(<span class="va">A</span>)<span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="va">x</span><span class="op">=</span><span class="va">zeros</span>(<span class="va">N</span><span class="op">,</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="kw">for</span> <span class="va">n</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="va">AA</span><span class="op">=</span><span class="va">A</span><span class="op">;</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>    <span class="va">AA</span>(<span class="op">:,</span><span class="va">n</span>)<span class="op">=</span><span class="va">b</span><span class="op">;</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="va">x</span>(<span class="va">n</span>)<span class="op">=</span><span class="va">det</span>(<span class="va">AA</span>)<span class="op">/</span><span class="va">d</span><span class="op">;</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="kw">end</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="va">disp</span>(<span class="ss">'x='</span>)</span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="va">disp</span>(<span class="va">x</span>)</span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 

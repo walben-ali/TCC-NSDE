@@ -11,12 +11,9 @@ book:
           - part: Part_LinAlg.qmd
             chapters:
                - 02_LinAlg.qmd
-     #           - 04_DataFit.qmd
-     #           - 05_Eigen.qmd
-     #           - 06_Root.qmd
           - part: Part_IVPs.qmd
             chapters:
-               - 07_IVP_Euler.qmd
+               - 03_IVP_Euler.qmd
                - 08_IVP_ModEuler.qmd
                - 09_IVP_RK4.qmd
                - 10_IVP_InBuilt.qmd
@@ -29,14 +26,17 @@ book:
           - part: Part_PDEs.qmd
             chapters:
                - 15_PDE.qmd
-     appendices:
-           - Z_App_Basic.qmd
-           - Z_App_Arrays.qmd
-           - Z_App_Loops.qmd
-           - Z_App_Plot.qmd
-           - Z_App_ReadWrite.qmd
-           - Z_App_GE.qmd
-           - Z_App_MatDeco.qmd
+     # appendices:
+     #       - Z_App_Basic.qmd
+     #       - Z_App_Arrays.qmd
+     #       - Z_App_Loops.qmd
+     #       - Z_App_Plot.qmd
+     #       - Z_App_ReadWrite.qmd
+     #       - Z_App_GE.qmd
+     #       - Z_App_MatDeco.qmd
+     #       - Z_App_DataFit.qmd
+     #       - Z_App_Eigen.qmd
+     #       - Z_App_Root.qmd
      downloads: [pdf,docx,epub]
 
 format:

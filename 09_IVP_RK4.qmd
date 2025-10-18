@@ -2,7 +2,7 @@
 {{< include _macros.qmd >}}
 :::
 
-# The Runge-Kutta Method
+# Fourth Order Runge-Kutta Method
 
 The Modified Euler method extended the Euler method to a two-stage procedure with a global integration error of $\OO{h^2}$.  This can be extended further to a ***Multi-Stage Method***, also called a ***Runge-Kutta Method*** with $p$ stages and a global error integration error of $\OO{h^p}$ for any arbitrarily large $p$ (in this case, the Modified Euler method is known as a second order Runge-Kutta method since it has two stages).  For instance, the *fourth order Runge-Kutta method* requires four calculations for every step and has a global integration error of $\OO{h^4}$, this is formulated as follows:
 \begin{align*}
@@ -15,7 +15,9 @@ The Modified Euler method extended the Euler method to a two-stage procedure wit
 
 Runge-Kutta methods like this are quite versatile and are generally the most used methods for their accuracy since the stepsize $h$ does not need to be too small to achieve good results.  Even though every step requires four calculations, the value of $h$ can be made larger in order to reduce the cost but retain considerable accuracy.
 
-:::{.callout-caution title="Runge-Kutta Method"}
+:::{.callout-caution icon=false}
+## Runge-Kutta Method
+
 Consider the differential equation
 $$\tdiff{y}=y(1-2t) \qtq{where} y(0)=1, \quad t \in [0,3.2].$$
 The exact solution to this differential equation is known to be

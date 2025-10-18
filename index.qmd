@@ -24,8 +24,13 @@ Passcode: Us2N6hB2
 |         |       | - Code timing and profiling                       |
 |         |       | - Applications for solving linear systems         |
 |         |       | - Computational stability                         |
+|         |       | - Solving linear systems using direct methods     |
+|         |       |     + Direct substitution                         |
+|         |       |     + Forward/Backward substitution               |
 +=========+=======+===================================================+
 | 2       | 24/10 | - Solving linear systems using direct methods     |
+|         |       |     + Tridiagonal matrix algorithm                |
+|         |       |     + Cramer's Rule                               |
 |         |       | - Solving linear systems using iterative methods  |
 +=========+=======+===================================================+
 | 3       | 31/10 | - Euler method for IVPs                           |

@@ -34,7 +34,9 @@ Initially, one might suspect that the derivative $y'(t_1)$ can be found from the
 	\bullet \quad \text{Corrector:} \quad & Y_{n+1}=Y_n+\frac{h}{2} \sbr{ f(t_n,Y_n)+f(t_{n+1},\tilde{Y}_{n+1}) }.
 \end{align*}
 
-:::{.callout-caution title="Modified Euler Method"}
+:::{.callout-caution icon=false}
+## Modified Euler Method
+
 Consider the differential equation
 $$\odiff{y}{t}=(1-2t)y^2 \qtq{with} y(0)=1, \quad t\in [0,2].$$
 This differential equation is non-linear but has a known particular solution which is
@@ -87,7 +89,9 @@ The following MATLAB code performs the Modified Euler iteration for the followin
 & \tdiff{w}=uv-w, & \quad w(0)=0.
 \end{align*}
 
-:::{.callout-note title="Linearity"}
+:::{.callout-note}
+## Linearity
+
 Note that this code is built for a general case that *does not* have to be linear even though the entire derivation process was built on the fact that the system is linear.
 :::
 

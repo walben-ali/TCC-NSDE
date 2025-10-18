@@ -1,1 +1,3 @@
 # Solving Initial Value Problems
+
+This section will develop the techniques used to solve initial value problems.

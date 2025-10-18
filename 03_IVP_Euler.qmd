@@ -33,7 +33,9 @@ $$h=\frac{t_f-t_0}{N}.$$
 Consider the IVP
 $$\tdiff{y}=f(t,y), \qtq{with} y(t_0)=y_0 \quad t \in [t_0,t_f].$$
 
-:::{.callout-caution title="Parallel Example"}
+:::{.callout-caution icon=false}
+## Parallel Example
+
 The steps of the Euler method will be explained theoretically and applied to this IVP in parallel to demonstrate the steps:
 $$\tdiff{y}=6-2y \qtq{with} y(0)=0, \quad t \in [0,2].$$
 In this case, the function on the RHS is $f(t,y)=6-2y$.  Note that this IVP has the exact solution
@@ -43,7 +45,9 @@ $$y(t)=3-3\ex{-2t}.$$
 1. Discretise the interval $[t_0,t_f]$ with stepsize $h$ to form the set of points
 $$\cbr{t_0, t_0+h, t_0+2h, \dots, t_0+Nh}.$$
 
-:::{.callout-caution title="Inverval Discretisation"}
+:::{.callout-caution icon=false}
+## Inverval Discretisation
+
 Suppose that the interval $[0,2]$ is to be split into $5$ subintervals, then $N=5$ and
 $$h=\frac{t_f-t_0}{N}=\frac{2-0}{5}=0.4.$$
 Therefore the discretised points are
@@ -54,7 +58,9 @@ Note that $N$ denotes the number of subintervals and **not** the number of point
 2. At the starting point $(t_0,y_0)$, the gradient is known since
 $$y'(t_0)=f(t_0,y_0).$$
 
-:::{.callout-caution title="Gradient at $\boldsymbol{(t_0,y_0)}$"}
+:::{.callout-caution icon=false}
+## Gradient at $\boldsymbol{(t_0,y_0)}$
+
 At the initial point,
 $$y'(t_0)=f(t_0,y_0) \qiq y'(0)=f(0,0)=6-2(0)=6.$$
 So the starting gradient is $6$.
@@ -74,7 +80,9 @@ Let $Y_1$ denote the *approximated value* of the solution at the point $t_1$, i.
 $$Y_1=y_0+h y'(t_0).$${#eq-Euler1}
 This determines the value of $Y_1$ which is an approximation to $y(t_1)$.
 
-:::{.callout-caution title="Calcuating $\boldsymbol{Y_1}$"}
+:::{.callout-caution icon=false}
+## Calcuating $\boldsymbol{Y_1}$
+
 The point $Y_1$ can be calculated as follows:
 $$Y_1=y_0+hy'(t_0)=0+(0.4)(6)=2.4.$$
 This means that the next point is $(t_1,Y_1)=(0.4,2.4)$.
@@ -83,7 +91,9 @@ This means that the next point is $(t_1,Y_1)=(0.4,2.4)$.
 4. This iteration can be continued to find $Y_{n+1}$ (which is the approximate value of $y(t_{n+1})$) for all $n=1, 2, \dots, N-1$
 $$Y_{n+1}=Y_n+h y'(t_n) \quad \text{where} \quad y'(t_n)=f(t_n,Y_n).$$
 
-:::{.callout-caution title="Calculating $\boldsymbol{Y_n}$"}
+:::{.callout-caution icon=false}
+## Calculating $\boldsymbol{Y_n}$
+
 The values of $Y_2, Y_3, Y_4$ and $Y_5$ can be calculated as follows:
 $$Y_2: \quad y'(t_1)=f(t_1,Y_1) \qiq y'(0.4)=f(0.4,2.4)=6-2(2.4)=1.2$$
 $$\iq Y_2=Y_1+hy'(t_1)=2.4+(0.4)(1.2)=2.88$$
@@ -101,7 +111,9 @@ $$\iq Y_5=Y_4+hy'(t_4)=2.9952+(0.4)(0.0096)=2.99904$$
 5. The solution to the IVP can now be approximated by the function that passes through the points
 $$(t_0,Y_0), \quad (t_1, Y_1), \quad \dots \quad (t_N,Y_N).$$
 
-:::{.callout-caution title="Solution to the IVP"}
+:::{.callout-caution icon=false}
+## Solution to the IVP
+
 The approximate solution to the IVP
 $$\tdiff{y}=6-2y \qtq{with} y(0)=0, \quad t \in [0,2]$$
 is the function that passes through the points:
@@ -117,7 +129,7 @@ Notice that the terms on the right hand side of @eq-Euler1 are all known and for
 
 ## Accuracy
 
-Consider the Taylor series expansion for the function $y$ at the point $t_1=t_0+h$,
+Consider the Taylor series expansion for the function $y$ at the point $t_1=t_0+h$
 $$y(t_1)=y(t_0+h)=y(t_0)+h y'(t_0)+ \frac{h^2}{2!} y''(t_0)+\OO{h^3}.$$
 Using ***Taylor's Theorem***[^TT], this can be written as
 $$y(t_1)=y(t_0+h)=y(t_0)+h y'(t_0)+ \frac{h^2}{2!} y''(\tau_1)$$
@@ -159,7 +171,9 @@ Hence, the global integration error $E=\OO{h}$, this means that the Euler method
 
 In conclusion, the local truncation error of the Euler method is $e=\OO{h^2}$ while the global integration error $E=\OO{h}$ when $h$ is small.
 
-:::{.callout-caution title="Different Stepsizes"}
+:::{.callout-caution icon=false}
+## Different Stepsizes
+
 Returning to the IVP
 $$\tdiff{y}=6-2y \qtq{with} y(0)=0, \quad t \in [0,2].$$
 
@@ -181,7 +195,7 @@ When the value of $h$ is halved, the global integration error is approximately h
 
 ## Set of IVPs {#sec-EulerSys}
 
-SO far, the Euler Method has been used to solve a single IVP, however this can be extended to solving a set of linear IVPs.
+So far, the Euler Method has been used to solve a single IVP, however this can be extended to solving a set of linear IVPs.
 
 Consider the set of $K$ linear IVPs defined on the interval $[t_0,t_f]$:
 \begin{align*}
@@ -202,7 +216,8 @@ The Euler iteration would be performed in a similar way as before.  First, the i
 $$\B{Y}_{n+1}=\B{Y}_n+h\B{y}'(t_n) \qtq{where} \B{y}'(t_n)=A\B{Y_n}+\B{b}_n \qtq{for} n=0,1,2,\dots,N-1$$
 subject to the initial values $\B{Y}_0=\B{y}_0$.  (Note that if the vector $\B{b}$ depends on $t$, then $\B{b}_n=\B{b}(t_n)$.)
 
-:::{.callout-caution title="Sets of IVPs"}
+:::{.callout-caution icon=false}
+## Sets of IVPs
 
 Consider the two coupled IVPs on the interval $[0,1]$:
 \begin{align*}
@@ -222,13 +237,21 @@ $$\B{Y}_{n+1}=\B{Y}_n+h\B{y}'(t_n) \qtq{where} \B{y}'(t_n)=A \B{Y}_n+\B{b}_n \qt
 This can be written as
 $$\B{Y}_{n+1}=\B{Y}_n+h\sbr{A \B{Y}_n+\B{b}_n} \qtq{for} n=0,1,2,3,4$$
 keeping in mind that $t_n=hn=0.2n$ the vector $\B{b}_n=\B{b}(t_n)=\B{0}$ and $\B{Y}_0=\B{y}_0$:
-\begin{align*}
-	&\B{Y}_1=\B{Y}_0+0.2\sbr{A \B{Y}_0+\B{b}_0}=\begin{pmatrix}1 \\ 0\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}1 \\ 0\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}=\begin{pmatrix}1.2 \\ 0.3\end{pmatrix} \\
-	&\B{Y}_2=\B{Y}_1+0.2\sbr{A \B{Y}_1+\B{b}_1}=\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}=\begin{pmatrix}1.56 \\ 0.6\end{pmatrix} \\
-	&\B{Y}_3=\B{Y}_2+0.2\sbr{A \B{Y}_2+\B{b}_2}=\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}=\begin{pmatrix}2.112 \\ 0.948\end{pmatrix} \\
-	&\B{Y}_4=\B{Y}_3+0.2\sbr{A \B{Y}_3+\B{b}_3}=\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}=\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix} \\
-	&\B{Y}_5=\B{Y}_4+0.2\sbr{A \B{Y}_4+\B{b}_4}=\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}=\begin{pmatrix}4.0531 \\ 1.9877\end{pmatrix} \\
-\end{align*}
+$$\B{Y}_1=\B{Y}_0+0.2\sbr{A \B{Y}_0+\B{b}_0}=\begin{pmatrix}1 \\ 0\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}1 \\ 0\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}$$
+$$=\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}$$
+
+$$\B{Y}_2=\B{Y}_1+0.2\sbr{A \B{Y}_1+\B{b}_1}=\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}1.2 \\ 0.3\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}$$
+$$=\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}$$
+
+$$\B{Y}_3=\B{Y}_2+0.2\sbr{A \B{Y}_2+\B{b}_2}=\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}1.56 \\ 0.6\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}$$
+$$=\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}$$
+
+$$\B{Y}_4=\B{Y}_3+0.2\sbr{A \B{Y}_3+\B{b}_3}=\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}2.112 \\ 0.948\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}$$
+$$=\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}$$
+
+$$\B{Y}_5=\B{Y}_4+0.2\sbr{A \B{Y}_4+\B{b}_4}=\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}+0.2\sbr{\begin{pmatrix}1 & 2 \\ \frac{3}{2} & -1\end{pmatrix}\begin{pmatrix}2.9136 \\ 1.3920\end{pmatrix}+\begin{pmatrix}0 \\ 0\end{pmatrix}}$$
+$$=\begin{pmatrix}4.0531 \\ 1.9877\end{pmatrix}$$
+
 $$\text{therefore} \quad y(1)=4.0531, \quad z(1)=1.9877.$$
 
 ![](figures/IVP_Euler1.jpg)
@@ -268,7 +291,9 @@ $$\B{y}_0=\Mat{y(0) \\ y_1(0) \\ y_2(0) \\ \vdots \\ y_{K-3}(0) \\ y_{K-2}(0) \\
 
 The matrix $A$ is called the ***Companion Matrix*** and is a matrix with 1 on the super diagonal and the last row is the minus of the coefficients in the higher order IVP, and zeros otherwise.  Now that the $\nth{K}$ order IVP has been converted into a set of $K$ linear IVPs, it can be solved just as in @sec-EulerSys.  Note that *any* linear $\nth{K}$ order IVP can always be converted into a set of $K$ first order IVPs but the converse is not always possible.
 
-:::{.callout-caution title="Higher Order IVPs"}
+:::{.callout-caution icon=false}
+## Higher Order IVPs
+
 Consider the following higher order IVP
 $$\Tdiff{y}{4}-8\Tdiff{y}{3}+7\Tdiff{y}{2}-\tdiff{y}+2y=\cos(t) \qtq{for} t \in \Rp$$
 $$\text{with} \quad y(0)=4, \quad \tdiff{y}(0)=1, \quad \Tdiff{y}{2}(0)=3, \quad \Tdiff{y}{3}(0)=0.$$
@@ -293,7 +318,9 @@ Now the IVP can be solved using the Euler method as before but only the first fu
 
 The method above can be extended into a set of higher order IVPs.
 
-:::{.callout-caution title="Set of Higher Order IVPs"}
+:::{.callout-caution icon=false}
+## Set of Higher Order IVPs
+
 Consider the following coupled system of higher order IVPs
 $$y''+6y'+y=\sin(t), \quad z'''-8z''=5y-2y'+\ex{2t}$$
 $$\tq{with} y(0)=1, \quad \tdiff{y}(0)=2, \quad z(0)=4, \quad \tdiff{z}(0)=1, \quad \Tdiff{z}{2}(0)=2$$
@@ -356,7 +383,9 @@ If $A$ is asymptotically stable, then a maximum bound $h_0$ for the stepsize can
 
 If the stepsize is too large, then the method may not converge but on the other hand if it is too low, then the iteration will take a considerable amount of time to perform.  Therefore an "optimal" stepsize is needed to obtain sufficiently accurate solutions.
 
-:::{.callout-caution title="Different Stepsizes"}
+:::{.callout-caution icon=false}
+## Different Stepsizes
+
 Consider the following initial value problem
 $$\tdiff{y}=100(\sin(t)-y) \qtq{with} y(0)=0.$$
 The figure below shows the Euler method being used to solve the initial value problem in the interval $[0,1]$ for the stepsizes $h=0.03, 0.02, 0.01, 0.001$.
@@ -366,8 +395,6 @@ The figure below shows the Euler method being used to solve the initial value pr
 When $h=0.03$, the Euler method does not converge.  At $h=0.02$, the Euler method converges but there clearly is a distinct artefact in the solution that shows a slight oscillation.  For $h$ less than $0.02$, this oscillation is no longer observed and the Euler method is convergent.
 :::
 
-### Exact Bound
-
 Consider the IVP
 $$\Btdiff{y}=A\B{y}+\B{b} \qtq{with} \B{y}(0)=\B{y}_0.$$
 Let $\lambda_1, \lambda_2, \dots, \lambda_K$ be the eigenvalues of $A$.  Suppose that the matrix $A$ is asymptotically stable (i.e. $\Re(\lambda_k)<0$ for all $k=1,2,\dots,K$).  In order for the Euler iterations to converge, the stepsize $h$ needs be less than the threshold stepsize $h_0$ where
@@ -375,9 +402,8 @@ $$h_0=2\min_{k=1,2,\dots,K}\cbr{\frac{|\Re(\lambda_k)|}{|\lambda_k|^2}}$${#eq-h0
 $$\tq{or} h_0=2 \min_{k=1,2,\dots,K} \cbr{\frac{1}{|\lambda_k|}} \quad \text{if all the eigenvalues are real.}$$
 In other words, if the initial value problem is asymptotically stable, then the Euler method is stable if an only if $h<h_0$.  This means that the convergence of the Euler is characterised by the eigenvalue that is furthest away from the origin, also called the ***Dominant Eigenvalue***.
 
-!!!!!DO!!!!!
-
-:::{.callout-caution title="Euler Upper Bound"}
+:::{.callout-caution icon=false}
+## Euler Upper Bound
 
 Consider the system of differential equations $\B{y}'=A\B{y}$ with $\B{y}(0)=\B{y}_0$ where
 $$A=\Mat{-1 & 0 & 3 \\ 0 & -10 & 0 \\ 18 & -1 & -100}.$$
@@ -400,7 +426,9 @@ $$\INorm{\B{x}}=\max |x_n|.$$
 Whereas for a matrix $A$, the **sup-norm** of $A$ is the maximal absolute row sum.  In other words, for a given matrix $A$, take the absolute value of all the terms, take the sum of each row and the sup-norm will be the largest out of these.
 
 
-:::{.callout-caution title="Sup-Norm of Vectors & Matrices"}
+:::{.callout-caution icon=false}
+## Sup-Norm of Vectors & Matrices
+
 Consider the vector $\B{x}$ and matrix $M$ given by
 $$\B{x}=\Mat{1 \\ -4 \\ -9 \\ 7}, \quad M=\begin{pmatrix}
 	 5 & 2 &  4 &  1 \\
@@ -443,7 +471,9 @@ $$\INorm{\II+hA} \leq 1.$$
 
 Computing all the eigenvalues of the matrix $A$ can be computationally expensive but obtaining the sup-norm is takes far fewer computations, however as a drawback, the resulting value of $h_0$ would be an estimate.
 
-:::{.callout-caution title="Stepsize Bound Estimate 1 (Tridiagonal)"}
+:::{.callout-caution icon=false}
+## Stepsize Bound Estimate 1 (Tridiagonal)
+
 Consider the differential equation $\B{y}'=A\B{y}$ where
 $$
 A=\begin{pmatrix}
@@ -500,7 +530,9 @@ $$h_0=2 \min \cbr{\frac{1}{|\lambda_k|}}=0.5359$$
 which is a larger bound compared to the one obtained using the sup-norm method.  Observe that if the size of the matrix was larger but followed the same theme (i.e. $2$ on the main diagonal and $-1$ and the sub and super diagonals), then no further calculations are required for the sup-norm method, the outcome will still be $h_0=\frac{1}{2}$.  As for the eigenvalue method, all the eigenvalues have to be recalculated again.
 :::
 
-:::{.callout-caution title="Stepsize Bound Estimate 2 (Bidiagonal)"}
+:::{.callout-caution icon=false}
+## Stepsize Bound Estimate 2 (Bidiagonal)
+
 Consider the differential equation $\B{y}'=A\B{y}$ where
 $$
 A=\begin{pmatrix}
@@ -556,7 +588,9 @@ this shows that the sup-norm method gives a tighter than using eigenvalues.
 
 The sup-norm method works well when the matrix in question has a diagonal, bidiagonal or tridiagonal structure where the diagonal terms are the same.  In general, the sup-norm method might *not* be suitable for any matrix.
 
-:::{.callout-caution title="Stepsize Bound Estimate 3 (General)"}
+:::{.callout-caution icon=false}
+## Stepsize Bound Estimate 3 (General)
+
 Consider the differential equation $\B{y}'=A\B{y}$ where
 $$A=\Mat{-1 & -2 \\ 4 & -3}.$$
 

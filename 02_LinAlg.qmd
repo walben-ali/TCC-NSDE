@@ -61,9 +61,13 @@ For $p \in \NN$, consider the ratio between the $p$-norm of the error $\Norm{\de
 &&& \quad \text{meaning that}\; \; \frac{1}{\Norm{\B{b}}{p}} \geq \frac{1}{\Norm{A}{p} \Norm{\B{x}}{p}}
 \end{align*}
 
-:::{#nte-SubMult .callout-note title="Submultiplicative Property of Matrix Norms"}
-For a matrix $A$ and a vector $\B{x}$,
-$$\| A\B{x} \| \leq \| A \| \| \B{x} \|.$$
+:::{#nte-SubMult .callout-note}
+## Submultiplicative Property of Matrix Norms
+
+For matrices $A$ and $B$ and a vector $\B{x}$,
+$$\| A\B{x} \| \leq \| A \| \| \B{x} \|,$$
+$$\| AB \| \leq \|A\| \|B\|.$$
+In both cases, the equality holds when either $A$ or $B$ are orthogonal.
 :::
 
 Let $\kappa_p(A)=\Norm{A^{-1}}{p} \Norm{A}{p}$, then
@@ -292,10 +296,10 @@ $$\underbrace{\Mat{a & b & c \\ d & e & f \\ g & h & i}}_{A}=\underbrace{\Mat{a 
 
 - ***Jacobi Method***: $\B{P=D}$
 
-The matrix $P$ is chosen to be equal to the diagonal part of $A$, then the splitting procedure gives the iteration matrix $B=I-D^{-1}A$ and the iteration itself is $\B{x}^{(k+1)} = B\B{x}^{(k)}+D^{-1}\B{b}$ for $k \geq 0$, which can be written component-wise as
-$$x_i^{(k+1)}=\frac{1}{a_{ii}}\left(b_i-\sum_{\substack{j=1 \\ j\neq i}}^{N}a_{ij}x_j^{(k)}\right) \qtq{for all} i=1,\dots,N.$$ {#eq-Jmethod}
+The matrix $P$ is chosen to be equal to the diagonal part of $A$, then the splitting procedure gives the iteration matrix $B=I-D^{-1}A$ and the iteration itself is $\B{x}^{(k)} = B\B{x}^{(k-1)}+D^{-1}\B{b}$ for $k \geq 0$, which can be written component-wise as
+$$x_i^{(k)}=\frac{1}{a_{ii}}\left(b_i-\sum_{\substack{j=1 \\ j\neq i}}^{N}a_{ij}x_j^{(k-1)}\right) \qtq{for all} i=1,\dots,N.$$ {#eq-Jmethod}
 
-If $A$ is strictly diagonally dominant by rows[^DiagDom], then the Jacobi method converges (i.e. $\rho(B)<1$, where $B=\mathcal{I}-D^{-1}A$).  Note that each component $x_i^{(k+1)}$ of the new vector $\B{x}^{(k+1)}$ is computed independently of the others, meaning that the update is simultaneous which makes this method suitable for parallel programming.
+If $A$ is strictly diagonally dominant by rows[^DiagDom], then the Jacobi method converges.  Note that each component $x_i^{(k)}$ of the new vector $\B{x}^{(k)}$ is computed independently of the others, meaning that the update is simultaneous which makes this method suitable for parallel programming.
 
 [^DiagDom]:  A matrix $A \in \RR^{N \times N}$ is ***Diagonally Dominant*** if every diagonal entry is larger in absolute value than the sum of the absolute value of all the other terms in that row.  More formally
 $$|a_{ii}|\geq \sum_{\substack{j=1 \\ j\neq i}}^{N}|a_{ij}| \qtq{for all} i=1,\dots,N.$$
@@ -310,7 +314,6 @@ Contrary to Jacobi method, Gauss-Seidel method updates the components in sequent
 
 There are many other methods that use splitting like:
 
-- Richardson method: $P=\frac{1}{\omega}\II$ where $\II$ is the identity matrix and $\omega \neq 0$
 - Damped Jacobi method: $P=\frac{1}{\omega}D$ for some $\omega \neq 0$
 - Successive over-relaxation method: $P=\frac{1}{\omega}D+L$ for some $\omega \neq 0$
 - Symmetric successive over-relaxation method: $P=\frac{1}{\omega(2-\omega)}(D+\omega L) D^{-1} (D+\omega U)$ for some $\omega \neq 0,2.$
@@ -319,21 +322,14 @@ There are many other methods that use splitting like:
 
 There are essentially two factors contributing to the effectiveness of an iterative method for $A\B{x}=\B{b}$: the computational cost per iteration and the number of performed iterations.  The computational cost per iteration depends on the structure and sparsity of the original matrix $A$ and on the choice of the splitting.  For both Jacobi and Gauss-Seidel methods, without further assumptions on $A$, the computational cost per iteration is $\OO{N^2}$.  Iterations should be stopped when one or more stopping criteria are satisfied, as will be discussed below.  For both Jacobi and Gauss-Seidel methods, the cost of performing $k$ iterations is $\OO{kN^2}$; so as long as $k \ll N$, these methods are much cheaper than Gaussian elimination. 
 
-In theory, iterative methods require an infinite number of iterations to converge to the exact solution of a linear system but in practice, aiming at the exact solution is neither reasonable nor necessary.  Indeed, what is actually needed is an approximation $\B{x}^{(k)}$ for which the error is guaranteed to be lower than a desired tolerance $\tau>0$.  On the other hand, since the error is itself unknown (as it depends on the exact solution), a suitable *a posteriori* error estimator is needed which predicts the error starting from quantities that have already been computed.  There are two natural estimators one may consider:
+In theory, iterative methods require an infinite number of iterations to converge to the exact solution of a linear system but in practice, aiming for the exact solution is neither reasonable nor necessary.  Indeed, what is actually needed is an approximation $\B{x}^{(k)}$ for which the error is guaranteed to be lower than a desired tolerance $\tau>0$.  On the other hand, since the error is itself unknown (as it depends on the exact solution), a suitable *a posteriori* error estimator is needed which predicts the error starting from quantities that have already been computed.  There are two natural estimators one may consider:
 
-- The residual at the $\nth{k}$ iteration, i.e. $\B{r}^{(k)}=\B{b}-A\B{x}^{(k)}$.  More precisely, an iterative method can be stopped at the first iteration step $k=k_{\min}$ for which
+- **Residual**:  The residual error at the $\nth{k}$ iteration, denoted $\B{r}^{(k)}$ is given by the error between $A\B{x}^{(k)}$ and $\B{b}$, namely $\B{r}^{(k)}=\B{b}-A\B{x}^{(k)}$.  An iterative method can be stopped at the first iteration step $k=k_{\min}$ for which
 $$\|\B{r}^{(k)}\|\leq\tau \|\B{b}\|.$$
-When the above estimate is satisfied, it is guaranteed that
-$$\frac{\|\B{e}^{(k)}\|}{\|\B{x}\|}\leq\tau \kappa(A),$$
-i.e. the control on the residual is meaningful only for those matrices whose condition number is reasonably small; in this way the relative error will be of the same size as the relative residual.
-- The increment at the $(k+1)^{\mathrm{st}}$ iteration, i.e. $\B{\delta}^{(k)}=\B{x}^{(k+1)}-\B{x}^{(k)}$.  More precisely, iterative method would stop after the first iteration step $k=k_{\min}$ for which
+- **Increment**:  The incremental error at the $k^{\mathrm{th}}$ iteration, denoted $\B{\delta}^{(k)}$ is the error between consecutive approximations, namely $\B{\delta}^{(k)}=\B{x}^{(k)}-\B{x}^{(k-1)}$.  An iterative method can be stopped after the first iteration step $k=k_{\min}$ for which
 $$\|\B{\delta}^{(k)}\|\leq\tau.$$
-If $B$ is symmetric and positive definite, then
-$$\|\B{e}^{(k+1)}\|=\|\B{e}^{(k)}+ \B{\delta}^{(k)}\|\leq \rho(B)\|\B{e}^{(k)}\|+\|\B{\delta}^{(k)}\|.$$
 
-Recalling that $\rho(B)$ should be less than 1 in order for the iterative method to converge, we deduce
-$$\|\B{e}^{(k)}\|\leq\frac{1}{1-\rho(B)}\|\B{\delta}^{(k)}\|,$$
-i.e. the control on the increment is meaningful only if $\rho(B) \ll 1$ since in that case the error will be of the same size as the increment.
+Of course, another way to stop the iteration is by imposing a maximum number of allowable iterations $K$, this is usually a good starting point since it is not possible to know beforehand if the method does indeed converge.  Enforcing a maximum number of iterations will determine if the initial guess is suitable, if the method is suitable or indeed if there is any convergence.
 
 ## In-Built MATLAB Procedures
 
@@ -343,7 +339,9 @@ For the linear system
 $$A \B{x} = \B{b} \qtq{where} A \in \RR^{N \times N}, \quad \B{x} \in \RR^N, \quad \B{b} \in \RR^N$$
 MATLAB can solve this using the syntax `x=A\b`.
 
-:::{.callout-caution title="Starting Example"}
+:::{.callout-caution icon=false}
+## Starting Example
+
 Returning to the example in the beginning of this section, the matrix system was
 $$\underbrace{\Mat{1 & 1 & 1 \\ 1 & -2 & 0 \\ 0 & 1 & -1}}_{A} \underbrace{\Mat{a \\ b \\ c}}_{\B{x}} = \underbrace{\Mat{20 \\ 0 \\ 10}}_{\B{b}}.$$
 This can be solved as follows:
@@ -369,31 +367,54 @@ The [MATLAB website](https://uk.mathworks.com/help/matlab/ref/double.mldivide.ht
 ## Exersises
 
 :::{.callout-important icon=false}
-## Exersise 2.1
+## Exercise 2.1
 
 Let $A$ and $B$ be invertible matrices, $p \in \mathbb{N}$ and $\lambda \in \mathbb{R}$.  The condition number $\kappa_p$ has the following properties:
 
 i. $\kappa_p(A) \geq 1$;
-ii. $\kappa_p(A)=1$ if and only if $A$ is an orthogonal matrix, i.e. $A^{-1}=A^{\mathrm{T}}$;
-iii. $\kappa_p(\Tr{A})=\kappa_p(A^{-1})=\kappa_p(A)$;
+ii. If $A$ is an orthogonal matrix ($A^{-1}=A^{\mathrm{T}}$), then $\kappa_2(A)=1$;
+iii. $\kappa_2\nbr{\Tr{A}}=\kappa_2\nbr{A^{-1}}=\kappa_2(A)$;
 iv. $\kappa_p(\lambda A)=\kappa_p(A)$;
 v. $\kappa_p(AB) \leq \kappa_p(A)\kappa_p(B)$.
+
+You may use the fact that $\| A \|_2=\| \Tr{A} \|_2$.
 
 :::
 
 :::{.callout-tip icon=false collapse=true}
 ## Solution 2.1
 
-i.
-ii.
+$$\kappa_p(A)=\Norm{A}{p} \Norm{A^{-1}}{p}$$
+
+i. Using the submultiplicative property of matrices
+$$\kappa_p(A)=\Norm{A}{p} \Norm{A^{-1}}{p} \geq \Norm{A A^{-1}}{p} = \Norm{\mathcal{I}}{p}=1.$$
+
+ii.  If $A$ is orthogonal ($A^{-1}=\Tr{A}$), then the submultiplicative property of matrices becomes an equality, so
+$$\kappa_2(A)=\Norm{A}{2} \Norm{A^{-1}}{2} = \Norm{A A^{-1}}{2} = \Norm{\mathcal{I}}{2}=1.$$
+
 iii.
+
+\begin{multline}
+\bullet \; \kappa_2\nbr{\Tr{A}}=\Norm{\Tr{A}}{2}\Norm{\Tr{\nbr{A^{-1}}}}{2}=\Norm{\Tr{A}}{2}\Norm{\Tr{A^{-1}}}{2} \\ =\Norm{A}{2}\Norm{A^{-1}}{2}=\kappa_2(A).
+\end{multline}
+$$\bullet \; \kappa_2\nbr{A^{-1}}=\Norm{A^{-1}}{2}=\Norm{\nbr{A^{-1}}^{-1}}{2}=\Norm{A}{2}\Norm{A^{-1}}{2}=\kappa_2(A).$$
+
 iv.
+
+\begin{multline}
+\kappa_p(\lambda A)=\Norm{\lambda A}{p} \Norm{(\lambda A)^{-1}}{p}=\Norm{\lambda A}{p} \Norm{\frac{1}{\lambda}A^{-1}}{p}= \\ |\lambda| \Norm{A}{p} \frac{1}{|\lambda|}\Norm{A^{-1}}{p}=\Norm{A}{p} \Norm{A^{-1}}{p}=\kappa_p(A).
+\end{multline}
+
 v.
+
+\begin{multline}
+\kappa_p(AB)=\Norm{AB}{p} \Norm{(AB)^{-1}}{p}=\Norm{AB}{p} \Norm{A^{-1} B^{-1}}{p} \\ \leq \Norm{A}{p} \Norm{B}{p} \Norm{B^{-1}}{p} \Norm{A^{-1}}{p}=\kappa_p(A)\kappa_p(B).
+\end{multline}
 
 :::
 
 :::{.callout-important icon=false}
-## Exersise 2.2
+## Exercise 2.2
 
 Solve the following linear systems of the form $A \B{x}=\B{b}$ using the following direct methods:
 
@@ -401,16 +422,30 @@ i. Direct substitution
 $$A=\Mat{1 & 0 & 0 \\ 0 & -2 & 0 \\ 0 & 0 & 5}, \quad \B{b}=\Mat{3 \\ 9 \\ 0}$$
 
 ii. Backward substitution
-$$A=\Mat{7 & 2 & 1 \\ 0 & 2 & -1 \\ 0 & 0 & 3}, \quad \B{b}=\Mat{0 \\ 1 \\ 1}$$
+$$A=\Mat{4 & 2 & 1 \\ 0 & 2 & 1 \\ 0 & 0 & 10}, \quad \B{b}=\Mat{1 \\ 1 \\ 1}$$
 
-iii. Direct substitution
-$$A=\Mat{1 & 0 & 0 \\ 0 & 2 & 0 \\ 1 & 1 & -1}, \quad \B{b}=\Mat{3 \\ 0 \\ 5}$$
+iii. Forwards substitution
+$$A=\Mat{1 & 0 & 0 \\ 4 & 5 & 0 \\ 9 & 1 & 2}, \quad \B{b}=\Mat{0 \\ 0 \\ 1}$$
 
 iv. TDMA
-$$A=\Mat{2 & -1 & 0 & 0 & 0 \\ -1 & 2 & -1 & 0 & 0 \\ 0 & -1 & 2 & -1 & 0 \\ 0 & 0 & -1 & 2 & -1 \\ 0 & 0 & 0 & -1 & 2}, \quad \B{b}=\Mat{1 \\ 0 \\ 0 \\ 0 \\ 1}$$
+$$A=\Mat{2 & -1 & 0 & 0 & 0 \\ -1 & 2 & -1 & 0 & 0 \\ 0 & -1 & 2 & -1 & 0 \\ 0 & 0 & -1 & 2 & -1 \\ 0 & 0 & 0 & -1 & 2}, \quad \B{b}=\Mat{1 \\ 0 \\ 1 \\ 0 \\ 1}$$
 
-v. Cramer's Rule
-$$A=\Mat{1 & 4 & 1 \\ 1 & 2 & 0 \\ 1 & -1 & 2}, \quad \B{b}=\Mat{1 \\ 0 \\ 0}$$
+vi. Cramer's Rule
+$$A=\Mat{1 & 0 & 2 \\ 2 & 1 & 2 \\ -1 & 0 & 0}, \quad \B{b}=\Mat{12 \\ 0 \\ 6}$$
+:::
+
+:::{.callout-tip icon=false}
+## Solutions 2.2
+
+$$\mathrm{i.} \quad \B{x}=\Mat{3 \\ -4.5 \\ 0}$$
+
+$$\mathrm{ii.} \quad \B{x}=\Mat{0 \\ 0.45 \\ 0.1}$$
+
+$$\mathrm{iii.} \quad \B{x}=\Mat{0 \\ 0 \\ 0.5}$$
+
+$$\mathrm{iv.} \quad \B{x}=\Mat{1.5 \\ 2 \\ 2.5 \\ 2 \\ 1.5}$$
+
+$$\mathrm{v.} \quad \B{x}=\Mat{0 \\ -12 \\ 6}$$
 :::
 
 :::{.callout-important icon=false}
@@ -422,7 +457,183 @@ Using the formulas derived, write MATLAB codes that can perform:
 - Backward substitution
 - Forward substitution
 - TDMA
+- Cramer's Rule
 
-Use the examples in Exersise 2.2 as test cases.
+Use the examples in Exercise 2.2 as test cases.
+
+:::
+
+:::{.callout-tip icon=false collapse=true}
+## Solutions 2.3
+
+Direct Substitution
+
+```matlab
+function D_Sub
+
+A=diag([1,-2,5]);
+b=[3;9;0];
+
+if isdiag(A)~=1
+    error('A must be a diagonal matrix')
+end
+
+if any(diag(A)==0)
+    error('All diagonal terms must be non-zero')
+end
+
+N=length(b);
+
+x=zeros(1,N);
+
+for n=1:1:N
+    x(n)=b(n)/A(n,n);
+end
+
+disp('x=')
+disp(x)
+
+end
+```
+
+Backward Substitution
+
+```matlab
+function B_Sub
+
+A=[4,2,1;0,2,1;0,0,10];
+b=[1;1;1];
+
+if istriu(A)~=1
+    error('A must be an upper triangluar matrix')
+end
+
+if any(diag(A)==0)
+    error('All diagonal terms must be non-zero')
+end
+
+N=length(b);
+
+x=zeros(1,N);
+
+x(N)=b(N)/A(N,N);
+
+for n=N-1:-1:1
+    S=0;
+    for i=n+1:1:N
+        S=S+A(n,i)*x(i);
+    end
+    x(n)=(b(n)-S)/A(n,n);
+end
+
+disp('x=')
+disp(x)
+
+end
+```
+
+Forward Substitution
+
+```matlab
+function F_Sub
+
+A=[1,0,0;4,5,0;9,1,2];
+b=[0;0;1];
+
+if istril(A)~=1
+    error('A must be a lower triangular matrix')
+end
+
+if any(diag(A)==0)
+    error('All diagonal terms must be non-zero')
+end
+
+N=length(b);
+
+x=zeros(1,N);
+
+x(1)=b(1)/A(1,1);
+
+for n=2:1:N
+    S=0;
+    for i=1:1:n-1
+        S=S+A(n,i)*x(i);
+    end
+    x(n)=(b(n)-S)/A(n,n);
+end
+
+disp('x=')
+disp(x)
+
+end
+```
+
+TDMA
+
+```matlab
+function TDMA
+
+m=[2,2,2,2,2];
+l=[-1,-1,-1,-1];
+r=[-1,-1,-1,-1];
+A=diag(m)+diag(l,-1)+diag(r,1);
+
+b=[1;0;1;0;1];
+
+N=length(b);
+
+R=zeros(1,N);
+B=zeros(1,N);
+x=zeros(1,N);
+
+l=[0,l];
+r=[r,0];
+
+R(1)=r(1)/m(1);
+for n=2:1:N-1
+    R(n)=r(n)/(m(n)-l(n)*R(n-1));
+end
+
+B(1)=b(1)/m(1);
+for n=2:1:N
+    B(n)=(b(n)-l(n)*B(n-1))/(m(n)-l(n)*R(n-1));
+end
+
+x(N)=B(N);
+for n=N-1:-1:1
+    x(n)=B(n)-R(n)*x(n+1);
+end
+
+disp('x=')
+disp(x)
+
+end
+```
+
+Cramer's Rule
+
+```matlab
+function Cramer
+
+A=[1,0,2;2,1,2;-1,0,1];
+b=[12;0;6];
+
+N=length(b);
+
+d=det(A);
+
+x=zeros(N,1);
+
+for n=1:1:N
+    AA=A;
+    AA(:,n)=b;
+    x(n)=det(AA)/d;
+end
+
+disp('x=')
+disp(x)
+
+end
+```
 
 :::
