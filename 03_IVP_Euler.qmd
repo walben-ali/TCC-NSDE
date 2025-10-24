@@ -659,9 +659,9 @@ function IVP_Euler
 % Line 31   : tf - End time
 % Line 34   : N  - Number of subdivisions
 % Line 37   : y0 - Vector of initial values
-% Line 105+ : Which functions to plot, remembering to assign
+% Line 106+ : Which functions to plot, remembering to assign
 %             a colour, texture and legend label
-% Line 125+ : Set of differential equations written
+% Line 120+ : Set of differential equations written
 %             explicitly.  These can also be non-linear and
 %             include forcing terms.  These equations can
 %             also be written in matrix form if the
@@ -676,7 +676,7 @@ t0=0;
 tf=1;
 
 % Number of subdivisions
-N=50;
+N=5000;
 
 % Column vector initial values y0=y(t0)
 y0=[0;1;0];
@@ -740,6 +740,7 @@ grid on
 
 % Setting font size and style
 set(gca,'FontSize',20,'FontName','Times')
+set(legend,'Interpreter','Latex')
 
 % Label the axes
 xlabel('$t$','Interpreter','Latex')
@@ -747,13 +748,9 @@ ylabel('$\mathbf{y}(t)$','Interpreter','Latex')
 
 % Plot the desried solutions.  If all the solutions are
 % needed, then consider using a for loop in that case
-plot(T,Y(1,:),'-b','LineWidth',2)
-plot(T,Y(2,:),'-r','LineWidth',2)
-plot(T,Y(3,:),'-k','LineWidth',2)
-
-% Legend labels
-legend('$y_1(t)$','$y_2(t)$','$y_3(t)$')
-set(legend,'Interpreter','Latex')
+plot(T,Y(1,:),'-b','LineWidth',2,'DisplayName','$y_1(t)$')
+plot(T,Y(2,:),'-r','LineWidth',2,'DisplayName','$y_2(t)$')
+plot(T,Y(3,:),'-k','LineWidth',2,'DisplayName','$y_3(t)$')
 
 % Display the values of the vector y at tf
 disp(strcat('The vector y at t=',num2str(tf),' is:'))

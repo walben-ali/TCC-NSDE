@@ -1,0 +1,644 @@
+::: {.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+Ordinary differential equations have been the main focus of this course so far but this will now be extended to *partial differential equations*.  The differential equations that will be studied here are the *1-Dimensional Heat (or Diffusion) Equation* and the *1-Dimensional Advection (or Convection) Equation*.
+
+## Heat Equation
+
+The 1-dimensional *heat* (or *diffusion*) *equation* is a partial differential equation that represents the heat transfer across a rod and is given by
+$$\pdiff{u}{t}=\alpha \Pdiff{u}{x}{2} \qtq{with} 0<x<L \qtq{and} t>0$$
+where $u=u(x,t)$ is the temperature at location $x$ at time $t$ and $\alpha$ is the thermal diffusivity[^alpha].  This equation represents the flow of heat along the length of a rod of length $L$.
+
+[^alpha]:  The thermal diffusivity will always be regarded as a constant and usually takes the form $\alpha=\frac{k}{\rho Cp}$ where $k$ is the thermal conductivity, $\rho$ is the density of the material and $Cp$ is the specific heat capacity.
+
+This partial differential equation has three derivatives in total, two derivatives in $x$ and one derivative in $t$, this means that three conditions are needed, two on $x$ and one on $t$:
+
+- $u(x,0)=u_{init}(x)$ for $x \in [0,L]$:  Initial heat distribution across the rod;
+- $u(0,t)=u_l(t)$ for $t>0$:  The temperature at the left end of the rod;
+- $u(L,t)=u_r(t)$ for $t>0$:  The temperature at the right end of the rod.
+
+This set of conditions along with the differential equation are known collectively as an ***Initial-Boundary Value Problem*** and can be solved using the ***Method of Lines***.
+
+## The Method of Lines for the Heat Equation
+
+The outline of the method of lines for the heat equation is as follows:
+
+1. Divide the spatial interval $[0,L]$ into $N_x$ equally sized sections and label the points as $x_0, x_1, x_2, \dots, x_N$ where $x_n=nh$ and the spatial interval width is $h_x=\frac{L}{N}$.
+
+![](figures/Disc.jpg)
+
+2. **Left Hand Side**:  For each point $x_n$, define the approximation $U_n(t) \approx u(x_n,t)$.  Therefore the left hand side of the heat equation can be written as
+$$\pdiff{u}{t}(x_n,t) \approx \odiff{U_n}{t}(t)$$
+and this holds for $n=1, 2, \dots, N-1$ since $U_0(t) \approx u(0,t)=u_l(t)$ and $U_N(t) \approx u(L,t)=u_r(t)$ are already known from the boundary conditions.  Notice that the derivative of $U_n$ is an ordinary derivative since $U_n$ is a function of $t$ only.
+
+3. **Right Hand Side**:  Use the finite difference approximation to approximate the *spatial* derivative in the differential equation.  Here, the centred difference approximation for the second derivative will be used, namely
+$$\Pdiff{u}{x}{2}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.$$
+Therefore the right hand side of the heat equation will become
+$$\alpha \Pdiff{u}{x}{2}(x_n,t) \approx \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right].$$
+This holds for $n=1, 2, \dots, N-1$ bearing in mind, once again, that $U_0(t) \approx u(0,t)=u_l(t)$ and $U_N(t) \approx u(L,t)=u_r(t)$ are known beforehand.
+
+4.  These can be combined to give the discretised form of the heat equation
+$$\odiff{U_n}{t}=\frac{\alpha}{h_x^2}\left[ U_{n-1}-2U_n+U_{n+1} \right]$$
+for all $n=1,2,\dots,N-1$ where $U_n=U_n(t)$.  This means that the partial differential equation has been split into $N-1$ ordinary differential equations.
+
+5. This entire system of $N-1$ equations can now be written in matrix form as $\Btdiff{U}=A\B{U}+\B{b}$ where
+\begin{multline*}
+\odiff{}{t}\underbrace{\begin{pmatrix}
+	U_1(t) \\
+	U_2(t) \\
+	U_3(t) \\
+	\vdots \\
+	U_{N-3}(t) \\
+	U_{N-2}(t) \\
+	U_{N-1}(t) \\
+\end{pmatrix}}_{\B{U}}=
+\underbrace{\frac{\alpha}{h_x^2}\begin{pmatrix}
+	-2 & 1 & 0 & \dots & 0 & 0 & 0 \\
+	1 & -2 & 1 & \dots & 0 & 0 & 0 \\
+	0 & 1 & -2 & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+	0 & 0 & 0 & \dots & -2 & 1 & 0 \\
+	0 & 0 & 0 & \dots & 1 & -2 & 1 \\
+	0 & 0 & 0 & \dots & 0 & 1 & -2 \\
+\end{pmatrix}}_{A}
+\underbrace{\begin{pmatrix}
+	U_1(t) \\
+	U_2(t) \\
+	U_3(t) \\
+	\vdots \\
+	U_{N-3}(t) \\
+	U_{N-2}(t) \\
+	U_{N-1}(t) \\
+\end{pmatrix}}_{\B{U}} \\
++\underbrace{\frac{\alpha}{h_x^2}\begin{pmatrix}
+	u_l(t) \\
+	0 \\
+	0 \\
+	\vdots \\
+	0 \\
+	0 \\
+	u_r(t) \\
+\end{pmatrix}}_{\B{b}}
+\end{multline*}
+subject to the *initial condition*
+$$
+\B{U}_0=\begin{pmatrix}
+U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N-3}(0) \\ U_{N-2}(0) \\ U_{N-1}(0)
+\end{pmatrix}\approx\begin{pmatrix}
+u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N-3},0) \\ u(x_{N-2},0) \\ u(x_{N-1},0)
+\end{pmatrix} =\begin{pmatrix}
+	u_{init}(x_1) \\
+	u_{init}(x_2) \\
+	u_{init}(x_3) \\
+	\vdots \\
+	u_{init}(x_{N-3}) \\
+	u_{init}(x_{N-2}) \\
+	u_{init}(x_{N-1}) \\
+\end{pmatrix}.
+$$
+This system can now be solved using any of the IVP solvers with a temporal stepsize $h_t$.
+
+In essence, the *Method of Lines* has converted a PDE into a set of ODEs using the same techniques as BVPs and will be solved in the same way as IVPs.
+
+::: {.callout-caution title="Heat Equation"}
+Consider an iron rod (of thermal diffusivity $\alpha=2.3\E{-5}$) of length 1 where the middle section of length 0.2 has been heated to a temperature of 1 while the rest is at 0.  The ends of the rod have been kept at a constant temperature of 2.  This system can be represented by the IBVP
+$$\pdiff{u}{t}=\alpha\Pdiff{u}{t}{2}, \quad x \in [0,1], \quad t>0$$
+$$u(x,0)=u_{init}(x)=\left\{
+\begin{matrix}
+		0 & 0 \leq x<0.4 \\
+		1 & 0.4 \leq x <0.6 \\
+		0 & 0.6 \leq x \leq 1 \\
+\end{matrix} \right. , \quad u(0,t)=u_l(t)=2, \quad u(L,t)=u_r(t)=2.$$
+
+First, divide the interval $[0,1]$ into five equal sections (which will be of width $h_x=\frac{1-0}{5}=0.2$).
+![](figures/Disc02.jpg)
+
+This system can be discretised using the centred difference method and written in matrix form as $\Btdiff{U}=A\B{U}+\B{b}$ where
+$$
+	\odiff{}{t}\underbrace{\begin{pmatrix}
+		U_1(t) \\
+		U_2(t) \\
+		U_3(t) \\
+		U_4(t) \\
+		U_5(t)
+	\end{pmatrix}}_{\B{U}}=
+	\underbrace{\frac{\alpha}{h^2}\begin{pmatrix}
+		-2 & 1 & 0 & 0 & 0 \\
+		1 & -2 & 1 & 0 & 0 \\
+		0 & 1 & -2 & 1 & 0 \\
+		0 & 0 & 1 & -2 & 1 \\
+		0 & 0 & 0 & 1 & -2
+	\end{pmatrix}}_{A}
+	\underbrace{\begin{pmatrix}
+		U_1(t) \\
+		U_2(t) \\
+		U_3(t) \\
+		U_4(t) \\
+		U_5(t) \\
+	\end{pmatrix}}_{\B{U}}+
+	\underbrace{\frac{\alpha}{h^2}\begin{pmatrix}
+		u_l(t) \\
+		0 \\
+		0 \\
+		0 \\
+		u_r(t) \\
+	\end{pmatrix}}_{\B{b}}
+$$
+The differential equation
+$$\odiff{\B{U}}{t}=A\B{U}+\B{b}$$
+can be solved using the Euler method with the initial condition
+$$
+	\B{U}(0)=\begin{pmatrix}
+		u_{init}(x_1) \\
+		u_{init}(x_2) \\
+		u_{init}(x_3) \\
+		u_{init}(x_4) \\
+		u_{init}(x_5) \\
+	\end{pmatrix}
+$$
+subject to a time stepsize $h_t$.  Below are the plots of the heat distribution at $t=0, 100, 1000$ for $N_x=500$ ($h_x=0.002$) and $h_t=0.02$ ($N_t=50000$).
+![](figures/Heat1.jpg)
+![](figures/Heat2.jpg)
+![](figures/Heat3.jpg)
+At the beginning, the temperature at the ends is 2 and the middle section is at a temperature of 1.  As time progresses, the heat evens out across the iron bar until eventually, the whole bar will be the same temperature.
+:::
+
+## Linear Advection Equation
+
+The heat equation deals with heat transfer through diffusion throughout a material.  Another way in which heat transfer can be achieved by advection (or convection) and this is given by
+$$\pdiff{u}{t}=-v \pdiff{u}{x} \qtq{with} 0<x<L \qtq{and} t>0$$
+where $u=u(x,t)$ is the temperature at location $x$ at time $t$ and $v$ is the flow speed.
+
+This partial differential equation has two derivatives in total, one in $x$ and one in $t$, this means that two conditions are needed, one spatial and one temporal:
+
+- $u(x,0)=u_{init}(x)$ for $x \in [0,L]$:  Initial heat distribution across the rod;
+- $u(0,t)=u_l(t)$ for $t>0$:  The temperature at the left end of the rod.
+
+Consider the PDE along with the initial condition only, namely $u(x,0)=u_{init}(x)$ for $x \in [0,L]$.  The exact solution to this differential equation is given by
+$$u(x,t)=u_{init}(x-vt),$$
+this can be verified from the partial differential equation as follows:
+$$\pdiff{u}{t}=-v \pdiff{u}{x} \quad \text{at} \quad u(x,t)=u_{init}(x-vt)$$
+\begin{align*}
+	&\text{LHS}=\pdiff{}{t}u(x,t)=\pdiff{}{t}\nbr{u_{init}(x-vt)}=-vu_{init}'(x-vt)\\
+	&\text{RHS}=\pdiff{}{x}u(x,t)=\pdiff{}{x}\nbr{u_{init}(x-vt)}=-vu_{init}'(x-vt).
+\end{align*}
+This means that if the initial heat profile takes the form of $u_{init}(x)$, then after time $t$, the profile will look exactly the same but shifted to the right by a distance $vt$.
+
+![](figures/Advection.jpg)
+
+The "information" moves from left to right so if the finite differences are to be used, the centred differencing approach would not be suitable since the information on the right is not known yet.  Therefore the backwards differencing approximation will be the most suitable.  This is known as an *upwind/upstream scheme* (i.e. against the direction of the wind/stream) if $v>0$.  Therefore using the convention $U_n(t) \approx u(x_n,t)$ where $x=x_n$ is the discretisation of the spatial points for $n=0,1,2,\dots,N$, the backward differencing approximation to the spatial derivative is
+$$\pdiff{u}{x}(x_n,t) \approx \pdiff{U_n}{x}=\frac{U_n-U_{n-1}}{h_x}.$$
+Therefore is discretised advection equation is
+$$\odiff{U_n}{t}= \frac{v}{h_x}\nbr{U_{n-1}-U_n} \qtq{for} n=1,2,\dots,N$$
+and this can be solved subject to the initial condition
+$$u(x,0)=u_{init}(x)$$
+and boundary condition
+$$u(0,t)=u_{l}(t)$$
+to give the discretised set of equations in the form $\Btdiff{U}=A\B{U}+\B{b}$ where
+\begin{multline*}
+     \odiff{}{t}\underbrace{\begin{pmatrix}
+		U_1(t) \\
+		U_2(t) \\
+		U_3(t) \\
+		\vdots \\
+		U_{N-2}(t) \\
+		U_{N-1}(t) \\
+		U_N(t)
+	\end{pmatrix}}_{\B{U}}=
+	\underbrace{\frac{v}{h_x}\begin{pmatrix}
+		-1 & 0 & 0 & \dots & 0 & 0 & 0 \\
+		1 & -1 & 0 & \dots & 0 & 0 & 0 \\
+		0 & 1 & -1 & \dots & 0 & 0 & 0 \\
+		\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+		0 & 0 & 0 & \dots & -1 & 0 & 0 \\
+		0 & 0 & 0 & \dots & 1 & -1 & 0 \\
+		0 & 0 & 0 & \dots & 0 & 1 & -1 \\
+	\end{pmatrix}}_{A}
+	\underbrace{\begin{pmatrix}
+		U_1(t) \\
+		U_2(t) \\
+		U_3(t) \\
+		\vdots \\
+		U_{N-2}(t) \\
+		U_{N-1}(t) \\
+		U_N(t)
+	\end{pmatrix}}_{\B{U}}\\+
+	\underbrace{\frac{v}{h_x}\begin{pmatrix}
+		u_l(t) \\
+		0 \\
+		0 \\
+		\vdots \\
+		0 \\
+		0 \\
+		0 \\
+	\end{pmatrix}}_{\B{b}}
+\end{multline*}
+and the initial condition is
+$$
+\B{U}_0=\begin{pmatrix}
+	U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N-3}(0) \\ U_{N-2}(0) \\ U_{N-1}(0)
+\end{pmatrix}\approx\begin{pmatrix}
+	u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N-3},0) \\ u(x_{N-2},0) \\ u(x_{N-1},0)
+\end{pmatrix} =\begin{pmatrix}
+	u_{init}(x_1) \\
+	u_{init}(x_2) \\
+	u_{init}(x_3) \\
+	\vdots \\
+	u_{init}(x_{N-3}) \\
+	u_{init}(x_{N-2}) \\
+	u_{init}(x_{N-1}) \\
+\end{pmatrix}
+$$.
+
+## Convection-Diffusion Equation
+
+The heat (or diffusion) equation dictates the spread of heat across a length of material while on the other hand, the advection (or convection) equation dictates the flow of heat in a certain direction.  The combination of these two effects gives rise to the ***Convection-Diffusion Equation*** which takes the form
+$$\pdiff{u}{t}=\alpha \Pdiff{u}{x}{2}-v \pdiff{u}{x} \qtq{with} 0<x<L, \quad t>0.$$
+
+Just as in the heat equation, this partial differential equation has three derivatives in total, two derivatives in $x$ and one derivative in $t$, this means that three conditions are needed, two on $x$ and one on $t$, these will be as follows:
+
+- $u(x,0)=u_{init}(x)$ for $x \in [0,L]$:  Initial heat distribution across the rod;
+- $u(0,t)=u_l(t)$ for $t>0$:  The temperature at the left end of the rod;
+- $u(L,t)=u_r(t)$ for $t>0$:  The temperature at the right end of the rod.
+
+In order to discretise this system, a finite difference approximation needs to be chosen first.  The centred difference approximation was used for the heat equation and the backwards difference approximation for the advection.  Here, the combination of both will be used.  Even though this might initially seem like an inconsistency, but in fact, this will allow the system to present a distinct stable advantage as will be seen in the next section.
+
+This system can be discretised in exactly the same way as before
+$$\odiff{U_n}{t}(t)= \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right]-\frac{v}{h_x}\left[U_n(t)+U_{n-1}(t) \right] \qtq{for} n=1,2,\dots,N-1.$$
+This system can be written in the form $\Btdiff{U}=A\B{U}+\B{b}$ where
+$$
+		A=\frac{\alpha}{h_x^2}\begin{pmatrix}
+			-2 & 1 & 0 & \dots & 0 & 0 & 0 \\
+			1 & -2 & 1 & \dots & 0 & 0 & 0 \\
+			0 & 1 & -2 & \dots & 0 & 0 & 0 \\
+			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+			0 & 0 & 0 & \dots & -2 & 1 & 0 \\
+			0 & 0 & 0 & \dots & 1 & -2 & 1 \\
+			0 & 0 & 0 & \dots & 0 & 1 & -2 \\
+		\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
+			-1 & 0 & 0 & \dots & 0 & 0 & 0 \\
+			1 & -1 & 0 & \dots & 0 & 0 & 0 \\
+			0 & 1 & -1 & \dots & 0 & 0 & 0 \\
+			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+			0 & 0 & 0 & \dots & -1 & 0 & 0 \\
+			0 & 0 & 0 & \dots & 1 & -1 & 0 \\
+			0 & 0 & 0 & \dots & 0 & 1 & -1 \\
+		\end{pmatrix}
+$$
+	$$
+		\B{U}\begin{pmatrix}
+			U_1(t) \\
+			U_2(t) \\
+			\vdots \\
+			U_{N-2}(t) \\
+			U_{N-1}(t) \\
+		\end{pmatrix}, \quad \B{b}=\frac{\alpha}{h_x^2}\begin{pmatrix}
+			u_l(t) \\
+			0 \\
+			\vdots \\
+			0 \\
+			u_r(t) \\
+		\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
+			u_l(t) \\
+			0 \\
+			\vdots \\
+			0 \\
+			0 \\
+		\end{pmatrix}.
+$$
+and this system can be solved using an Euler iteration subject to the initial condition $u(x,0)=u_{init}(x)$.
+
+## Asymptotic Stability
+
+The method of lines is essentially a hybrid method that makes use of a combination between a finite difference approximation and the Euler method and is very effective at solving partial differential equations, as seen from solving the heat, advection and convection-diffusion equations.  The derivation of the method of lines for the different methods builds on the very same principle and the codes can be adapted quite easily.  One main issue that arises here is the choice for the stepsizes for both the spatial and temporal discretisations, i.e. the choice of $h_t$ and $h_x$ respectively. When both methods are combined, there needs to be a restriction on both stepsizes.
+
+The first issue that needs to be addressed is the asymptotic stability of the heat equation and the advection equation.  For arbitrarily large matrices, it may not be simple to determine if all the eigenvalues are negative since it may be computationally restrictive to do so.  However, a result can be used to see if all the eigenvalues are negative without explicitly calculating them.
+
+::: {#thm-Gersh}
+## Gershgorin Circle Theorem
+
+Let $A$ be an $N \times N$ given by
+$$
+A=\begin{pmatrix}
+	a_{11} & a_{12} & a_{13} & \dots  & a_{1N} \\
+	a_{21} & a_{22} & a_{23} & \dots  & a_{2N} \\
+	a_{31} & a_{32} & a_{33} & \dots  & a_{3N} \\
+	\vdots & \vdots & \vdots & \ddots & \vdots \\
+	a_{N1} & a_{N2} & a_{N3} & \dots  & a_{NN}
+\end{pmatrix}.
+$$
+On the complex plane, consider $N$ closed discs, each centred at the locations $a_{ii}$ for $i=1,2,\dots,n$ (the diagonal terms) where the disc centred at $a_{ii}$ has a radius $R_i$ where
+$$R_i=\sum_{j \neq i}{|a_{ij}|}.$$
+Then all the eigenvalues of the matrix $A$ will have to lie in at least one of these discs.  In other words, every eigenvalues of $A$ satisfies
+$$|\lambda-a_{ii}| \leq R_i \qtq{for at least one } i=1,2,\dots,n.$$
+:::
+
+::: {.callout-caution title="Gershgorin Circle Theorem Exapmple"}
+Consider the matrix
+$$
+A=\begin{pmatrix}
+	-1 & 3 & 4 & 2 & -4 \\
+	0 & 5 & 4 & 7 & 1 \\
+	4 & -2 & 0 & -3 & 0 \\
+	6 & -6 & -4 & -6 & -1 \\
+	7 & 4 & 7 & 9 & 7
+\end{pmatrix}.
+$$
+Following the steps of the theorem:
+
+1. Indicate the locations of the diagonal terms (namely $-1, 5, 0, -6, 7$) on the complex plane.
+
+2. Find the radii $R_i$ which are equal to the row sum of the absolute terms *without* the diagonal terms, in other words,
+$$
+	\text{abs}(A)=\begin{pmatrix}
+	1 & 3 & 4 & 2 & 4 \\
+	0 & 5 & 4 & 7 & 1 \\
+	4 & 2 & 0 & 3 & 0 \\
+	6 & 6 & 4 & 6 & 1 \\
+	7 & 4 & 7 & 9 & 7
+\end{pmatrix}
+\begin{matrix}
+	\rightarrow \\ \rightarrow \\ \rightarrow \\ \rightarrow \\ \rightarrow
+\end{matrix}
+\begin{matrix}
+	3+4+2+4 \\ 0+4+7+1 \\ 4+2+3+0 \\ 6+6+4+1 \\ 7+4+7+9
+\end{matrix}
+\begin{matrix}
+	=13 \\ =12 \\ =9 \\ =17 \\ =27
+\end{matrix}
+\begin{matrix}
+	\rightarrow R_1 \\ \rightarrow R_2 \\ \rightarrow R_3 \\ \rightarrow R_4 \\ \rightarrow R_5
+\end{matrix}
+$$
+
+3. Draw a circle around $a_{11}=-1$ with radius $R_1=13$, a circle around $a_{22}=5$ with radius $R_2=12$ and so on.
+
+4. All the eigenvalues of the matrix $A$ must lie in at least one of the circles indicated.  Indeed, the following figure shows the diagonal terms each with circles around them with the appropriate radius.  The eigenvalues are given in red and the blue circles are those which contain all said eigenvalues.
+![](figures/Ger.jpg)
+:::
+
+### Stability of the Euler Method for the Advection Equation
+
+Consider the matrix $A_2$ of size $N \times N$ from the advection equation
+$$
+A_2=\begin{pmatrix}
+	-1 & 0 & \dots & 0 & 0 \\
+	1 & -1 & \dots & 0 & 0 \\
+	\vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & \dots & -1 & 0 \\
+	0 & 0 & \dots & 1 & -1 \\
+\end{pmatrix}.
+$$
+Following the steps of the Gershgorin theorem, the centres of all the circles on the complex plane will be located at the diagonal terms, all of which are $-1$.  The radii of these circles are the row sums of the matrix $A_2$ without the diagonal terms, which means that all the radii will be 1.  The figure below shows the circle that results on the complex plane.  Therefore regardless of what the eigenvalues might be, it is known that they will always have negative real parts and therefore the advection matrix forms an asymptotically stable system.
+![](figures/Ger_Ad.jpg)
+
+Since the advection equation is asymptotically stable, a bound for the temporal stepsize needs to be found.  Consider the advection equation after the discretisation $\Btdiff{U}=A\B{U}+\B{b}$ where $A=\frac{v}{h_x}A_2$.  The Euler method is numerically stable if the time step $h_t$ satisfies
+$$\INorm{\II+h_t A} \leq 1.$$
+First calculate $\II+h_t A$:
+$$
+\II+h_t A=\II+\frac{vh_t}{h_x}A_2=
+\begin{pmatrix}
+	1-\tilde{v} & 0 & 0 & \dots & 0 & 0 & 0 \\
+	\tilde{v} & 1-\tilde{v} & 0 & \dots & 0 & 0 & 0 \\
+	0 & \tilde{v} & 1-\tilde{v} & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 0&  \tilde{v} & 1-\tilde{v}
+\end{pmatrix}.
+$$
+where $\tilde{v}=\frac{vh_t}{h_x}$.  Now taking the absolute value of all the terms and taking the row sums gives:
+$$
+\mathrm{abs}\nbr{\II+\frac{vh_t}{h_x}A_2}=
+\begin{pmatrix}
+	|1-\tilde{v}| & 0 & 0 & \dots & 0 & 0 & 0 \\
+	\tilde{v} & |1-\tilde{v}| & 0 & \dots & 0 & 0 & 0 \\
+	0 & \tilde{v} & |1-\tilde{v}| & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 0&  \tilde{v} & |1-\tilde{v}|
+\end{pmatrix}\begin{matrix}
+\to \\ \to \\ \to \\ \vdots \\ \to
+\end{matrix}\begin{matrix}
+|1-\tilde{v}| \\ \tilde{v}+|1-\tilde{v}| \\ \tilde{v}+|1-\tilde{v}| \\ \vdots \\ \tilde{v}+|1-\tilde{v}|
+\end{matrix}.
+$$
+The row sums of the absolute terms of this matrix are
+$$a=|1-\tilde{v}| \qtq{and} b=|1-\tilde{v}|+\tilde{v}.$$
+Since it is assumed that $v>0$, then $b>a$ therefore, $\INorm{\II+h_tA}=b=|1-\tilde{v}|+\tilde{v}$.  Consider the two cases when $1-\tilde{v}>0$ and $1-\tilde{v}<0.$$
+1.  If $1-\tilde{v}>0$, then $0<\tilde{v}<1$:
+$$\INorm{\II+h_tA}=|1-\tilde{v}|+\tilde{v}=1-\tilde{v}+\tilde{v}=1.$$
+Therefore if $1-\tilde{v}>0$, then $\INorm{\II+h_tA}\leq 1$.
+
+2.  If $1-\tilde{v}<0$, then $\tilde{v}>1$:
+$$\INorm{\II+h_tA}=|1-\tilde{v}|+\tilde{v}=\tilde{v}-1+\tilde{v}=2\tilde{v}-1,$$
+therefore in this case, if $\INorm{\II+h_tA}$ needs to be less than or equal to $1$, then
+$$\INorm{\II+h_tA}\leq 1 \qiq 2\tilde{v}-1\leq 1 \qiq \tilde{v} \leq 1$$
+which contradicts with the assumption that $\tilde{v}>1$.
+
+Therefore, the Euler method will produce a convergent solution if
+$$\tilde{v} < 1 \quad \implies \quad v\frac{h_t}{h_x}<1.$$
+In terms of number of spatial and temporal points $N_x$ and $N_t$ respectively, this restriction would be
+$$v \frac{t_f-t_0}{L-x_0} \frac{N_x}{N_t} < 1$$
+So for a fixed velocity $v$, if the time step $h_t$ is to be halved, then the spatial step would also need to be halved as well.
+
+### Stability of the Euler Method for the Heat Equation
+
+Consider the matrix $A_1$ of size $N \times N$ from the heat equation
+$$
+A_1=\begin{pmatrix}
+	-2 & 1 & \dots & 0 & 0 \\
+	1 & -2 & \dots & 0 & 0 \\
+	\vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & \dots & -2 & 1 \\
+	0 & 0 & \dots & 1 & -2 \\
+\end{pmatrix}.
+$$
+The steps of the Gershgorin theorem can be followed to produce the following figure on the complex plane.
+![](figures/Ger_Heat.jpg)
+Once again, this shows that all the eigenvalues will have negative real parts even though their explicit values are not known.
+
+To determine the bound on the stepsize, consider the heat equation after the discretisation, which is $\Btdiff{U}=A\B{U}+\B{b}$ where $A=\frac{\alpha}{h_x^2}A_1$.  The Euler method is numerically stable if the time step $h_t$ satisfies
+$$\INorm{\II+h_t A} \leq 1.$$
+First calculate $\II+h_t A$:
+$$
+\II+h_t A=\II+\frac{\alpha h_t}{h_x^2}A_1=
+\begin{pmatrix}
+	1-2\tilde{\alpha} & \tilde{\alpha} & 0 & \dots & 0 & 0 & 0 \\
+	\tilde{\alpha} & 1-2\tilde{\alpha} & \tilde{\alpha} & \dots & 0 & 0 & 0 \\
+	0 & \tilde{\alpha} & 1-2\tilde{\alpha} & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 0&  \tilde{\alpha} & 1-2\tilde{\alpha}
+\end{pmatrix}
+$$
+where $\tilde{\alpha}=\frac{\alpha h_t}{h_x^2}$.  Now taking the absolute value of all the terms and taking the row sums gives:
+$$
+\mathrm{abs}\nbr{\II+\frac{\alpha h_t}{h_x^2}A_1}=
+\begin{pmatrix}
+	|1-2\tilde{\alpha}| & \tilde{\alpha} & 0 & \dots & 0 & 0 & 0 \\
+	\tilde{\alpha} & |1-2\tilde{\alpha}| & \tilde{\alpha} & \dots & 0 & 0 & 0 \\
+	0 & \tilde{\alpha} & |1-2\tilde{\alpha}| & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 0&  \tilde{\alpha} & |1-2\tilde{\alpha}|
+\end{pmatrix}\begin{matrix}
+	\to \; \; \tilde{\alpha}+|1-2\tilde{\alpha}| \\ \to 2\tilde{\alpha}+|1-2\tilde{\alpha}|\\ \to 2\tilde{\alpha}+|1-2\tilde{\alpha}|\\ \vdots \\ \to \; \; \tilde{\alpha}+|1-2\tilde{\alpha}|.
+\end{matrix}
+$$
+The row sums of the absolute terms of this matrix are
+$$a=\tilde{\alpha}+|1-2\tilde{\alpha}| \qtq{and} b=2\tilde{\alpha}+|1-2\tilde{\alpha}|.$$
+Since $tilde{\alpha}>0$, then $b>a$ and therefore, $\INorm{\II+h_tA}=b=2\tilde{\alpha}+|1-2\tilde{\alpha}|$.  Consider the two cases $1-2\tilde{\alpha}>0$ and $1-2\tilde{\alpha}<0$.
+
+1.  If $1-2\tilde{\alpha}>0$, then $0<\tilde{\alpha}<\frac{1}{2}$:
+$$\INorm{\II+h_tA}=|1-2\tilde{\alpha}|+2\tilde{\alpha}=1-2\tilde{\alpha}+2\tilde{\alpha}=1,$$
+therefore $\INorm{\II+h_tA} \leq 1$.
+
+2.  If $1-2\tilde{\alpha}<0$, then $\tilde{\alpha}>\frac{1}{2}$:
+$$\INorm{\II+h_tA}=|1-2\tilde{\alpha}|+2\tilde{\alpha}=2\tilde{\alpha}-1+2\tilde{\alpha}=4\tilde{\alpha}-1,$$
+therefore in this case, if $\INorm{\II+h_tA}$ needs to be less than or equal to $1$, then
+$$\INorm{\II+h_tA}\leq 1 \qiq 4\tilde{\alpha}-1\leq 1 \qiq \tilde{\alpha} \leq \frac{1}{2}$$
+which contradicts with the assumption that $\tilde{\alpha}>\frac{1}{2}$.
+
+This means that the Euler method produces a stable convergent solution if
+$$\tilde{\alpha} < \frac{1}{2} \quad \implies \quad \alpha\frac{h_t}{h_x^2}<\frac{1}{2}.$$
+In terms of number of spatial and temporal points $N_x$ and $N_t$ respectively, this restriction would be
+$$2 \alpha \frac{t_f-t_0}{(L-x_0)^2} \frac{N_x^2}{N_t} < 1$$
+So for a fixed diffusivity $\alpha$, if the time step $h_t$ is to be halved, then the spatial step would should be quartered.
+
+## Stability of the Convection-Diffusion Equation
+
+Now that it has been established that both the heat and advection equations are asymptotically stable and the stepsize bounds have been found, it is time to combine both cases to tackle the convection-diffusion equation.
+
+When discretised, the convection-diffusion equation can be written as $\Btdiff{U}=A\B{U}+\B{b}$ where the matrix $A$ is given by
+$$
+A=\frac{\alpha}{h_x^2}\begin{pmatrix}
+	-2 & 1 & \dots & 0 & 0 \\
+	1 & -2 & \dots & 0 & 0 \\
+	\vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & \dots & -2 & 1 \\
+	0 & 0 & \dots & 1 & -2 \\
+\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
+	-1 & 0 & \dots & 0 & 0 \\
+	1 & -1 & \dots & 0 & 0 \\
+	\vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & \dots & -1 & 0 \\
+	0 & 0 & \dots & 1 & -1 \\
+\end{pmatrix}.
+$$
+
+The Gershgorin theorem can be applied to the matrix $A$ to show that all the eigenvectors have negative real parts.  Indeed,
+$$
+A=
+\begin{pmatrix}
+	-2\hat{\alpha}-\hat{v} & \hat{\alpha} & 0 & \dots & 0 & 0 & 0 \\
+	\hat{\alpha}+\hat{v} & -2\hat{\alpha}-\hat{v} & \hat{\alpha} & \dots & 0 & 0 & 0 \\
+	0 & \hat{\alpha}+\hat{v} & -2\hat{\alpha}-\hat{v} & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 0&  \hat{\alpha}+\hat{v} & -2\hat{\alpha}-\hat{v}
+\end{pmatrix}.
+$$
+where $\hat{\alpha}=\frac{\alpha}{h_x^2}$ and $\hat{v}=\frac{v}{h_x}$.  By the Gershgorin theorem, the centres of the circles will be located at the diagonal terms, namely at $-2\hat{\alpha}-\hat{v}$ with the radii $\hat{\alpha}$, $\hat{\alpha}+\hat{v}$ and $2\hat{\alpha}+\hat{v}$.  The largest radius is $2\hat{\alpha}+\hat{v}$ which means that all the eigenvalues will be negative as shown below.  Therefore the convection-diffusion equation is asymptotically stable.
+
+![](figures/Gersch.jpg)
+
+To find the bound for the stepsizes, consider the convection-diffusion equation after the discretisation $\Btdiff{U}=A\B{U}+\B{b}$ where $A=\frac{\alpha}{h_x^2}A_1+\frac{v}{h_x}A_2$.  The Euler method is numerically stable if the time step $h_t$ satisfies
+$$\INorm{\II+h_t A} \leq 1.$$
+Calculating $\II+h_t A$:
+$$
+\II+h_t A=
+\begin{pmatrix}
+	1-2\tilde{\alpha}-\tilde{v} & \tilde{\alpha} & 0 & \dots & 0 & 0 & 0 \\
+	\tilde{\alpha}+\tilde{v} & 1-2\tilde{\alpha}-\tilde{v} & \tilde{\alpha} & \dots & 0 & 0 & 0 \\
+	0 & \tilde{\alpha}+\tilde{v} & 1-2\tilde{\alpha}-\tilde{v} & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 1-2\tilde{\alpha}-\tilde{v} & \tilde{\alpha} & 0\\
+	0 & 0 & 0 & \dots & \tilde{\alpha}+\tilde{v} & 1-2\tilde{\alpha}-\tilde{v} & \tilde{\alpha} \\
+	0 & 0 & 0 & \dots & 0&  \tilde{\alpha}+\tilde{v} & 1-2\tilde{\alpha}-\tilde{v}
+\end{pmatrix}
+$$
+where $\tilde{\alpha}=\frac{\alpha h_t}{h_x^2}$ and $\tilde{v}=\frac{v h_t}{h_x}$.  Taking the absolute value of all the terms and adding the rows gives
+\begin{multline*}
+\mathrm{abs}\nbr{\II+h_t A}=
+\begin{pmatrix}
+	|1-2\tilde{\alpha}-\tilde{v}| & \tilde{\alpha} & 0 & \dots & 0 & 0 & 0 \\
+	\tilde{\alpha}+\tilde{v} & |1-2\tilde{\alpha}-\tilde{v}| & \tilde{\alpha} & \dots & 0 & 0 & 0 \\
+	0 & \tilde{\alpha}+\tilde{v} & |1-2\tilde{\alpha}-\tilde{v}| & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+	0 & 0 & 0 & \dots & 0&  \tilde{\alpha}+\tilde{v} & |1-2\tilde{\alpha}-\tilde{v}|
+\end{pmatrix}\\\begin{matrix}
+\to \; \; \; \; \; \; \; \; \tilde{\alpha} +|1-2\tilde{\alpha}-\tilde{v}| \\ \to 2\tilde{\alpha}+\tilde{v}+|1-2\tilde{\alpha}-\tilde{v}|\\ \to 2\tilde{\alpha}+\tilde{v}+|1-2\tilde{\alpha}-\tilde{v}|\\ \vdots \\ \to \; \; \tilde{\alpha}+\tilde{v}+|1-2\tilde{\alpha}-\tilde{v}|
+\end{matrix}.
+\end{multline*}
+
+The row sums of the absolute terms of this matrix are
+$$a=\tilde{\alpha}+|1-2\tilde{\alpha}-\tilde{v}|, \quad b=2\tilde{\alpha}+\tilde{v}+|1-2\tilde{\alpha}-\tilde{v}| \qtq{and} c=\tilde{\alpha}+\tilde{v}+|1-2\tilde{\alpha}-\tilde{v}|.$$
+Since $\tilde{\alpha}>0$ and $\tilde{v}>0$, then $b>c>a$, therefore, $\INorm{\II+h_tA}=b=2\tilde{\alpha}+\tilde{v}+|1-2\tilde{\alpha}-\tilde{v}|$.  Consider the two cases $1-2\tilde{\alpha}-\tilde{v}>0$ and $1-2\tilde{\alpha}-\tilde{v}<0$.
+
+1. If $1-2\tilde{\alpha}-\tilde{v}>0$, then $2\tilde{\alpha}+\tilde{v}<1$:
+$$\INorm{\II+h_tA}=|1-2\tilde{\alpha}-\tilde{v}|+2\tilde{\alpha}+\tilde{v}=1-2\tilde{\alpha}-\tilde{v}+2\tilde{\alpha}+\tilde{v}=1,$$
+therefore $\INorm{\II+h_tA} \leq 1$.
+
+2.  If $1-2\tilde{\alpha}-\tilde{v}<0$, then $2\tilde{\alpha}+\tilde{v}>1$:
+$$\INorm{\II+h_tA}=|1-2\tilde{\alpha}-\tilde{v}|+2\tilde{\alpha}+\tilde{v}=2\tilde{\alpha}+\tilde{v}-1+2\tilde{\alpha}+\tilde{v}=4\tilde{\alpha}+2\tilde{v}-1,$$
+therefore in this case, if $\INorm{\II+h_tA}$ needs to be less than or equal to $1$, then
+$$\INorm{\II+h_tA}\leq 1 \qiq 4\tilde{\alpha}+2\tilde{v}-1\leq 1 \qiq 2\tilde{\alpha}+\tilde{v} \leq 1$$
+which contradicts with the assumption that $2\tilde{\alpha}+\tilde{v}>1$.
+
+This means that the Euler method will produce a stable convergent solution if
+$$2\tilde{\alpha}+\tilde{v} < 1 \quad \implies \quad 2\alpha\frac{h_t}{h_x^2}+v\frac{h_t}{h_x}<1.$$
+This means that a choice can be made with regards to the bounds of the different components, for instance, the values of $h_x$ and $h_t$ can be chosen such that
+$$\tilde{\alpha}<\frac{1}{4} \qtq{and} \tilde{v}<\frac{1}{2} \qtq{or} \tilde{\alpha}<\frac{1}{3} \qtq{and} \tilde{v}<\frac{1}{3}$$
+or any combination thereof provided that the choices satisfy the inequality $2\tilde{\alpha}+\tilde{v} < 1$.
+
+::: {.callout-caution title="Bound for Convection-Diffusion"}
+
+Consider the convection-diffusion equation
+$$
+\pdiff{u}{t}=0.1\Pdiff{u}{x}{2}-0.5\pdiff{u}{x} \quad
+\begin{matrix}
+	t \in [0,10] \\ x \in [-2,2]
+\end{matrix}
+$$
+$$u(x,0)=u_{init}(x)=10, \quad u(-2,t)=u_l(t)=1, \quad u(2,t)=u_r(t)=0.$$
+This can be discretised to give $\Btdiff{U}=A\B{U}$ where
+$$
+\odiff{}{t}\underbrace{\begin{pmatrix}
+	U_1(t) \\
+	U_2(t) \\
+	\vdots \\
+	U_{N-1}(t) \\
+	U_N(t)
+\end{pmatrix}}_{\B{U}}$$
+$$=
+\underbrace{\left[\frac{0.1}{h_x^2}\begin{pmatrix}
+	-2 & 1 & \dots & 0 & 0 \\
+	1 & -2 & \dots & 0 & 0 \\
+	\vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & \dots & -2 & 1 \\
+	0 & 0 & \dots & 1 & -2 \\
+\end{pmatrix}+\frac{0.5}{h_x}\begin{pmatrix}
+	-1 & 0 & \dots & 0 & 0 \\
+	1 & -1 & \dots & 0 & 0 \\
+	\vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & \dots & -1 & 0 \\
+	0 & 0 & \dots & 1 & -1 \\
+\end{pmatrix}\right]}_{A}
+\underbrace{\begin{pmatrix}
+	U_1(t) \\
+	U_2(t) \\
+	\vdots \\
+	U_{N-1}(t) \\
+	U_N(t)
+\end{pmatrix}}_{\B{U}}
+$$
+subject to
+$$
+	\B{U}(0)=\begin{pmatrix}
+		u_{init}(x_1) \\
+		u_{init}(x_2) \\
+		\vdots \\
+		u_{init}(x_{N-1}) \\
+		u_{init}(x_{N}) \\
+	\end{pmatrix} \qtq{where} u_{init}(x)=10.
+$$
+As yet, the value of $N$ has not been put forward since the stepsizes need to be established first.  For a stable Euler method, the stepsizes $h_t$ and $h_x$ need to satisfy
+$$2\alpha\frac{h_t}{h_x^2}+v\frac{h_t}{h_x} < 1 \quad \implies \quad 2\frac{h_t}{h_x}+5\frac{h_t}{h_x^2}<10.$$
+If $h_t=2.5\E{-5}$ and $h_x=0.02$ (which corresponds to $N_t=40000$ and $N_x=100$), then the Euler method will be stable.
+:::

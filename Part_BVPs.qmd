@@ -1,1 +1,3 @@
 # Solving Boundary Value Problems
+
+This section will cover ways of solving Boundary Value Problems (BVPs) using the different differencing schemes.

@@ -178,5 +178,23 @@
   },
   "Z_App_Root.qmd": {
     "Z_App_Root.html": "0cc46563"
+  },
+  "04_IVP_ModEuler.qmd": {
+    "04_IVP_ModEuler.html": "699ea866"
+  },
+  "05_IVP_RK4.qmd": {
+    "05_IVP_RK4.html": "3d142455"
+  },
+  "06_IVP_InBuilt.qmd": {
+    "06_IVP_InBuilt.html": "d61b5c62"
+  },
+  "07_IVP_Implicit.qmd": {
+    "07_IVP_Implicit.html": "781f3877"
+  },
+  "10_SBVP.qmd": {
+    "10_SBVP.html": "428072d4"
+  },
+  "11_PDE.qmd": {
+    "11_PDE.html": "0b72b362"
   }
 }

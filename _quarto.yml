@@ -14,26 +14,26 @@ book:
           - part: Part_IVPs.qmd
             chapters:
                - 03_IVP_Euler.qmd
-               - 08_IVP_ModEuler.qmd
-               - 09_IVP_RK4.qmd
-               - 10_IVP_InBuilt.qmd
-               - 11_IVP_Implicit.qmd
+               - 04_IVP_ModEuler.qmd
+               - 05_IVP_RK4.qmd
+               - 06_IVP_InBuilt.qmd
+               - 07_IVP_Implicit.qmd
           - part: Part_BVPs.qmd
             chapters:
-               - 12_BVP.qmd
-               - 13_MVP.qmd
-               - 14_SBVP.qmd
+               - 08_BVP.qmd
+               - 09_MVP.qmd
+               - 10_SBVP.qmd
           - part: Part_PDEs.qmd
             chapters:
-               - 15_PDE.qmd
-     # appendices:
+               - 11_PDE.qmd
+     appendices:
      #       - Z_App_Basic.qmd
      #       - Z_App_Arrays.qmd
      #       - Z_App_Loops.qmd
      #       - Z_App_Plot.qmd
      #       - Z_App_ReadWrite.qmd
-     #       - Z_App_GE.qmd
-     #       - Z_App_MatDeco.qmd
+           - Z_App_GE.qmd
+           - Z_App_MatDeco.qmd
      #       - Z_App_DataFit.qmd
      #       - Z_App_Eigen.qmd
      #       - Z_App_Root.qmd
