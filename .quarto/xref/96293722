@@ -1,1 +1,1 @@
-{"entries":[{"order":{"number":1,"section":[1,1,0,0,0,0,0]},"key":"eq-float","caption":""}],"options":{"chapters":true},"headings":["floating-point-arithmetic","computational-complexity"]}
+{"headings":["floating-point-arithmetic","computational-complexity"],"options":{"chapters":true},"entries":[{"caption":"","order":{"number":1,"section":[1,1,0,0,0,0,0]},"key":"eq-float"}]}

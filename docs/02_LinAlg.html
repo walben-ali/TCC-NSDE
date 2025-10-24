@@ -324,14 +324,62 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./Z_App_Basic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">MATLAB Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Arrays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Arrays in MATLAB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Loops</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Plot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Plotting in MATLAB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_ReadWrite.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Reading &amp; Writing Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./Z_App_GE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Gaussian Elimination Method</span></span></a>
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Gaussian Elimination Method</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Z_App_MatDeco.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Matrix Decompositions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">Matrix Decompositions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_DataFit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">Data Fitting</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Eigen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Eigenvalue Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Root.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Numerical Solutions of Non-Linear Equations</span></span></a>
   </div>
 </li>
       </ul>
@@ -670,7 +718,7 @@ Example of Cramer’s Rule
 <section id="gaussian-elimination-lu-factorisation" class="level3" data-number="2.2.5">
 <h3 data-number="2.2.5" class="anchored" data-anchor-id="gaussian-elimination-lu-factorisation"><span class="header-section-number">2.2.5</span> Gaussian Elimination &amp; LU Factorisation</h3>
 <p>Consider the linear system <span class="math display">\[A \boldsymbol{x} = \boldsymbol{b} \quad \text{where} \quad A \in \mathbb{R}^{N \times N}, \quad \boldsymbol{x} \in \mathbb{R}^N, \quad \boldsymbol{b} \in \mathbb{R}^N.\]</span> In real-life situations, the matrix <span class="math inline">\(A\)</span> does not always have a form that lends itself to being easily solvable (like a diagonal, triangular, sparse, etc.). However, there are ways in which a matrix can be broken down into several matrices, each of which can be dealt with separately and reducing computational time.</p>
-<p>One way of doing this is by <strong><em>Gaussian Elimination</em></strong> which is a series of steps that reduces a matrix <span class="math inline">\(A\)</span> into an upper triangular matrix. The steps of the Gaussian elimination are presented in details in <a href="Z_App_GE.html" class="quarto-xref"><span>Appendix A</span></a>.</p>
+<p>One way of doing this is by <strong><em>Gaussian Elimination</em></strong> which is a series of steps that reduces a matrix <span class="math inline">\(A\)</span> into an upper triangular matrix. The steps of the Gaussian elimination are presented in details in <a href="Z_App_GE.html" class="quarto-xref"><span>Appendix F</span></a>.</p>
 <p>In order to convert the linear system <span class="math inline">\(A\boldsymbol{x}=\boldsymbol{b}\)</span> into the upper triangular matrix system <span class="math inline">\(U\boldsymbol{x}=\boldsymbol{g}\)</span> by Gaussian elimination, a series of transformations have to be done, each represented by a matrix <span class="math inline">\(M^{(n)}\)</span> giving the form <span class="math display">\[U=M A \quad \text{where} \quad M=M^{(N-1)} M^{(N-2)} \dots M^{(1)}.\]</span> For every <span class="math inline">\(n=1,2,\dots,N-1\)</span>, the matrix <span class="math inline">\(M^{(n)}\)</span> is lower triangular (because the process is intended to eliminate the lower triangular elements) which means that the product of all these matrices <span class="math inline">\(M\)</span> must also be lower triangular. Note that since <span class="math inline">\(M^{(n)}\)</span> and <span class="math inline">\(M\)</span> are both non-singular and lower triangular, then their inverses must also be lower triangular. This means that the matrix <span class="math inline">\(L=M^{-1}\)</span> will be lower triangular and invertible. Additionally, since Gaussian elimination tends to keep the diagonal terms unchanged, then the diagonal terms of <span class="math inline">\(M\)</span>, and consequently <span class="math inline">\(L\)</span>, will all be 1.</p>
 <p>This means that the matrix <span class="math inline">\(A\)</span> can be written as <span class="math inline">\(A=LU\)</span> where <span class="math inline">\(L=M^{-1}\)</span> is a lower triangular matrix and <span class="math inline">\(U\)</span> is an upper triangular matrix. This is called the <strong><em>LU Decomposition</em></strong> of <span class="math inline">\(A\)</span>.</p>
 <p>In the cases when there might be pivoting issues (which is when the pivot points might be equal to 0 during the Gaussian Elimination), the LU decomposition will more precisely be the <strong><em>PLU Decomposition</em></strong> (or the <strong><em>LU Decomposition with Partial Pivoting</em></strong>) where the method will produce an additional permutation matrix <span class="math inline">\(P\)</span> where <span class="math inline">\(PA=LU\)</span>. This matrix <span class="math inline">\(P\)</span> will swap rows when needed in order to have non-zero pivot points and is in fact orthogonal (i.e.&nbsp;<span class="math inline">\(P^{-1}={P}^{\mathrm{T}}\)</span>).</p>
@@ -738,7 +786,7 @@ Example of Cramer’s Rule
 </section>
 <section id="other-direct-methods" class="level3" data-number="2.2.6">
 <h3 data-number="2.2.6" class="anchored" data-anchor-id="other-direct-methods"><span class="header-section-number">2.2.6</span> Other Direct Methods</h3>
-<p>There are many other direct methods with more involved calculations like <em>QR decomposition</em> and <em>Singular Value Decomposition</em> amongst others. All these methods will be placed in <a href="Z_App_MatDeco.html" class="quarto-xref"><span>Appendix B</span></a>.</p>
+<p>There are many other direct methods with more involved calculations like <em>QR decomposition</em> and <em>Singular Value Decomposition</em> amongst others. All these methods will be placed in <a href="Z_App_MatDeco.html" class="quarto-xref"><span>Appendix G</span></a>.</p>
 </section>
 </section>
 <section id="iterative-methods" class="level2" data-number="2.3">

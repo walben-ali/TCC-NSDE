@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Numerical Solutions of Differential Equations – Appendix D — Plotting in MATLAB</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Z_App_ReadWrite.html" rel="next">
+<link href="./Z_App_Loops.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Z_App_Basic.html">Appendices</a></li><li class="breadcrumb-item"><a href="./Z_App_Plot.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Plotting in MATLAB</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Numerical Solutions of Differential Equations</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="Download" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Download"><i class="bi bi-download"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Numerical-Solutions-of-Differential-Equations.pdf">
+              <i class="bi bi-file-pdf pe-1"></i>
+            Download PDF
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Numerical-Solutions-of-Differential-Equations.docx">
+              <i class="bi bi-file-word pe-1"></i>
+            Download Docx
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Numerical-Solutions-of-Differential-Equations.epub">
+              <i class="bi bi-journal pe-1"></i>
+            Download ePub
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Internal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Internal Workings of MATLAB</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_LinAlg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Algebra</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_LinAlg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Solving Linear Systems of Equations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_IVPs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solving Initial Value Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_IVP_Euler.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Euler Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_IVP_ModEuler.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Modified Euler Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_IVP_RK4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fourth Order Runge-Kutta Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_IVP_InBuilt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">MATLAB’s In-Built Procedures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_IVP_Implicit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Implicit IVP Solvers</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_BVPs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solving Boundary Value Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_BVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boundary Value Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_MVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Mixed Value Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_SBVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Symmetric Boundary Conditions</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./Part_PDEs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solving Partial Differential Equations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_PDE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Basic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">MATLAB Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Arrays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Arrays in MATLAB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Loops</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Plot.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Plotting in MATLAB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_ReadWrite.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Reading &amp; Writing Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_GE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Gaussian Elimination Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_MatDeco.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">Matrix Decompositions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_DataFit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">Data Fitting</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Eigen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Eigenvalue Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Z_App_Root.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Numerical Solutions of Non-Linear Equations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#forming-lists-for-plotting" id="toc-forming-lists-for-plotting" class="nav-link active" data-scroll-target="#forming-lists-for-plotting"><span class="header-section-number">D.1</span> Forming Lists for Plotting</a></li>
+  <li><a href="#line-properties" id="toc-line-properties" class="nav-link" data-scroll-target="#line-properties"><span class="header-section-number">D.2</span> Line Properties</a></li>
+  <li><a href="#multiple-plots" id="toc-multiple-plots" class="nav-link" data-scroll-target="#multiple-plots"><span class="header-section-number">D.3</span> Multiple Plots</a>
+  <ul class="collapse">
+  <li><a href="#legends" id="toc-legends" class="nav-link" data-scroll-target="#legends"><span class="header-section-number">D.3.1</span> Legends</a></li>
+  </ul></li>
+  <li><a href="#figure-properties" id="toc-figure-properties" class="nav-link" data-scroll-target="#figure-properties"><span class="header-section-number">D.4</span> Figure Properties</a></li>
+  <li><a href="#subplots" id="toc-subplots" class="nav-link" data-scroll-target="#subplots"><span class="header-section-number">D.5</span> Subplots</a></li>
+  <li><a href="#aesthetics" id="toc-aesthetics" class="nav-link" data-scroll-target="#aesthetics"><span class="header-section-number">D.6</span> Aesthetics</a></li>
+  <li><a href="#discrete-plots" id="toc-discrete-plots" class="nav-link" data-scroll-target="#discrete-plots"><span class="header-section-number">D.7</span> Discrete Plots</a></li>
+  <li><a href="#plot-cheat-sheet" id="toc-plot-cheat-sheet" class="nav-link" data-scroll-target="#plot-cheat-sheet"><span class="header-section-number">D.8</span> Plot Cheat Sheet</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Z_App_Basic.html">Appendices</a></li><li class="breadcrumb-item"><a href="./Z_App_Plot.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Plotting in MATLAB</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Appendix D — Plotting in MATLAB</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-body">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="forming-lists-for-plotting" class="level2" data-number="D.1">
+<h2 data-number="D.1" class="anchored" data-anchor-id="forming-lists-for-plotting"><span class="header-section-number">D.1</span> Forming Lists for Plotting</h2>
+<p>Suppose the function <span class="math inline">\(x^3\)</span> is to be plotted. First of all, a range of <span class="math inline">\(x\)</span> values is needed, so if the function needs to be plotted in the interval <span class="math inline">\([-2,2]\)</span>, then a vector needs to be formed that spans this particular domain, the more points there are, the smoother the function will be. This can be in done by using, say, <code>x=-2:1:2</code> which produces a vector <code>x</code> with 5 points, namely <code>x=[-2 -1 0 1 2]</code>.</p>
+<p>Secondly, the values on the <span class="math inline">\(y\)</span>-axis need to be formed. For every <span class="math inline">\(x\)</span> value, the value on the <span class="math inline">\(y\)</span> axis will be at <span class="math inline">\(x^3\)</span>, this can be done using elementwise exponentiation as <code>y=x.^3</code>. In this case, the <code>x</code> and <code>y</code> vectors will be <code>x=[-2 -1 0 1 2]</code> and <code>y=[-8 -1 0 1 8]</code>.</p>
+<p>Now the plotting can commence. The <code>plot</code> function takes two arguments, the first is the set of coordinates on the horizontal axis and the second is the corresponding set of coordinates on the vertical axis. The <code>plot</code> function then plots the first against the second to form a set of points and connects them with lines. In other words, <code>plot(x,y)</code> draws points at the coordinates <span class="math inline">\((x(1),y(1))=(-2,-8)\)</span>, <span class="math inline">\((x(2),y(2))=(-1,-1)\)</span>, <span class="math inline">\((x(3),y(3))=(0,0)\)</span>, etc. and draws a line that connects all these points in the order they appear in.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;</span> <span class="va">x</span><span class="op">=-</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;&gt;</span> <span class="va">y</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">3</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">y</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="figures/x3_1.jpg" class="img-fluid"></p>
+<p>Clearly, 5 points is not enough to plot a function accurately, so the domain vector <span class="math inline">\(x\)</span> must be made finer by choosing smaller increments by saying something like <code>x=-2:0.1:2</code> (in this case, <code>x=[-5 -4.9 -4.8 -4.7 ... 4.7 4.8 4.9 5]</code>). A very convenient way of achieving this is by using the <code>linspace</code> function where <code>linspace(a,b)</code> forms a vector between <code>a</code> and <code>b</code> with 100 equally spaced points. If a different mesh is required, then add an extra argument <code>n</code> as <code>linspace(a,b,n)</code>, this forms a vector between <code>a</code> and <code>b</code> consisting of <code>n</code> equally spaced points. Therefore, the range of <span class="math inline">\(x\)</span> values can be refined as <code>x=linspace(-2,2)</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;</span> <span class="va">x</span><span class="op">=</span><span class="va">linspace</span>(<span class="op">-</span><span class="fl">2</span><span class="op">,</span><span class="fl">2</span>)<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;</span> <span class="va">y</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">3</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">y</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="figures/x3_2.jpg" class="img-fluid"></p>
+<p>Notice that the semicolons are placed since the output does not need to be seen and it is therefore suppressed, otherwise MATLAB will output all 100 terms of <code>x</code> and <code>y</code> which not necessary.</p>
+</section>
+<section id="line-properties" class="level2" data-number="D.2">
+<h2 data-number="D.2" class="anchored" data-anchor-id="line-properties"><span class="header-section-number">D.2</span> Line Properties</h2>
+<p>The <code>plot</code> function has many additional options that can change the plotting colour, shape, style, line widths and many more (these can be referred to by simply typing <code>help plot</code> into the command window). Some of these options can be incorporated into a plot by adding them into the <code>plot</code> function itself as additional inputs as <code>plot(x,y,'Color','r','LineStyle','-','LineWidth',2)</code>.</p>
+<p>Some of the available colours are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Colour</th>
+<th style="text-align: center;"><code>'Color'</code> Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span color="FF0000">red</span></td>
+<td style="text-align: center;"><code>'r'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span color="0000FF">blue</span></td>
+<td style="text-align: center;"><code>'b'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span color="00FF00">green</span></td>
+<td style="text-align: center;"><code>'g'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span color="00FFFF">cyan</span></td>
+<td style="text-align: center;"><code>'c'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span color="FF00FF">magenta</span></td>
+<td style="text-align: center;"><code>'m'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span color="FFFF00">yellow</span></td>
+<td style="text-align: center;"><code>'y'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span color="000000">black</span></td>
+<td style="text-align: center;"><code>'k'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span color="FFFFFF">white</span></td>
+<td style="text-align: center;"><code>'w'</code></td>
+</tr>
+</tbody>
+</table>
+<p>Some of the available line styles are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Line Style</th>
+<th style="text-align: center;"><code>'LineStyle'</code> Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Solid</td>
+<td style="text-align: center;"><code>'-'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Dashed</td>
+<td style="text-align: center;"><code>'--'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Dotted</td>
+<td style="text-align: center;"><code>':'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Chain</td>
+<td style="text-align: center;"><code>'-.'</code></td>
+</tr>
+</tbody>
+</table>
+<p>The colours and line styles can be combined into one, so if a blue solid line is needed, then it can simply be done by using <code>'-b'</code> and the plotting command will be <code>plot(x,y,'-b')</code>.</p>
+</section>
+<section id="multiple-plots" class="level2" data-number="D.3">
+<h2 data-number="D.3" class="anchored" data-anchor-id="multiple-plots"><span class="header-section-number">D.3</span> Multiple Plots</h2>
+<p>It would stand to reason that if two different functions are to be plotted on the same figure space, say <span class="math inline">\(y=x^2\)</span> as a red solid line and <span class="math inline">\(z=x^3\)</span> as a blue dashed line for <span class="math inline">\(x \in [-5,5]\)</span>, then the following commands can be executed:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;</span> <span class="va">x</span><span class="op">=</span><span class="va">linspace</span>(<span class="op">-</span><span class="fl">5</span><span class="op">,</span><span class="fl">5</span>)<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;</span> <span class="va">y</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;</span> <span class="va">z</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">3</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">y</span><span class="op">,</span><span class="ss">'-r'</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">z</span><span class="op">,</span><span class="ss">'--b'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Unfortunately, MATLAB has a habit of overwriting plots every time the <code>plot</code> command is used, so in this case MATLAB would plot the graph of <code>y</code> then remove it and plot the graph of <code>z</code>. In order to avoid that, typing <code>hold on</code> before any <code>plot</code> command allows plotting more than one plot in the same figure space as well allowing some augmentation. This can be reverted by <code>hold off</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;</span> <span class="va">hold</span> <span class="va">on</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;</span> <span class="va">x</span><span class="op">=</span><span class="va">linspace</span>(<span class="op">-</span><span class="fl">5</span><span class="op">,</span><span class="fl">5</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;</span> <span class="va">y</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">&gt;&gt;</span> <span class="va">z</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">3</span><span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">y</span><span class="op">,</span><span class="ss">'-r'</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">z</span><span class="op">,</span><span class="ss">'--b'</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="op">&gt;&gt;</span> <span class="va">hold</span> <span class="va">off</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-yzplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-yzplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/yzPLOT.jpg" id="fig-yzplot" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-yzplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+</figcaption>
+</figure>
+</div>
+<section id="legends" class="level3" data-number="D.3.1">
+<h3 data-number="D.3.1" class="anchored" data-anchor-id="legends"><span class="header-section-number">D.3.1</span> Legends</h3>
+<p>When there is more than one line plotted in the same figure space, it is useful to have a legend to distinguish between the different plots. So if the functions <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> are plotted as above, then a legend can be added that labels them by simply using <code>legend('Function y','Function z')</code>. This labels the first plot with <code>Function y</code> and the second with <code>Function z</code>. Remember, quotation marks need to be inserted so they are displayed verbatim, otherwise MATLAB will produce an error since there are no variable with the names <code>Function y</code> or <code>Function z</code>.</p>
+<p><img src="figures/yzPLOTLeg.jpg" class="img-fluid"></p>
+</section>
+</section>
+<section id="figure-properties" class="level2" data-number="D.4">
+<h2 data-number="D.4" class="anchored" data-anchor-id="figure-properties"><span class="header-section-number">D.4</span> Figure Properties</h2>
+<p>Some useful figure functions are:</p>
+<ul>
+<li><code>clf</code>: Clears the figure space.</li>
+<li><code>figure</code>: Opens a new figure window.</li>
+<li><code>figure(n)</code>: Goes to figure window number <span class="math inline">\(n\)</span> (and creates one if it is not open to begin with) and plots within that window.</li>
+</ul>
+<p>The figures themselves can be augmented by introducing titles, grid lines and labelling the <span class="math inline">\(x\)</span>- and <span class="math inline">\(y\)</span>-axes, all these can be achieved as long as the <code>hold on</code> command is active:</p>
+<ul>
+<li>Title: <code>title('Put title here')</code>, the title must be in quotation marks.</li>
+<li>Grid: <code>grid on</code> and <code>grid off</code>.</li>
+<li><span class="math inline">\(x\)</span>-axis: <code>xlabel('Label for x axis')</code>.</li>
+<li><span class="math inline">\(y\)</span>-axis: <code>ylabel('Label for y axis')</code>.</li>
+</ul>
+<p>MATLAB usually adjusts the axes so that the graphs fit but sometimes, the axes need to be readjusted according the user’s preference, this can be done by using <code>axis([left right down up]</code> where <code>left</code> is the leftmost point, <code>right</code> is the rightmost point, etc.</p>
+</section>
+<section id="subplots" class="level2" data-number="D.5">
+<h2 data-number="D.5" class="anchored" data-anchor-id="subplots"><span class="header-section-number">D.5</span> Subplots</h2>
+<p>Plotting multiple functions is very useful only if the axes can be maintained but if they are different, then the information can be quite distorted when interpreted graphically. In this case, subplots can be used to display more than one plot on the same figure space but on different sections. The command <code>subplot(a,b,n)</code> generates a grid of size <span class="math inline">\(a \times b\)</span> (<span class="math inline">\(a\)</span> rows and <span class="math inline">\(b\)</span> columns) and starts plotting in the <span class="math inline">\(n^{\text{th}}\)</span> location where the top left is 1 and continues across the rows.</p>
+<p>Suppose that for <span class="math inline">\(x \in [0,10]\)</span>, four functions are to be plotted: <span class="math inline">\(y=x^2\)</span> on the top left, <span class="math inline">\(z=x^3\)</span> on the top right, <span class="math inline">\(w=\sin(x)\)</span> on the bottom left and <span class="math inline">\(u=\mathrm{e}^{x}\)</span> on the bottom right. This means that a <span class="math inline">\(2 \times 2\)</span> grid is needed so the first two terms in <code>subplot</code> are 2. The function <span class="math inline">\(y\)</span> has to be plotted after <code>subplot(2,2,1)</code> while <span class="math inline">\(z\)</span> is to be plotted after <code>subplot(2,2,2)</code> and so on.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;</span> <span class="va">x</span><span class="op">=</span><span class="va">linspace</span>(<span class="fl">0</span><span class="op">,</span><span class="fl">10</span>)<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;</span> <span class="va">y</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;</span> <span class="va">z</span><span class="op">=</span><span class="va">x</span><span class="op">.^</span><span class="fl">3</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="op">&gt;&gt;</span> <span class="va">w</span><span class="op">=</span><span class="va">sin</span>(<span class="va">x</span>)<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;&gt;</span> <span class="va">u</span><span class="op">=</span><span class="va">exp</span>(<span class="va">x</span>)<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">&gt;&gt;</span> <span class="va">subplot</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">1</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">y</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="op">&gt;&gt;</span> <span class="va">subplot</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">2</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">z</span>)</span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="op">&gt;&gt;</span> <span class="va">subplot</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">3</span>)</span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">w</span>)</span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="op">&gt;&gt;</span> <span class="va">subplot</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">2</span><span class="op">,</span><span class="fl">4</span>)</span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="op">&gt;&gt;</span> <span class="va">plot</span>(<span class="va">x</span><span class="op">,</span><span class="va">u</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="figures/Subplots.jpg" class="img-fluid"></p>
+<p>One issue in this case is that all the subplots will behave independently, so turning on the grid in one subplot will not do the same for all the rest. Therefore, operations such as <code>grid on</code> and <code>hold on</code> need to be done for each of the subplots individually.</p>
+</section>
+<section id="aesthetics" class="level2" data-number="D.6">
+<h2 data-number="D.6" class="anchored" data-anchor-id="aesthetics"><span class="header-section-number">D.6</span> Aesthetics</h2>
+<p>Fonts in figures can usually be an issue since the default setting may not be to the user’s liking. As seen in the figures above, the font on the axes is quite small which could make it difficult to read especially if the plots are to be in a report or dissertation. In that case, a special command needs to be run after <code>hold on</code> and before any plotting can commence. The command <code>set(gca,'FontSize',20,'FontName','Times')</code> sets the fontsize to 20 and the font to Times New Roman globally on all axes, legends and titles.</p>
+<p>On MATLAB, the mathematical symbols will be displayed as regular text instead of mathematical symbols (like “x” instead of “<span class="math inline">\(x\)</span>”). This can be adjusted by using LaTeX syntax by using dollar signs around the mathematical symbols. For example, the <span class="math inline">\(x\)</span>- and <span class="math inline">\(y\)</span>-axes can be labelled with “<span class="math inline">\(x\)</span>” and “<span class="math inline">\(y\)</span>” by using <code>xlabel('$x$','Interpreter','Latex')</code> and <code>ylabel('$y$','Interpreter','Latex')</code>. The same can be done in the title as <code>title('Plot of $x$ Against $y$','Interpreter','Latex')</code>.</p>
+<p>The legend entries need slightly more work; if two functions <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> are plotted, then they can be labelled in maths typesetting by first defining legend in terms of a placeholder variable as <code>Leg=legend('Function $y$','Function $z$')</code> then prescribing the interpreter as <code>set(Legend,'Interpreter')</code>. MATLAB usually places the legend on the top right corner by default but this can be modified by the <code>'Location'</code> argument and change it to <code>East</code>, <code>West</code>, <code>NorthEast</code>, <code>SouthWest</code> and so on, meaning that the new prescription for the legend would be <code>set(Legend,'Interpreter','Location','SouthWest')</code>.</p>
+<p>Remember, this modification of font shapes, sizes and the different styles is only for aesthetic reasons and serves no purpose otherwise.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Lots of Plots">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Lots of Plots
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose that the following need to be plotted:</p>
+<ol type="1">
+<li>The function <span class="math inline">\(x(t)=\cos(t)\)</span> for <span class="math inline">\(t \in [0,10]\)</span> as a blue solid line of thickness 1.</li>
+<li>The function <span class="math inline">\(y(t)=\mathrm{e}^{0.2t}\)</span> for <span class="math inline">\(t \in [0,10]\)</span> as a red chain of thickness 2.</li>
+<li>The function <span class="math inline">\(z(t)=\mathrm{e}^{\sin(t)}\)</span> for <span class="math inline">\(t \in [0,10]\)</span> as a black dashed line of thickness 3.</li>
+<li>The legend appears in the bottom right corner and labels <span class="math inline">\(x(t)\)</span> as “<span class="math inline">\(\cos(t)\)</span>”, <span class="math inline">\(y(t)\)</span> as “Function <span class="math inline">\(y(t)\)</span>” and <span class="math inline">\(z(t)\)</span> as “Last”.</li>
+<li>The title of the figure should be “Some Random Functions”.</li>
+<li>The horizontal axis labelled as “<span class="math inline">\(t\)</span>”.</li>
+<li>The vertical axis labelled as “Functions”.</li>
+<li>The horizontal axis ranges from <span class="math inline">\(0\)</span> to <span class="math inline">\(10\)</span> and the vertical axis ranges from <span class="math inline">\(-2\)</span> to <span class="math inline">\(8\)</span>.</li>
+<li>Axis lines are drawn to represent the horizontal and vertical axes.</li>
+</ol>
+<p>Each of these can be executed separately by the following commands:</p>
+<ol start="0" type="1">
+<li><code>t=linspace(0,10);</code></li>
+<li><code>x=cos(t); plot(t,x,'-b','LineWidth',1)</code></li>
+<li><code>y=exp(0.2*t); plot(t,y,'-.r','LineWidth',2)</code></li>
+<li><code>z=exp(sin(t)); plot(t,z,'--k','LineWidth',3)</code></li>
+<li><code>Leg=legend('$\cos(t)$','Function $y(t)$','Last');</code> <code>set(Leg,'Interpreter','Latex','Location','SouthEast')</code></li>
+<li><code>title('Some Random Functions','Interpreter','Latex')</code></li>
+<li><code>xlabel($t$,'Interpreter','Latex')</code></li>
+<li><code>ylabel('Functions','Interpreter','Latex')</code></li>
+<li><code>axis([0 10 -2 8])</code></li>
+<li><code>plot([0 10],[0 0],'-k'); plot([0 0],[-2 8],'-k')</code></li>
+</ol>
+<p>A MATLAB script can be written to execute all these in order:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb6-1"><a href="#cb6-1"></a><span class="va">clf</span>                 <span class="co">% Clears the figure before plotting</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="va">hold</span> <span class="va">on</span>             <span class="co">% Allows more than one plot in the same figure</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="va">grid</span> <span class="va">on</span>               <span class="co">% Produces a grid</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="va">set</span>(<span class="va">gca</span><span class="op">,</span><span class="ss">'FontSize'</span><span class="op">,</span><span class="fl">20</span><span class="op">,</span><span class="ss">'FontName'</span><span class="op">,</span><span class="ss">'Times'</span>)    <span class="co">% Sets the font golobally</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="va">t</span><span class="op">=</span><span class="va">linspace</span>(<span class="fl">0</span><span class="op">,</span><span class="fl">10</span>)<span class="op">;</span>   <span class="co">% Horizontal axis values</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="va">x</span><span class="op">=</span><span class="va">cos</span>(<span class="va">t</span>)<span class="op">;</span>           <span class="co">% Vector of values for the x function</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="va">y</span><span class="op">=</span><span class="va">exp</span>(<span class="fl">0.2</span><span class="op">*</span><span class="va">t</span>)<span class="op">;</span>       <span class="co">% Vector of values for the y function</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="va">z</span><span class="op">=</span><span class="va">exp</span>(<span class="va">sin</span>(<span class="va">t</span>))<span class="op">;</span>      <span class="co">% Vector of values for the z function</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="va">plot</span>(<span class="va">t</span><span class="op">,</span><span class="va">x</span><span class="op">,</span><span class="ss">'-b'</span><span class="op">,</span><span class="ss">'LineWidth'</span><span class="op">,</span><span class="fl">1</span>)    <span class="co">% Plots t against x</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="va">plot</span>(<span class="va">t</span><span class="op">,</span><span class="va">y</span><span class="op">,</span><span class="ss">'-.r'</span><span class="op">,</span><span class="ss">'LineWidth'</span><span class="op">,</span><span class="fl">2</span>)   <span class="co">% Plots t against y</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="va">plot</span>(<span class="va">t</span><span class="op">,</span><span class="va">z</span><span class="op">,</span><span class="ss">'--k'</span><span class="op">,</span><span class="ss">'LineWidth'</span><span class="op">,</span><span class="fl">3</span>)   <span class="co">% Plots t against z</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="va">title</span>(<span class="ss">'Some Random Functions'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)   <span class="co">% Title</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="va">xlabel</span>(<span class="ss">'$t$'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)          <span class="co">% Horizontal axis label</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="va">ylabel</span>(<span class="ss">'Functions'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)   <span class="co">% Vertical axis label</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="va">axis</span>([<span class="fl">0</span> <span class="fl">10</span> <span class="op">-</span><span class="fl">2</span> <span class="fl">8</span>])           <span class="co">% Sets the axes</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="va">plot</span>([<span class="fl">0</span> <span class="fl">10</span>]<span class="op">,</span>[<span class="fl">0</span> <span class="fl">0</span>]<span class="op">,</span><span class="ss">'-k'</span>)     <span class="co">% Plots the horizontal axis</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="va">plot</span>([<span class="fl">0</span> <span class="fl">0</span>]<span class="op">,</span>[<span class="op">-</span><span class="fl">2</span> <span class="fl">8</span>]<span class="op">,</span><span class="ss">'-k'</span>)     <span class="co">% Plots the vertical axis</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="va">Leg</span><span class="op">=</span><span class="va">legend</span>(<span class="ss">'$\cos(t)$'</span><span class="op">,</span><span class="ss">'Function $y(t)$'</span><span class="op">,</span><span class="ss">'Last'</span>)<span class="op">;</span>      <span class="co">% Sets the legend</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="va">set</span>(<span class="va">Leg</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span><span class="op">,</span><span class="ss">'Location'</span><span class="op">,</span><span class="ss">'SouthEast'</span>)<span class="op">;</span>  <span class="co">% Sets the font, interpreter and location of the legend</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="figures/Multiplot.jpg" class="img-fluid"></p>
+<p>All these commands can be executed in the command window rather than writing them in a script but if a mistake is made, then it cannot be undone and the entire stream of commands needs to be redone once again. Using a script on the other hand will allow for easy alteration.</p>
+</div>
+</div>
+</section>
+<section id="discrete-plots" class="level2" data-number="D.7">
+<h2 data-number="D.7" class="anchored" data-anchor-id="discrete-plots"><span class="header-section-number">D.7</span> Discrete Plots</h2>
+<p>The <code>plot</code> function does not just plot functions, all it needs are two vectors of the same length and it can plot them against one another. So if the graph is to be plotted as a series of points (discrete plot) rather than coordinates connected with a line, then the change in the <code>plot</code> function is quite straight forward, simply replace <code>'LineStyle'</code> with <code>'MarkerStyle'</code> and <code>'LineWidth'</code> with <code>'MarkerSize'</code>. This will use discrete points rather than connecting them with lines. The different marker styles are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Marker Style</th>
+<th style="text-align: center;"><code>'MarkerStyle'</code> Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Dot <span class="math inline">\(\cdot\)</span></td>
+<td style="text-align: center;"><code>'.'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Cross <span class="math inline">\(\times\)</span></td>
+<td style="text-align: center;"><code>'x'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Asterisk <span class="math inline">\(\ast\)</span></td>
+<td style="text-align: center;"><code>'*'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Circle <span class="math inline">\(\circ\)</span></td>
+<td style="text-align: center;"><code>'o'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Crosshair <span class="math inline">\(+\)</span></td>
+<td style="text-align: center;"><code>'+'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Square <span class="math inline">\(\square\)</span></td>
+<td style="text-align: center;"><code>'s'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Diamond <span class="math inline">\(\diamond\)</span></td>
+<td style="text-align: center;"><code>'d'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Pentagram <span class="math inline">\(\star\)</span></td>
+<td style="text-align: center;"><code>'p'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Upward Triangle <span class="math inline">\(\triangle\)</span></td>
+<td style="text-align: center;"><code>'^'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Downward Triangle <span class="math inline">\(\triangledown\)</span></td>
+<td style="text-align: center;"><code>'v'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Rightward Triangle <span class="math inline">\(\triangleright\)</span></td>
+<td style="text-align: center;"><code>'&gt;'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Leftward Triangle <span class="math inline">\(\triangleleft\)</span></td>
+<td style="text-align: center;"><code>'&lt;'</code></td>
+</tr>
+</tbody>
+</table>
+<p>The colours work in the same way. These discrete plots can be combined with the line plot all in one command, for example, to plot a function with a red dashed line connecting circles, the plot command will be <code>plot(x,y,'--or')</code>.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Collatz Conjecture Plot">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Collatz Conjecture Plot
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider to the Collatz conjecture from <a href="Z_App_Loops.html#sec-While" class="quarto-xref"><span>Section C.2</span></a>, suppose that the number of steps it takes to reach 1 is to be plotted against the starting values, say from 1 to <span class="math inline">\(N\)</span> where <span class="math inline">\(N\)</span> will be the input. This will require the use of many of the tools developed so far.</p>
+<p>First of all, a function that takes in a starting value and outputs the number of steps is needed, which that has already been done in the code <code>Collatz</code>. Since the inputs will be all the numbers from 1 to <span class="math inline">\(N\)</span>, a <code>for</code> loop will be suitable for the job. Finally, the <code>plot</code> function with markers will be employed since connecting the points with lines will not make sense in this particular context.</p>
+<p>In order for the <code>plot</code> function to work, it needs two vectors of the same length. For this particular example, the first vector is the list of numbers from 1 to <span class="math inline">\(N\)</span>, which will be labelled <code>X</code> and will be on the <span class="math inline">\(x\)</span>-axis, and the second is the vector of the number of steps for a starting value to decrease to 1 and this is labelled <code>Y</code>. The terms in the vector <code>Y</code> will have to be calculated individually by using the <code>Collatz</code> function. Of course, since the size of <code>Y</code> is the same size a <code>X</code>, it can be initialised by using <code>Y=zeros(size(X))</code>, the terms can then be substituted after they have been calculated. The code to execute this plotting procedure is as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">function</span> <span class="va">Plot_Collatz</span>(<span class="va">N</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="va">X</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">:</span><span class="va">N</span><span class="op">;</span>            <span class="co">% List of starting values from 1 to N</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="va">Y</span><span class="op">=</span><span class="va">zeros</span>(<span class="va">size</span>(<span class="va">X</span>))<span class="op">;</span>   <span class="co">% Initialise the vector Y</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="kw">for</span> <span class="va">i</span><span class="op">=</span><span class="va">X</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a>     [<span class="va">y</span>]<span class="op">=</span><span class="va">Collatz</span>(<span class="va">i</span>)<span class="op">;</span>     <span class="co">% Run the Collatz algorithm for the starting</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>                         <span class="co">% value i</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>    </span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="va">Y</span>(<span class="va">i</span>)<span class="op">=</span><span class="va">y</span><span class="op">;</span>             <span class="co">% Record the the number of steps in the i-th</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>                        <span class="co">% element of the vector Y</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a>                      </span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="kw">end</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="va">clf</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="va">hold</span> <span class="va">on</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="va">grid</span> <span class="va">on</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="va">set</span>(<span class="va">gca</span><span class="op">,</span><span class="ss">'FontSize'</span><span class="op">,</span><span class="fl">20</span><span class="op">,</span><span class="ss">'FontName'</span><span class="op">,</span><span class="ss">'Times'</span>)</span>
+<span id="cb7-21"><a href="#cb7-21"></a></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="va">plot</span>(<span class="va">X</span><span class="op">,</span><span class="va">Y</span><span class="op">,</span><span class="ss">'.b'</span><span class="op">,</span><span class="ss">'MarkerSize'</span><span class="op">,</span><span class="fl">10</span>)</span>
+<span id="cb7-23"><a href="#cb7-23"></a></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="va">title</span>(<span class="va">strcat</span>(<span class="ss">'Steps of the Collatz Conjecture for Starting Points 1 to'</span><span class="op">,</span><span class="ss">' '</span><span class="op">,</span><span class="va">num2str</span>(<span class="va">N</span>))<span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)</span>
+<span id="cb7-25"><a href="#cb7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="va">xlabel</span>(<span class="ss">'Starting Value'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)</span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="va">ylabel</span>(<span class="ss">'Number of Steps'</span><span class="op">,</span><span class="ss">'Interpreter'</span><span class="op">,</span><span class="ss">'Latex'</span>)</span>
+<span id="cb7-28"><a href="#cb7-28"></a></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The code can now be run in the command window using <code>Plot_Collatz(1000)</code> will give the following plot:</p>
+<p><img src="figures/Coll_1_1000.jpg" class="img-fluid"></p>
+<p>There are a few things that need to be observed in the above code:</p>
+<ul>
+<li>In Line 4, the <code>for</code> loop starts with <code>i=X</code>, this means that the values of <code>i</code> would run through all the values of the vector <code>X</code> in order. So the <code>for</code> loop does not need to take terms from a uniform set but it can be from any set of values and those will be taken in the order they appear.</li>
+<li>Line 6 runs the <code>Collatz</code> function for the input value <code>i</code> to produce a value <code>y</code> and this is then recorded in the vector <code>Y</code> in the <span class="math inline">\(i^{\text{th}}\)</span> location in Line 8, hence <code>Y(i)=y</code>. Of course there will be no issues there since the size of <code>Y</code> is known and has already been initialised in Line 3 as a vector of zeros of the same size as <code>X</code>, the values are then replaced by the desired terms.</li>
+<li>Notice that here, the main function <code>Plot_Collatz</code> (also known as the <em>top level function</em>) refers to another function, namely <code>Collatz</code>. This code should be saved as a separate <code>.m</code> file and <em>has to be in the same directory</em> as <code>Plot_Collatz</code>, otherwise the code will not work. An alternative would be to put the <code>Collatz</code> function after the end of <code>Plot_collatz</code>.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource matlab number-lines code-with-copy"><code class="sourceCode matlab"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">function</span> <span class="va">Plot_Collatz</span>(<span class="va">N</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>     <span class="va">Body</span> <span class="va">of</span> <span class="va">Plot_Collatz</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="kw">end</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="kw">function</span> [<span class="va">n</span>]<span class="op">=</span><span class="va">Collatz</span>(<span class="va">a</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a>     <span class="va">Body</span> <span class="va">of</span> <span class="va">Collatz</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>     </span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>The <code>Collatz</code> function requires a single input, but in some cases, there could be many inputs and many outputs, in that case when calling the function, the sequence of inputs and outputs <em>must be in exactly the same order</em> as it appears in the function itself.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="plot-cheat-sheet" class="level2" data-number="D.8">
+<h2 data-number="D.8" class="anchored" data-anchor-id="plot-cheat-sheet"><span class="header-section-number">D.8</span> Plot Cheat Sheet</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">MATLAB Command</th>
+<th style="text-align: center;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>clf</code></td>
+<td style="text-align: center;">Clear figure space</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>figure</code></td>
+<td style="text-align: center;">Opens a new figure space</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>figure(n)</code></td>
+<td style="text-align: center;">Plots in figure space <code>n</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>hold on</code></td>
+<td style="text-align: center;">Allows more than one plot to be drawn on the same figure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>hold off</code></td>
+<td style="text-align: center;">Cancels <code>hold on</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>grid on</code></td>
+<td style="text-align: center;">Turns on the plot grid</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>grid off</code></td>
+<td style="text-align: center;">Turns off the plot grid</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>plot([a,b],[c,d])</code></td>
+<td style="text-align: center;">Plots a straight line from point (<code>a</code>,<code>c</code>) to (<code>b</code>,<code>d</code>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>set(gca,'FontSize',20)</code></td>
+<td style="text-align: center;">Sets the global font size to 20</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>set(gca,'FontName','Times')</code></td>
+<td style="text-align: center;">Sets the global font to Times</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>axis([left right down up])</code></td>
+<td style="text-align: center;">Sets the axes where the <span class="math inline">\(x\)</span>-axis goes from <code>left</code> to <code>right</code> and the <span class="math inline">\(y\)</span>-axis from <code>down</code> to <code>up</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>title('Plot')</code></td>
+<td style="text-align: center;">Adds the title “Plot” to the figure</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>xlabel('x')</code></td>
+<td style="text-align: center;">Labels the <span class="math inline">\(x\)</span>-axis with “x”</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>xlabel('$x$','Interpreter','Latex')</code></td>
+<td style="text-align: center;">Labels the <span class="math inline">\(x\)</span>-axis with “<span class="math inline">\(x\)</span>”</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>Leg=legend('Plot 1','Plot 2',...)</code></td>
+<td style="text-align: center;">Gives the legend a handle “<code>Leg</code>” for further modification and labels the first plotted line as “Plot 1”, the second as “Plot 2”, etc.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>set(Leg,'Interpreter','Latex')</code></td>
+<td style="text-align: center;">Renders the legend in LaTeX, just like the labels</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>x=linspace(a,b)</code></td>
+<td style="text-align: center;">Generates a vector <code>x</code> with 100 points from <code>a</code> to <code>b</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>x=linspace(a,b,n)</code></td>
+<td style="text-align: center;">Generates a vector <code>x</code> with <code>n</code> points from <code>a</code> to <code>b</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>plot(x,y)</code></td>
+<td style="text-align: center;">Plots the vector <code>x</code> against the vector <code>y</code> as long as they are of the same size</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>plot(x,y,'-b')</code></td>
+<td style="text-align: center;">Plots <code>x</code> against <code>y</code> with a blue line (continuous)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>plot(x,y,'-b','LineWidth',2)</code></td>
+<td style="text-align: center;">Plots <code>x</code> against <code>y</code> with a blue line of thickness 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>plot(x,y,'xk')</code></td>
+<td style="text-align: center;">Plots <code>x</code> against <code>y</code> with black crosses (discrete)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>plot(x,y,'xk','MarkerSize',10)</code></td>
+<td style="text-align: center;">Plots <code>x</code> against <code>y</code> with black crosses of size 10</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation column-body">
+  <div class="nav-page nav-page-previous">
+      <a href="./Z_App_Loops.html" class="pagination-link" aria-label="Loops">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Loops</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Z_App_ReadWrite.html" class="pagination-link" aria-label="Reading &amp; Writing Data">
+        <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Reading &amp; Writing Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
