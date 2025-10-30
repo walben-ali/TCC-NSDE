@@ -24,34 +24,34 @@ This set of conditions along with the differential equation are known collective
 
 The outline of the method of lines for the heat equation is as follows:
 
-1. Divide the spatial interval $[0,L]$ into $N_x$ equally sized sections and label the points as $x_0, x_1, x_2, \dots, x_N$ where $x_n=nh$ and the spatial interval width is $h_x=\frac{L}{N}$.
+1. Divide the spatial interval $[0,L]$ into $N_x$ equally sized sections and label the points as $x_0, x_1, x_2, \dots, x_{N_x}$ where $x_n=nh_x$ and the spatial interval width is $h_x=\frac{L}{N_x}$.
 
 ![](figures/Disc.jpg)
 
 2. **Left Hand Side**:  For each point $x_n$, define the approximation $U_n(t) \approx u(x_n,t)$.  Therefore the left hand side of the heat equation can be written as
 $$\pdiff{u}{t}(x_n,t) \approx \odiff{U_n}{t}(t)$$
-and this holds for $n=1, 2, \dots, N-1$ since $U_0(t) \approx u(0,t)=u_l(t)$ and $U_N(t) \approx u(L,t)=u_r(t)$ are already known from the boundary conditions.  Notice that the derivative of $U_n$ is an ordinary derivative since $U_n$ is a function of $t$ only.
+and this holds for $n=1, 2, \dots, N_x-1$ since $U_0(t) \approx u(0,t)=u_l(t)$ and $U_N(t) \approx u(L,t)=u_r(t)$ are already known from the boundary conditions.  Notice that the derivative of $U_n$ is an ordinary derivative since $U_n$ is a function of $t$ only.
 
 3. **Right Hand Side**:  Use the finite difference approximation to approximate the *spatial* derivative in the differential equation.  Here, the centred difference approximation for the second derivative will be used, namely
 $$\Pdiff{u}{x}{2}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.$$
 Therefore the right hand side of the heat equation will become
 $$\alpha \Pdiff{u}{x}{2}(x_n,t) \approx \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right].$$
-This holds for $n=1, 2, \dots, N-1$ bearing in mind, once again, that $U_0(t) \approx u(0,t)=u_l(t)$ and $U_N(t) \approx u(L,t)=u_r(t)$ are known beforehand.
+This holds for $n=1, 2, \dots, N_x-1$ bearing in mind, once again, that $U_0(t) \approx u(0,t)=u_l(t)$ and $U_{N_x}(t) \approx u(L,t)=u_r(t)$ are known beforehand.
 
 4.  These can be combined to give the discretised form of the heat equation
 $$\odiff{U_n}{t}=\frac{\alpha}{h_x^2}\left[ U_{n-1}-2U_n+U_{n+1} \right]$$
-for all $n=1,2,\dots,N-1$ where $U_n=U_n(t)$.  This means that the partial differential equation has been split into $N-1$ ordinary differential equations.
+for all $n=1,2,\dots,N_x-1$ where $U_n=U_n(t)$.  This means that the partial differential equation has been split into $N_x-1$ ordinary differential equations.
 
-5. This entire system of $N-1$ equations can now be written in matrix form as $\Btdiff{U}=A\B{U}+\B{b}$ where
+5. This entire system of $N_x-1$ equations can now be written in matrix form as $\Btdiff{U}=A\B{U}+\B{b}$ where
 \begin{multline*}
 \odiff{}{t}\underbrace{\begin{pmatrix}
 	U_1(t) \\
 	U_2(t) \\
 	U_3(t) \\
 	\vdots \\
-	U_{N-3}(t) \\
-	U_{N-2}(t) \\
-	U_{N-1}(t) \\
+	U_{N_x-3}(t) \\
+	U_{N_x-2}(t) \\
+	U_{N_x-1}(t) \\
 \end{pmatrix}}_{\B{U}}=
 \underbrace{\frac{\alpha}{h_x^2}\begin{pmatrix}
 	-2 & 1 & 0 & \dots & 0 & 0 & 0 \\
@@ -67,9 +67,9 @@ for all $n=1,2,\dots,N-1$ where $U_n=U_n(t)$.  This means that the partial diffe
 	U_2(t) \\
 	U_3(t) \\
 	\vdots \\
-	U_{N-3}(t) \\
-	U_{N-2}(t) \\
-	U_{N-1}(t) \\
+	U_{N_x-3}(t) \\
+	U_{N_x-2}(t) \\
+	U_{N_x-1}(t) \\
 \end{pmatrix}}_{\B{U}} \\
 +\underbrace{\frac{\alpha}{h_x^2}\begin{pmatrix}
 	u_l(t) \\
@@ -84,24 +84,26 @@ for all $n=1,2,\dots,N-1$ where $U_n=U_n(t)$.  This means that the partial diffe
 subject to the *initial condition*
 $$
 \B{U}_0=\begin{pmatrix}
-U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N-3}(0) \\ U_{N-2}(0) \\ U_{N-1}(0)
+U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N_x-3}(0) \\ U_{N_x-2}(0) \\ U_{N_x-1}(0)
 \end{pmatrix}\approx\begin{pmatrix}
-u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N-3},0) \\ u(x_{N-2},0) \\ u(x_{N-1},0)
+u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N_x-3},0) \\ u(x_{N_x-2},0) \\ u(x_{N_x-1},0)
 \end{pmatrix} =\begin{pmatrix}
 	u_{init}(x_1) \\
 	u_{init}(x_2) \\
 	u_{init}(x_3) \\
 	\vdots \\
-	u_{init}(x_{N-3}) \\
-	u_{init}(x_{N-2}) \\
-	u_{init}(x_{N-1}) \\
+	u_{init}(x_{N_x-3}) \\
+	u_{init}(x_{N_x-2}) \\
+	u_{init}(x_{N_x-1}) \\
 \end{pmatrix}.
 $$
 This system can now be solved using any of the IVP solvers with a temporal stepsize $h_t$.
 
 In essence, the *Method of Lines* has converted a PDE into a set of ODEs using the same techniques as BVPs and will be solved in the same way as IVPs.
 
-::: {.callout-caution title="Heat Equation"}
+::: {.callout-caution icon=false}
+## Heat Equation
+
 Consider an iron rod (of thermal diffusivity $\alpha=2.3\E{-5}$) of length 1 where the middle section of length 0.2 has been heated to a temperature of 1 while the rest is at 0.  The ends of the rod have been kept at a constant temperature of 2.  This system can be represented by the IBVP
 $$\pdiff{u}{t}=\alpha\Pdiff{u}{t}{2}, \quad x \in [0,1], \quad t>0$$
 $$u(x,0)=u_{init}(x)=\left\{
@@ -109,7 +111,8 @@ $$u(x,0)=u_{init}(x)=\left\{
 		0 & 0 \leq x<0.4 \\
 		1 & 0.4 \leq x <0.6 \\
 		0 & 0.6 \leq x \leq 1 \\
-\end{matrix} \right. , \quad u(0,t)=u_l(t)=2, \quad u(L,t)=u_r(t)=2.$$
+\end{matrix} \right. ,$$
+$$u(0,t)=u_l(t)=2, \quad u(L,t)=u_r(t)=2.$$
 
 First, divide the interval $[0,1]$ into five equal sections (which will be of width $h_x=\frac{1-0}{5}=0.2$).
 ![](figures/Disc02.jpg)
@@ -187,10 +190,10 @@ This means that if the initial heat profile takes the form of $u_{init}(x)$, the
 
 ![](figures/Advection.jpg)
 
-The "information" moves from left to right so if the finite differences are to be used, the centred differencing approach would not be suitable since the information on the right is not known yet.  Therefore the backwards differencing approximation will be the most suitable.  This is known as an *upwind/upstream scheme* (i.e. against the direction of the wind/stream) if $v>0$.  Therefore using the convention $U_n(t) \approx u(x_n,t)$ where $x=x_n$ is the discretisation of the spatial points for $n=0,1,2,\dots,N$, the backward differencing approximation to the spatial derivative is
+The "information" moves from left to right so if the finite differences are to be used, the centred differencing approach would not be suitable since the information on the right is not known yet.  Therefore the backwards differencing approximation will be the most suitable.  This is known as an *upwind/upstream scheme* (i.e. against the direction of the wind/stream) if $v>0$.  Therefore using the convention $U_n(t) \approx u(x_n,t)$ where $x=x_n$ is the discretisation of the spatial points for $n=0,1,2,\dots,N_x$, the backward differencing approximation to the spatial derivative is
 $$\pdiff{u}{x}(x_n,t) \approx \pdiff{U_n}{x}=\frac{U_n-U_{n-1}}{h_x}.$$
 Therefore is discretised advection equation is
-$$\odiff{U_n}{t}= \frac{v}{h_x}\nbr{U_{n-1}-U_n} \qtq{for} n=1,2,\dots,N$$
+$$\odiff{U_n}{t}= \frac{v}{h_x}\nbr{U_{n-1}-U_n} \qtq{for} n=1,2,\dots,N_x$$
 and this can be solved subject to the initial condition
 $$u(x,0)=u_{init}(x)$$
 and boundary condition
@@ -202,9 +205,9 @@ to give the discretised set of equations in the form $\Btdiff{U}=A\B{U}+\B{b}$ w
 		U_2(t) \\
 		U_3(t) \\
 		\vdots \\
-		U_{N-2}(t) \\
-		U_{N-1}(t) \\
-		U_N(t)
+		U_{N_x-2}(t) \\
+		U_{N_x-1}(t) \\
+		U_{N_x}(t)
 	\end{pmatrix}}_{\B{U}}=
 	\underbrace{\frac{v}{h_x}\begin{pmatrix}
 		-1 & 0 & 0 & \dots & 0 & 0 & 0 \\
@@ -220,9 +223,9 @@ to give the discretised set of equations in the form $\Btdiff{U}=A\B{U}+\B{b}$ w
 		U_2(t) \\
 		U_3(t) \\
 		\vdots \\
-		U_{N-2}(t) \\
-		U_{N-1}(t) \\
-		U_N(t)
+		U_{N_x-2}(t) \\
+		U_{N_x-1}(t) \\
+		U_{N_x}(t)
 	\end{pmatrix}}_{\B{U}}\\+
 	\underbrace{\frac{v}{h_x}\begin{pmatrix}
 		u_l(t) \\
@@ -237,17 +240,17 @@ to give the discretised set of equations in the form $\Btdiff{U}=A\B{U}+\B{b}$ w
 and the initial condition is
 $$
 \B{U}_0=\begin{pmatrix}
-	U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N-3}(0) \\ U_{N-2}(0) \\ U_{N-1}(0)
+	U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N_x-2}(0) \\ U_{N_x-1}(0) \\ U_{N_x}(0)
 \end{pmatrix}\approx\begin{pmatrix}
-	u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N-3},0) \\ u(x_{N-2},0) \\ u(x_{N-1},0)
+	u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N_x-2},0) \\ u(x_{N_x-1},0) \\ u(x_{N_x},0)
 \end{pmatrix} =\begin{pmatrix}
 	u_{init}(x_1) \\
 	u_{init}(x_2) \\
 	u_{init}(x_3) \\
 	\vdots \\
-	u_{init}(x_{N-3}) \\
-	u_{init}(x_{N-2}) \\
-	u_{init}(x_{N-1}) \\
+	u_{init}(x_{N_x-2}) \\
+	u_{init}(x_{N_x-1}) \\
+	u_{init}(x_{N_x}) \\
 \end{pmatrix}
 $$.
 
@@ -264,48 +267,48 @@ Just as in the heat equation, this partial differential equation has three deriv
 
 In order to discretise this system, a finite difference approximation needs to be chosen first.  The centred difference approximation was used for the heat equation and the backwards difference approximation for the advection.  Here, the combination of both will be used.  Even though this might initially seem like an inconsistency, but in fact, this will allow the system to present a distinct stable advantage as will be seen in the next section.
 
-This system can be discretised in exactly the same way as before
-$$\odiff{U_n}{t}(t)= \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right]-\frac{v}{h_x}\left[U_n(t)+U_{n-1}(t) \right] \qtq{for} n=1,2,\dots,N-1.$$
+This system can be discretised in exactly the same way as before, so for $n=1,2,\dots,N_x-1$,
+$$\odiff{U_n}{t}(t)= \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right]-\frac{v}{h_x}\left[U_n(t)+U_{n-1}(t) \right].$$
 This system can be written in the form $\Btdiff{U}=A\B{U}+\B{b}$ where
+\begin{multline}
+A=\frac{\alpha}{h_x^2}\begin{pmatrix}
+	-2 & 1 & 0 & \dots & 0 & 0 & 0 \\
+	1 & -2 & 1 & \dots & 0 & 0 & 0 \\
+	0 & 1 & -2 & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+	0 & 0 & 0 & \dots & -2 & 1 & 0 \\
+	0 & 0 & 0 & \dots & 1 & -2 & 1 \\
+	0 & 0 & 0 & \dots & 0 & 1 & -2 \\
+\end{pmatrix} \\ +\frac{v}{h_x}\begin{pmatrix}
+	-1 & 0 & 0 & \dots & 0 & 0 & 0 \\
+	1 & -1 & 0 & \dots & 0 & 0 & 0 \\
+	0 & 1 & -1 & \dots & 0 & 0 & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+	0 & 0 & 0 & \dots & -1 & 0 & 0 \\
+	0 & 0 & 0 & \dots & 1 & -1 & 0 \\
+	0 & 0 & 0 & \dots & 0 & 1 & -1 \\
+\end{pmatrix},
+\end{multline}
 $$
-		A=\frac{\alpha}{h_x^2}\begin{pmatrix}
-			-2 & 1 & 0 & \dots & 0 & 0 & 0 \\
-			1 & -2 & 1 & \dots & 0 & 0 & 0 \\
-			0 & 1 & -2 & \dots & 0 & 0 & 0 \\
-			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
-			0 & 0 & 0 & \dots & -2 & 1 & 0 \\
-			0 & 0 & 0 & \dots & 1 & -2 & 1 \\
-			0 & 0 & 0 & \dots & 0 & 1 & -2 \\
-		\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
-			-1 & 0 & 0 & \dots & 0 & 0 & 0 \\
-			1 & -1 & 0 & \dots & 0 & 0 & 0 \\
-			0 & 1 & -1 & \dots & 0 & 0 & 0 \\
-			\vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
-			0 & 0 & 0 & \dots & -1 & 0 & 0 \\
-			0 & 0 & 0 & \dots & 1 & -1 & 0 \\
-			0 & 0 & 0 & \dots & 0 & 1 & -1 \\
-		\end{pmatrix}
-$$
-	$$
-		\B{U}\begin{pmatrix}
-			U_1(t) \\
-			U_2(t) \\
-			\vdots \\
-			U_{N-2}(t) \\
-			U_{N-1}(t) \\
-		\end{pmatrix}, \quad \B{b}=\frac{\alpha}{h_x^2}\begin{pmatrix}
-			u_l(t) \\
-			0 \\
-			\vdots \\
-			0 \\
-			u_r(t) \\
-		\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
-			u_l(t) \\
-			0 \\
-			\vdots \\
-			0 \\
-			0 \\
-		\end{pmatrix}.
+\B{U}=\begin{pmatrix}
+	U_1(t) \\
+	U_2(t) \\
+	\vdots \\
+	U_{N-2}(t) \\
+	U_{N-1}(t) \\
+\end{pmatrix}, \quad \B{b}=\frac{\alpha}{h_x^2}\begin{pmatrix}
+	u_l(t) \\
+	0 \\
+	\vdots \\
+	0 \\
+	u_r(t) \\
+\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
+	u_l(t) \\
+	0 \\
+	\vdots \\
+	0 \\
+	0 \\
+\end{pmatrix}.
 $$
 and this system can be solved using an Euler iteration subject to the initial condition $u(x,0)=u_{init}(x)$.
 
@@ -334,7 +337,8 @@ Then all the eigenvalues of the matrix $A$ will have to lie in at least one of t
 $$|\lambda-a_{ii}| \leq R_i \qtq{for at least one } i=1,2,\dots,n.$$
 :::
 
-::: {.callout-caution title="Gershgorin Circle Theorem Exapmple"}
+::: {.callout-caution icon=false}
+## Gershgorin Circle Theorem Exapmple
 Consider the matrix
 $$
 A=\begin{pmatrix}
@@ -423,7 +427,8 @@ $$
 $$
 The row sums of the absolute terms of this matrix are
 $$a=|1-\tilde{v}| \qtq{and} b=|1-\tilde{v}|+\tilde{v}.$$
-Since it is assumed that $v>0$, then $b>a$ therefore, $\INorm{\II+h_tA}=b=|1-\tilde{v}|+\tilde{v}$.  Consider the two cases when $1-\tilde{v}>0$ and $1-\tilde{v}<0.$$
+Since it is assumed that $v>0$, then $b>a$ therefore, $\INorm{\II+h_tA}=b=|1-\tilde{v}|+\tilde{v}$.  Consider the two cases when $1-\tilde{v}>0$ and $1-\tilde{v}<0.$
+
 1.  If $1-\tilde{v}>0$, then $0<\tilde{v}<1$:
 $$\INorm{\II+h_tA}=|1-\tilde{v}|+\tilde{v}=1-\tilde{v}+\tilde{v}=1.$$
 Therefore if $1-\tilde{v}>0$, then $\INorm{\II+h_tA}\leq 1$.

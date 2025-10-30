@@ -62,7 +62,9 @@ thus providing the last equation to complete the set.  Finally, this system can 
 \end{multline*}
 This can then be solved in MATLAB but bearing in mind that $U_0=U_N$ which determines the function $U$ at $-L$ and $L$.
 
-::: {.callout-caution title="Symmetric Boundary Value Problem"}
+::: {.callout-caution icon=false}
+## Symmetric Boundary Value Problem
+
 Consider the conduction problem
 $$-\Odiff{T}{x}{2}=40\sin(x) \qtq{in} -1< x < 1$$
 with the conditions

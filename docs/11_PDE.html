@@ -30,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Z_App_Basic.html" rel="next">
 <link href="./Part_PDEs.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -279,77 +278,6 @@ window.Quarto = {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Basic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">MATLAB Basics</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Arrays.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Arrays in MATLAB</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Loops.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Loops</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Plot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Plotting in MATLAB</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_ReadWrite.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Reading &amp; Writing Data</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_GE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Gaussian Elimination Method</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_MatDeco.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">Matrix Decompositions</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_DataFit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">Data Fitting</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Eigen.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Eigenvalue Problems</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Z_App_Root.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Numerical Solutions of Non-Linear Equations</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
     </ul>
     </div>
 </nav>
@@ -407,22 +335,22 @@ window.Quarto = {
 <h2 data-number="11.1" class="anchored" data-anchor-id="the-method-of-lines-for-the-heat-equation"><span class="header-section-number">11.1</span> The Method of Lines for the Heat Equation</h2>
 <p>The outline of the method of lines for the heat equation is as follows:</p>
 <ol type="1">
-<li>Divide the spatial interval <span class="math inline">\([0,L]\)</span> into <span class="math inline">\(N_x\)</span> equally sized sections and label the points as <span class="math inline">\(x_0, x_1, x_2, \dots, x_N\)</span> where <span class="math inline">\(x_n=nh\)</span> and the spatial interval width is <span class="math inline">\(h_x=\frac{L}{N}\)</span>.</li>
+<li>Divide the spatial interval <span class="math inline">\([0,L]\)</span> into <span class="math inline">\(N_x\)</span> equally sized sections and label the points as <span class="math inline">\(x_0, x_1, x_2, \dots, x_{N_x}\)</span> where <span class="math inline">\(x_n=nh_x\)</span> and the spatial interval width is <span class="math inline">\(h_x=\frac{L}{N_x}\)</span>.</li>
 </ol>
 <p><img src="figures/Disc.jpg" class="img-fluid"></p>
 <ol start="2" type="1">
-<li><p><strong>Left Hand Side</strong>: For each point <span class="math inline">\(x_n\)</span>, define the approximation <span class="math inline">\(U_n(t) \approx u(x_n,t)\)</span>. Therefore the left hand side of the heat equation can be written as <span class="math display">\[\frac{\partial u}{\partial t}(x_n,t) \approx \frac{\mathrm{d} U_n}{\mathrm{d} t}(t)\]</span> and this holds for <span class="math inline">\(n=1, 2, \dots, N-1\)</span> since <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_N(t) \approx u(L,t)=u_r(t)\)</span> are already known from the boundary conditions. Notice that the derivative of <span class="math inline">\(U_n\)</span> is an ordinary derivative since <span class="math inline">\(U_n\)</span> is a function of <span class="math inline">\(t\)</span> only.</p></li>
-<li><p><strong>Right Hand Side</strong>: Use the finite difference approximation to approximate the <em>spatial</em> derivative in the differential equation. Here, the centred difference approximation for the second derivative will be used, namely <span class="math display">\[\frac{\partial^{2} u}{\partial x^{2}}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.\]</span> Therefore the right hand side of the heat equation will become <span class="math display">\[\alpha \frac{\partial^{2} u}{\partial x^{2}}(x_n,t) \approx \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right].\]</span> This holds for <span class="math inline">\(n=1, 2, \dots, N-1\)</span> bearing in mind, once again, that <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_N(t) \approx u(L,t)=u_r(t)\)</span> are known beforehand.</p></li>
-<li><p>These can be combined to give the discretised form of the heat equation <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}=\frac{\alpha}{h_x^2}\left[ U_{n-1}-2U_n+U_{n+1} \right]\]</span> for all <span class="math inline">\(n=1,2,\dots,N-1\)</span> where <span class="math inline">\(U_n=U_n(t)\)</span>. This means that the partial differential equation has been split into <span class="math inline">\(N-1\)</span> ordinary differential equations.</p></li>
-<li><p>This entire system of <span class="math inline">\(N-1\)</span> equations can now be written in matrix form as <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[\begin{multline*}
+<li><p><strong>Left Hand Side</strong>: For each point <span class="math inline">\(x_n\)</span>, define the approximation <span class="math inline">\(U_n(t) \approx u(x_n,t)\)</span>. Therefore the left hand side of the heat equation can be written as <span class="math display">\[\frac{\partial u}{\partial t}(x_n,t) \approx \frac{\mathrm{d} U_n}{\mathrm{d} t}(t)\]</span> and this holds for <span class="math inline">\(n=1, 2, \dots, N_x-1\)</span> since <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_N(t) \approx u(L,t)=u_r(t)\)</span> are already known from the boundary conditions. Notice that the derivative of <span class="math inline">\(U_n\)</span> is an ordinary derivative since <span class="math inline">\(U_n\)</span> is a function of <span class="math inline">\(t\)</span> only.</p></li>
+<li><p><strong>Right Hand Side</strong>: Use the finite difference approximation to approximate the <em>spatial</em> derivative in the differential equation. Here, the centred difference approximation for the second derivative will be used, namely <span class="math display">\[\frac{\partial^{2} u}{\partial x^{2}}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.\]</span> Therefore the right hand side of the heat equation will become <span class="math display">\[\alpha \frac{\partial^{2} u}{\partial x^{2}}(x_n,t) \approx \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right].\]</span> This holds for <span class="math inline">\(n=1, 2, \dots, N_x-1\)</span> bearing in mind, once again, that <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_{N_x}(t) \approx u(L,t)=u_r(t)\)</span> are known beforehand.</p></li>
+<li><p>These can be combined to give the discretised form of the heat equation <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}=\frac{\alpha}{h_x^2}\left[ U_{n-1}-2U_n+U_{n+1} \right]\]</span> for all <span class="math inline">\(n=1,2,\dots,N_x-1\)</span> where <span class="math inline">\(U_n=U_n(t)\)</span>. This means that the partial differential equation has been split into <span class="math inline">\(N_x-1\)</span> ordinary differential equations.</p></li>
+<li><p>This entire system of <span class="math inline">\(N_x-1\)</span> equations can now be written in matrix form as <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[\begin{multline*}
 \frac{\mathrm{d} }{\mathrm{d} t}\underbrace{\begin{pmatrix}
 U_1(t) \\
 U_2(t) \\
 U_3(t) \\
 \vdots \\
-U_{N-3}(t) \\
-U_{N-2}(t) \\
-U_{N-1}(t) \\
+U_{N_x-3}(t) \\
+U_{N_x-2}(t) \\
+U_{N_x-1}(t) \\
 \end{pmatrix}}_{\boldsymbol{U}}=
 \underbrace{\frac{\alpha}{h_x^2}\begin{pmatrix}
 -2 &amp; 1 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
@@ -438,9 +366,9 @@ U_1(t) \\
 U_2(t) \\
 U_3(t) \\
 \vdots \\
-U_{N-3}(t) \\
-U_{N-2}(t) \\
-U_{N-1}(t) \\
+U_{N_x-3}(t) \\
+U_{N_x-2}(t) \\
+U_{N_x-1}(t) \\
 \end{pmatrix}}_{\boldsymbol{U}} \\
 +\underbrace{\frac{\alpha}{h_x^2}\begin{pmatrix}
 u_l(t) \\
@@ -453,25 +381,25 @@ u_r(t) \\
 \end{pmatrix}}_{\boldsymbol{b}}
 \end{multline*}\]</span> subject to the <em>initial condition</em> <span class="math display">\[
 \boldsymbol{U}_0=\begin{pmatrix}
-U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N-3}(0) \\ U_{N-2}(0) \\ U_{N-1}(0)
+U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N_x-3}(0) \\ U_{N_x-2}(0) \\ U_{N_x-1}(0)
 \end{pmatrix}\approx\begin{pmatrix}
-u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N-3},0) \\ u(x_{N-2},0) \\ u(x_{N-1},0)
+u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N_x-3},0) \\ u(x_{N_x-2},0) \\ u(x_{N_x-1},0)
 \end{pmatrix} =\begin{pmatrix}
 u_{init}(x_1) \\
 u_{init}(x_2) \\
 u_{init}(x_3) \\
 \vdots \\
-u_{init}(x_{N-3}) \\
-u_{init}(x_{N-2}) \\
-u_{init}(x_{N-1}) \\
+u_{init}(x_{N_x-3}) \\
+u_{init}(x_{N_x-2}) \\
+u_{init}(x_{N_x-1}) \\
 \end{pmatrix}.
 \]</span> This system can now be solved using any of the IVP solvers with a temporal stepsize <span class="math inline">\(h_t\)</span>.</p></li>
 </ol>
 <p>In essence, the <em>Method of Lines</em> has converted a PDE into a set of ODEs using the same techniques as BVPs and will be solved in the same way as IVPs.</p>
-<div class="callout callout-style-default callout-caution callout-titled" title="Heat Equation">
+<div class="callout callout-style-default callout-caution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Heat Equation
@@ -483,7 +411,7 @@ Heat Equation
         0 &amp; 0 \leq x&lt;0.4 \\
         1 &amp; 0.4 \leq x &lt;0.6 \\
         0 &amp; 0.6 \leq x \leq 1 \\
-\end{matrix} \right. , \quad u(0,t)=u_l(t)=2, \quad u(L,t)=u_r(t)=2.\]</span></p>
+\end{matrix} \right. ,\]</span> <span class="math display">\[u(0,t)=u_l(t)=2, \quad u(L,t)=u_r(t)=2.\]</span></p>
 <p>First, divide the interval <span class="math inline">\([0,1]\)</span> into five equal sections (which will be of width <span class="math inline">\(h_x=\frac{1-0}{5}=0.2\)</span>). <img src="figures/Disc02.jpg" class="img-fluid"></p>
 <p>This system can be discretised using the centred difference method and written in matrix form as <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[
     \frac{\mathrm{d} }{\mathrm{d} t}\underbrace{\begin{pmatrix}
@@ -539,15 +467,15 @@ Heat Equation
     &amp;\text{RHS}=\frac{\partial }{\partial x}u(x,t)=\frac{\partial }{\partial x}\left( u_{init}(x-vt) \right)=-vu_{init}'(x-vt).
 \end{align*}\]</span> This means that if the initial heat profile takes the form of <span class="math inline">\(u_{init}(x)\)</span>, then after time <span class="math inline">\(t\)</span>, the profile will look exactly the same but shifted to the right by a distance <span class="math inline">\(vt\)</span>.</p>
 <p><img src="figures/Advection.jpg" class="img-fluid"></p>
-<p>The “information” moves from left to right so if the finite differences are to be used, the centred differencing approach would not be suitable since the information on the right is not known yet. Therefore the backwards differencing approximation will be the most suitable. This is known as an <em>upwind/upstream scheme</em> (i.e.&nbsp;against the direction of the wind/stream) if <span class="math inline">\(v&gt;0\)</span>. Therefore using the convention <span class="math inline">\(U_n(t) \approx u(x_n,t)\)</span> where <span class="math inline">\(x=x_n\)</span> is the discretisation of the spatial points for <span class="math inline">\(n=0,1,2,\dots,N\)</span>, the backward differencing approximation to the spatial derivative is <span class="math display">\[\frac{\partial u}{\partial x}(x_n,t) \approx \frac{\partial U_n}{\partial x}=\frac{U_n-U_{n-1}}{h_x}.\]</span> Therefore is discretised advection equation is <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}= \frac{v}{h_x}\left( U_{n-1}-U_n \right) \quad \text{for} \quad n=1,2,\dots,N\]</span> and this can be solved subject to the initial condition <span class="math display">\[u(x,0)=u_{init}(x)\]</span> and boundary condition <span class="math display">\[u(0,t)=u_{l}(t)\]</span> to give the discretised set of equations in the form <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[\begin{multline*}
+<p>The “information” moves from left to right so if the finite differences are to be used, the centred differencing approach would not be suitable since the information on the right is not known yet. Therefore the backwards differencing approximation will be the most suitable. This is known as an <em>upwind/upstream scheme</em> (i.e.&nbsp;against the direction of the wind/stream) if <span class="math inline">\(v&gt;0\)</span>. Therefore using the convention <span class="math inline">\(U_n(t) \approx u(x_n,t)\)</span> where <span class="math inline">\(x=x_n\)</span> is the discretisation of the spatial points for <span class="math inline">\(n=0,1,2,\dots,N_x\)</span>, the backward differencing approximation to the spatial derivative is <span class="math display">\[\frac{\partial u}{\partial x}(x_n,t) \approx \frac{\partial U_n}{\partial x}=\frac{U_n-U_{n-1}}{h_x}.\]</span> Therefore is discretised advection equation is <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}= \frac{v}{h_x}\left( U_{n-1}-U_n \right) \quad \text{for} \quad n=1,2,\dots,N_x\]</span> and this can be solved subject to the initial condition <span class="math display">\[u(x,0)=u_{init}(x)\]</span> and boundary condition <span class="math display">\[u(0,t)=u_{l}(t)\]</span> to give the discretised set of equations in the form <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[\begin{multline*}
      \frac{\mathrm{d} }{\mathrm{d} t}\underbrace{\begin{pmatrix}
         U_1(t) \\
         U_2(t) \\
         U_3(t) \\
         \vdots \\
-        U_{N-2}(t) \\
-        U_{N-1}(t) \\
-        U_N(t)
+        U_{N_x-2}(t) \\
+        U_{N_x-1}(t) \\
+        U_{N_x}(t)
     \end{pmatrix}}_{\boldsymbol{U}}=
     \underbrace{\frac{v}{h_x}\begin{pmatrix}
         -1 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
@@ -563,9 +491,9 @@ Heat Equation
         U_2(t) \\
         U_3(t) \\
         \vdots \\
-        U_{N-2}(t) \\
-        U_{N-1}(t) \\
-        U_N(t)
+        U_{N_x-2}(t) \\
+        U_{N_x-1}(t) \\
+        U_{N_x}(t)
     \end{pmatrix}}_{\boldsymbol{U}}\\+
     \underbrace{\frac{v}{h_x}\begin{pmatrix}
         u_l(t) \\
@@ -578,17 +506,17 @@ Heat Equation
     \end{pmatrix}}_{\boldsymbol{b}}
 \end{multline*}\]</span> and the initial condition is <span class="math display">\[
 \boldsymbol{U}_0=\begin{pmatrix}
-    U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N-3}(0) \\ U_{N-2}(0) \\ U_{N-1}(0)
+    U_1(0) \\ U_2(0) \\ U_3(0) \\ \vdots \\ U_{N_x-2}(0) \\ U_{N_x-1}(0) \\ U_{N_x}(0)
 \end{pmatrix}\approx\begin{pmatrix}
-    u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N-3},0) \\ u(x_{N-2},0) \\ u(x_{N-1},0)
+    u(x_1,0) \\ u(x_2,0) \\ u(x_3,0) \\ \vdots \\ u(x_{N_x-2},0) \\ u(x_{N_x-1},0) \\ u(x_{N_x},0)
 \end{pmatrix} =\begin{pmatrix}
     u_{init}(x_1) \\
     u_{init}(x_2) \\
     u_{init}(x_3) \\
     \vdots \\
-    u_{init}(x_{N-3}) \\
-    u_{init}(x_{N-2}) \\
-    u_{init}(x_{N-1}) \\
+    u_{init}(x_{N_x-2}) \\
+    u_{init}(x_{N_x-1}) \\
+    u_{init}(x_{N_x}) \\
 \end{pmatrix}
 \]</span>.</p>
 </section>
@@ -602,44 +530,44 @@ Heat Equation
 <li><span class="math inline">\(u(L,t)=u_r(t)\)</span> for <span class="math inline">\(t&gt;0\)</span>: The temperature at the right end of the rod.</li>
 </ul>
 <p>In order to discretise this system, a finite difference approximation needs to be chosen first. The centred difference approximation was used for the heat equation and the backwards difference approximation for the advection. Here, the combination of both will be used. Even though this might initially seem like an inconsistency, but in fact, this will allow the system to present a distinct stable advantage as will be seen in the next section.</p>
-<p>This system can be discretised in exactly the same way as before <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}(t)= \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right]-\frac{v}{h_x}\left[U_n(t)+U_{n-1}(t) \right] \quad \text{for} \quad n=1,2,\dots,N-1.\]</span> This system can be written in the form <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[
-        A=\frac{\alpha}{h_x^2}\begin{pmatrix}
-            -2 &amp; 1 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
-            1 &amp; -2 &amp; 1 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
-            0 &amp; 1 &amp; -2 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
-            \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
-            0 &amp; 0 &amp; 0 &amp; \dots &amp; -2 &amp; 1 &amp; 0 \\
-            0 &amp; 0 &amp; 0 &amp; \dots &amp; 1 &amp; -2 &amp; 1 \\
-            0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; -2 \\
-        \end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
-            -1 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
-            1 &amp; -1 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
-            0 &amp; 1 &amp; -1 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
-            \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
-            0 &amp; 0 &amp; 0 &amp; \dots &amp; -1 &amp; 0 &amp; 0 \\
-            0 &amp; 0 &amp; 0 &amp; \dots &amp; 1 &amp; -1 &amp; 0 \\
-            0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; -1 \\
-        \end{pmatrix}
-\]</span> <span class="math display">\[
-        \boldsymbol{U}\begin{pmatrix}
-            U_1(t) \\
-            U_2(t) \\
-            \vdots \\
-            U_{N-2}(t) \\
-            U_{N-1}(t) \\
-        \end{pmatrix}, \quad \boldsymbol{b}=\frac{\alpha}{h_x^2}\begin{pmatrix}
-            u_l(t) \\
-            0 \\
-            \vdots \\
-            0 \\
-            u_r(t) \\
-        \end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
-            u_l(t) \\
-            0 \\
-            \vdots \\
-            0 \\
-            0 \\
-        \end{pmatrix}.
+<p>This system can be discretised in exactly the same way as before, so for <span class="math inline">\(n=1,2,\dots,N_x-1\)</span>, <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}(t)= \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right]-\frac{v}{h_x}\left[U_n(t)+U_{n-1}(t) \right].\]</span> This system can be written in the form <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[\begin{multline}
+A=\frac{\alpha}{h_x^2}\begin{pmatrix}
+    -2 &amp; 1 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
+    1 &amp; -2 &amp; 1 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; -2 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
+    0 &amp; 0 &amp; 0 &amp; \dots &amp; -2 &amp; 1 &amp; 0 \\
+    0 &amp; 0 &amp; 0 &amp; \dots &amp; 1 &amp; -2 &amp; 1 \\
+    0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; -2 \\
+\end{pmatrix} \\ +\frac{v}{h_x}\begin{pmatrix}
+    -1 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
+    1 &amp; -1 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; -1 &amp; \dots &amp; 0 &amp; 0 &amp; 0 \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
+    0 &amp; 0 &amp; 0 &amp; \dots &amp; -1 &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 0 &amp; \dots &amp; 1 &amp; -1 &amp; 0 \\
+    0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; -1 \\
+\end{pmatrix},
+\end{multline}\]</span> <span class="math display">\[
+\boldsymbol{U}=\begin{pmatrix}
+    U_1(t) \\
+    U_2(t) \\
+    \vdots \\
+    U_{N-2}(t) \\
+    U_{N-1}(t) \\
+\end{pmatrix}, \quad \boldsymbol{b}=\frac{\alpha}{h_x^2}\begin{pmatrix}
+    u_l(t) \\
+    0 \\
+    \vdots \\
+    0 \\
+    u_r(t) \\
+\end{pmatrix}+\frac{v}{h_x}\begin{pmatrix}
+    u_l(t) \\
+    0 \\
+    \vdots \\
+    0 \\
+    0 \\
+\end{pmatrix}.
 \]</span> and this system can be solved using an Euler iteration subject to the initial condition <span class="math inline">\(u(x,0)=u_{init}(x)\)</span>.</p>
 </section>
 <section id="asymptotic-stability" class="level2" data-number="11.4">
@@ -657,10 +585,10 @@ A=\begin{pmatrix}
 \end{pmatrix}.
 \]</span> On the complex plane, consider <span class="math inline">\(N\)</span> closed discs, each centred at the locations <span class="math inline">\(a_{ii}\)</span> for <span class="math inline">\(i=1,2,\dots,n\)</span> (the diagonal terms) where the disc centred at <span class="math inline">\(a_{ii}\)</span> has a radius <span class="math inline">\(R_i\)</span> where <span class="math display">\[R_i=\sum_{j \neq i}{|a_{ij}|}.\]</span> Then all the eigenvalues of the matrix <span class="math inline">\(A\)</span> will have to lie in at least one of these discs. In other words, every eigenvalues of <span class="math inline">\(A\)</span> satisfies <span class="math display">\[|\lambda-a_{ii}| \leq R_i \quad \text{for at least one } \quad i=1,2,\dots,n.\]</span></p>
 </div>
-<div class="callout callout-style-default callout-caution callout-titled" title="Gershgorin Circle Theorem Exapmple">
+<div class="callout callout-style-default callout-caution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Gershgorin Circle Theorem Exapmple
@@ -737,9 +665,10 @@ A_2=\begin{pmatrix}
 \end{matrix}\begin{matrix}
 |1-\tilde{v}| \\ \tilde{v}+|1-\tilde{v}| \\ \tilde{v}+|1-\tilde{v}| \\ \vdots \\ \tilde{v}+|1-\tilde{v}|
 \end{matrix}.
-\]</span> The row sums of the absolute terms of this matrix are <span class="math display">\[a=|1-\tilde{v}| \quad \text{and} \quad b=|1-\tilde{v}|+\tilde{v}.\]</span> Since it is assumed that <span class="math inline">\(v&gt;0\)</span>, then <span class="math inline">\(b&gt;a\)</span> therefore, <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}=b=|1-\tilde{v}|+\tilde{v}\)</span>. Consider the two cases when <span class="math inline">\(1-\tilde{v}&gt;0\)</span> and <span class="math inline">\(1-\tilde{v}&lt;0.\)</span>$ 1. If <span class="math inline">\(1-\tilde{v}&gt;0\)</span>, then <span class="math inline">\(0&lt;\tilde{v}&lt;1\)</span>: <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}=|1-\tilde{v}|+\tilde{v}=1-\tilde{v}+\tilde{v}=1.\]</span> Therefore if <span class="math inline">\(1-\tilde{v}&gt;0\)</span>, then <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}\leq 1\)</span>.</p>
-<ol start="2" type="1">
-<li>If <span class="math inline">\(1-\tilde{v}&lt;0\)</span>, then <span class="math inline">\(\tilde{v}&gt;1\)</span>: <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}=|1-\tilde{v}|+\tilde{v}=\tilde{v}-1+\tilde{v}=2\tilde{v}-1,\]</span> therefore in this case, if <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}\)</span> needs to be less than or equal to <span class="math inline">\(1\)</span>, then <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}\leq 1 \quad \implies \quad 2\tilde{v}-1\leq 1 \quad \implies \quad\tilde{v} \leq 1\]</span> which contradicts with the assumption that <span class="math inline">\(\tilde{v}&gt;1\)</span>.</li>
+\]</span> The row sums of the absolute terms of this matrix are <span class="math display">\[a=|1-\tilde{v}| \quad \text{and} \quad b=|1-\tilde{v}|+\tilde{v}.\]</span> Since it is assumed that <span class="math inline">\(v&gt;0\)</span>, then <span class="math inline">\(b&gt;a\)</span> therefore, <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}=b=|1-\tilde{v}|+\tilde{v}\)</span>. Consider the two cases when <span class="math inline">\(1-\tilde{v}&gt;0\)</span> and <span class="math inline">\(1-\tilde{v}&lt;0.\)</span></p>
+<ol type="1">
+<li><p>If <span class="math inline">\(1-\tilde{v}&gt;0\)</span>, then <span class="math inline">\(0&lt;\tilde{v}&lt;1\)</span>: <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}=|1-\tilde{v}|+\tilde{v}=1-\tilde{v}+\tilde{v}=1.\]</span> Therefore if <span class="math inline">\(1-\tilde{v}&gt;0\)</span>, then <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}\leq 1\)</span>.</p></li>
+<li><p>If <span class="math inline">\(1-\tilde{v}&lt;0\)</span>, then <span class="math inline">\(\tilde{v}&gt;1\)</span>: <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}=|1-\tilde{v}|+\tilde{v}=\tilde{v}-1+\tilde{v}=2\tilde{v}-1,\]</span> therefore in this case, if <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}\)</span> needs to be less than or equal to <span class="math inline">\(1\)</span>, then <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}\leq 1 \quad \implies \quad 2\tilde{v}-1\leq 1 \quad \implies \quad\tilde{v} \leq 1\]</span> which contradicts with the assumption that <span class="math inline">\(\tilde{v}&gt;1\)</span>.</p></li>
 </ol>
 <p>Therefore, the Euler method will produce a convergent solution if <span class="math display">\[\tilde{v} &lt; 1 \quad \implies \quad v\frac{h_t}{h_x}&lt;1.\]</span> In terms of number of spatial and temporal points <span class="math inline">\(N_x\)</span> and <span class="math inline">\(N_t\)</span> respectively, this restriction would be <span class="math display">\[v \frac{t_f-t_0}{L-x_0} \frac{N_x}{N_t} &lt; 1\]</span> So for a fixed velocity <span class="math inline">\(v\)</span>, if the time step <span class="math inline">\(h_t\)</span> is to be halved, then the spatial step would also need to be halved as well.</p>
 </section>
@@ -1476,9 +1405,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Z_App_Basic.html" class="pagination-link" aria-label="MATLAB Basics">
-        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">MATLAB Basics</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

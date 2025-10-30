@@ -26,17 +26,17 @@ book:
           - part: Part_PDEs.qmd
             chapters:
                - 11_PDE.qmd
-     appendices:
-          - Z_App_Basic.qmd
-          - Z_App_Arrays.qmd
-          - Z_App_Loops.qmd
-          - Z_App_Plot.qmd
-          - Z_App_ReadWrite.qmd
-          - Z_App_GE.qmd
-          - Z_App_MatDeco.qmd
-          - Z_App_DataFit.qmd
-          - Z_App_Eigen.qmd
-          - Z_App_Root.qmd
+     # appendices:
+     #      - Z_App_Basic.qmd
+     #      - Z_App_Arrays.qmd
+     #      - Z_App_Loops.qmd
+     #      - Z_App_Plot.qmd
+     #      - Z_App_ReadWrite.qmd
+     #      - Z_App_GE.qmd
+     #      - Z_App_MatDeco.qmd
+     #      - Z_App_DataFit.qmd
+     #      - Z_App_Eigen.qmd
+     #      - Z_App_Root.qmd
      downloads: [pdf,docx,epub]
 
 format:

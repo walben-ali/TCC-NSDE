@@ -1,1 +1,3 @@
 # Solving Partial Differential Equations
+
+This section will cover how solutions to IVPs and BVPs can be combined to solve PDEs.
