@@ -1,3 +1,3 @@
 # Solving Partial Differential Equations
 
-This section will cover how solutions to IVPs and BVPs can be combined to solve PDEs.
+Ordinary differential equations have been the main focus of this course so far but this will now be extended to *partial differential equations*.  The differential equations that will be studied here are the *1-Dimensional Heat (or Diffusion) Equation*, *1-Dimensional Advection (or Convection) Equation*, *1-Dimensional Wave Equation*.

@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Z_App_Basic.html" rel="next">
+<link href="./12_Wave.html" rel="next">
 <link href="./Part_PDEs.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -112,7 +112,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Part_PDEs.html">Solving Partial Differential Equations</a></li><li class="breadcrumb-item"><a href="./11_PDE.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Part_PDEs.html">Solving Partial Differential Equations</a></li><li class="breadcrumb-item"><a href="./11_Heat.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -273,8 +273,14 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_PDE.html" class="sidebar-item-text sidebar-link active">
+  <a href="./11_Heat.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_Wave.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Wave Equation</span></span></a>
   </div>
 </li>
       </ul>
@@ -367,15 +373,16 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#stability-of-the-euler-method-for-the-advection-equation" id="toc-stability-of-the-euler-method-for-the-advection-equation" class="nav-link" data-scroll-target="#stability-of-the-euler-method-for-the-advection-equation"><span class="header-section-number">11.4.1</span> Stability of the Euler Method for the Advection Equation</a></li>
   <li><a href="#stability-of-the-euler-method-for-the-heat-equation" id="toc-stability-of-the-euler-method-for-the-heat-equation" class="nav-link" data-scroll-target="#stability-of-the-euler-method-for-the-heat-equation"><span class="header-section-number">11.4.2</span> Stability of the Euler Method for the Heat Equation</a></li>
+  <li><a href="#stability-of-the-convection-diffusion-equation" id="toc-stability-of-the-convection-diffusion-equation" class="nav-link" data-scroll-target="#stability-of-the-convection-diffusion-equation"><span class="header-section-number">11.4.3</span> Stability of the Convection-Diffusion Equation</a></li>
   </ul></li>
-  <li><a href="#stability-of-the-convection-diffusion-equation" id="toc-stability-of-the-convection-diffusion-equation" class="nav-link" data-scroll-target="#stability-of-the-convection-diffusion-equation"><span class="header-section-number">11.5</span> Stability of the Convection-Diffusion Equation</a></li>
+  <li><a href="#convection-diffusion-equation-with-centred-differencing" id="toc-convection-diffusion-equation-with-centred-differencing" class="nav-link" data-scroll-target="#convection-diffusion-equation-with-centred-differencing"><span class="header-section-number">11.5</span> Convection-Diffusion Equation with Centred Differencing</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content column-body" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Part_PDEs.html">Solving Partial Differential Equations</a></li><li class="breadcrumb-item"><a href="./11_PDE.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Part_PDEs.html">Solving Partial Differential Equations</a></li><li class="breadcrumb-item"><a href="./11_Heat.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Heat Equation</span></h1>
 </div>
@@ -394,7 +401,6 @@ window.Quarto = {
 </header>
 
 
-<p>Ordinary differential equations have been the main focus of this course so far but this will now be extended to <em>partial differential equations</em>. The differential equations that will be studied here are the <em>1-Dimensional Heat (or Diffusion) Equation</em> and the <em>1-Dimensional Advection (or Convection) Equation</em>.</p>
 <p>The 1-dimensional <em>heat</em> (or <em>diffusion</em>) <em>equation</em> is a partial differential equation that represents the heat transfer across a rod and is given by <span class="math display">\[\frac{\partial u}{\partial t}=\alpha \frac{\partial^{2} u}{\partial x^{2}} \quad \text{with} \quad 0&lt;x&lt;L \quad \text{and} \quad t&gt;0\]</span> where <span class="math inline">\(u=u(x,t)\)</span> is the temperature at location <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span> and <span class="math inline">\(\alpha\)</span> is the thermal diffusivity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. This equation represents the flow of heat along the length of a rod of length <span class="math inline">\(L\)</span>.</p>
 <p>This partial differential equation has three derivatives in total, two derivatives in <span class="math inline">\(x\)</span> and one derivative in <span class="math inline">\(t\)</span>, this means that three conditions are needed, two on <span class="math inline">\(x\)</span> and one on <span class="math inline">\(t\)</span>:</p>
 <ul>
@@ -411,7 +417,7 @@ window.Quarto = {
 </ol>
 <p><img src="figures/Disc.jpg" class="img-fluid"></p>
 <ol start="2" type="1">
-<li><p><strong>Left Hand Side</strong>: For each point <span class="math inline">\(x_n\)</span>, define the approximation <span class="math inline">\(U_n(t) \approx u(x_n,t)\)</span>. Therefore the left hand side of the heat equation can be written as <span class="math display">\[\frac{\partial u}{\partial t}(x_n,t) \approx \frac{\mathrm{d} U_n}{\mathrm{d} t}(t)\]</span> and this holds for <span class="math inline">\(n=1, 2, \dots, N_x-1\)</span> since <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_N(t) \approx u(L,t)=u_r(t)\)</span> are already known from the boundary conditions. Notice that the derivative of <span class="math inline">\(U_n\)</span> is an ordinary derivative since <span class="math inline">\(U_n\)</span> is a function of <span class="math inline">\(t\)</span> only.</p></li>
+<li><p><strong>Left Hand Side</strong>: For each point <span class="math inline">\(x_n\)</span>, define the approximation <span class="math inline">\(U_n(t) \approx u(x_n,t)\)</span>. Therefore the left hand side of the heat equation can be written as <span class="math display">\[\frac{\partial u}{\partial t}(x_n,t) \approx \frac{\mathrm{d} U_n}{\mathrm{d} t}(t)\]</span> and this holds for <span class="math inline">\(n=1, 2, \dots, N_x-1\)</span> since <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_{N_x}(t) \approx u(L,t)=u_r(t)\)</span> are already known from the boundary conditions. Notice that the derivative of <span class="math inline">\(U_n\)</span> is an ordinary derivative since <span class="math inline">\(U_n\)</span> is a function of <span class="math inline">\(t\)</span> only.</p></li>
 <li><p><strong>Right Hand Side</strong>: Use the finite difference approximation to approximate the <em>spatial</em> derivative in the differential equation. Here, the centred difference approximation for the second derivative will be used, namely <span class="math display">\[\frac{\partial^{2} u}{\partial x^{2}}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.\]</span> Therefore the right hand side of the heat equation will become <span class="math display">\[\alpha \frac{\partial^{2} u}{\partial x^{2}}(x_n,t) \approx \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right].\]</span> This holds for <span class="math inline">\(n=1, 2, \dots, N_x-1\)</span> bearing in mind, once again, that <span class="math inline">\(U_0(t) \approx u(0,t)=u_l(t)\)</span> and <span class="math inline">\(U_{N_x}(t) \approx u(L,t)=u_r(t)\)</span> are known beforehand.</p></li>
 <li><p>These can be combined to give the discretised form of the heat equation <span class="math display">\[\frac{\mathrm{d} U_n}{\mathrm{d} t}=\frac{\alpha}{h_x^2}\left[ U_{n-1}-2U_n+U_{n+1} \right]\]</span> for all <span class="math inline">\(n=1,2,\dots,N_x-1\)</span> where <span class="math inline">\(U_n=U_n(t)\)</span>. This means that the partial differential equation has been split into <span class="math inline">\(N_x-1\)</span> ordinary differential equations.</p></li>
 <li><p>This entire system of <span class="math inline">\(N_x-1\)</span> equations can now be written in matrix form as <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math display">\[\begin{multline*}
@@ -704,6 +710,19 @@ A=\begin{pmatrix}
 </ol>
 </div>
 </div>
+<div id="nte-TriDiagEvForm" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note&nbsp;11.1: Explicit Formaula
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If a matrix <span class="math inline">\(A\)</span> of size <span class="math inline">\(N \times N\)</span> is tridiagonal with <span class="math inline">\(m\)</span> on the main diagonal, <span class="math inline">\(r\)</span> on the super diagonal and <span class="math inline">\(l\)</span> on the subdiagonal, then the matrix <span class="math inline">\(A\)</span> will have eigenvalues <span class="math display">\[\lambda_n=m-2\sqrt{rl}\cos\left( \frac{n\pi}{N+1} \right) \quad \text{for} \quad n=1,2, \dots, N.\]</span></p>
+</div>
+</div>
 <section id="stability-of-the-euler-method-for-the-advection-equation" class="level3" data-number="11.4.1">
 <h3 data-number="11.4.1" class="anchored" data-anchor-id="stability-of-the-euler-method-for-the-advection-equation"><span class="header-section-number">11.4.1</span> Stability of the Euler Method for the Advection Equation</h3>
 <p>Consider the matrix <span class="math inline">\(A_2\)</span> of size <span class="math inline">\(N \times N\)</span> from the advection equation <span class="math display">\[
@@ -715,6 +734,19 @@ A_2=\begin{pmatrix}
     0 &amp; 0 &amp; \dots &amp; 1 &amp; -1 \\
 \end{pmatrix}.
 \]</span> Following the steps of the Gershgorin theorem, the centres of all the circles on the complex plane will be located at the diagonal terms, all of which are <span class="math inline">\(-1\)</span>. The radii of these circles are the row sums of the matrix <span class="math inline">\(A_2\)</span> without the diagonal terms, which means that all the radii will be 1. The figure below shows the circle that results on the complex plane. Therefore regardless of what the eigenvalues might be, it is known that they will always have negative real parts and therefore the advection matrix forms an asymptotically stable system. <img src="figures/Ger_Ad.jpg" class="img-fluid"></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the formula given in <a href="#nte-TriDiagEvForm" class="quarto-xref">Note&nbsp;<span>11.1</span></a>, the eigenvalues of the advection matrix <span class="math inline">\(A_2\)</span> are all equal to <span class="math inline">\(-1\)</span>, which does indeed mean that the system is asymptotically stable.</p>
+</div>
+</div>
 <p>Since the advection equation is asymptotically stable, a bound for the temporal stepsize needs to be found. Consider the advection equation after the discretisation <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math inline">\(A=\frac{v}{h_x}A_2\)</span>. The Euler method is numerically stable if the time step <span class="math inline">\(h_t\)</span> satisfies <span class="math display">\[\left\| \mathcal{I}+h_t A \right\|_{\infty} \leq 1.\]</span> First calculate <span class="math inline">\(\mathcal{I}+h_t A\)</span>: <span class="math display">\[
 \mathcal{I}+h_t A=\mathcal{I}+\frac{vh_t}{h_x}A_2=
 \begin{pmatrix}
@@ -755,6 +787,19 @@ A_1=\begin{pmatrix}
     0 &amp; 0 &amp; \dots &amp; 1 &amp; -2 \\
 \end{pmatrix}.
 \]</span> The steps of the Gershgorin theorem can be followed to produce the following figure on the complex plane. <img src="figures/Ger_Heat.jpg" class="img-fluid"> Once again, this shows that all the eigenvalues will have negative real parts even though their explicit values are not known.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the formula given in <a href="#nte-TriDiagEvForm" class="quarto-xref">Note&nbsp;<span>11.1</span></a>, the eigenvalues of the heat matrix <span class="math inline">\(A_1\)</span> are equal given by <span class="math display">\[\lambda_n=-2-2\cos\left( \frac{n\pi}{N_x+1} \right) \quad \text{for} \quad n=1,2,\dots,N_x,\]</span> all of which are negative real numbers, meaning that the system is asymptotically stable.</p>
+</div>
+</div>
 <p>To determine the bound on the stepsize, consider the heat equation after the discretisation, which is <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math inline">\(A=\frac{\alpha}{h_x^2}A_1\)</span>. The Euler method is numerically stable if the time step <span class="math inline">\(h_t\)</span> satisfies <span class="math display">\[\left\| \mathcal{I}+h_t A \right\|_{\infty} \leq 1.\]</span> First calculate <span class="math inline">\(\mathcal{I}+h_t A\)</span>: <span class="math display">\[
 \mathcal{I}+h_t A=\mathcal{I}+\frac{\alpha h_t}{h_x^2}A_1=
 \begin{pmatrix}
@@ -782,9 +827,8 @@ A_1=\begin{pmatrix}
 </ol>
 <p>This means that the Euler method produces a stable convergent solution if <span class="math display">\[\tilde{\alpha} &lt; \frac{1}{2} \quad \implies \quad \alpha\frac{h_t}{h_x^2}&lt;\frac{1}{2}.\]</span> In terms of number of spatial and temporal points <span class="math inline">\(N_x\)</span> and <span class="math inline">\(N_t\)</span> respectively, this restriction would be <span class="math display">\[2 \alpha \frac{t_f-t_0}{(L-x_0)^2} \frac{N_x^2}{N_t} &lt; 1\]</span> So for a fixed diffusivity <span class="math inline">\(\alpha\)</span>, if the time step <span class="math inline">\(h_t\)</span> is to be halved, then the spatial step would should be quartered.</p>
 </section>
-</section>
-<section id="stability-of-the-convection-diffusion-equation" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="stability-of-the-convection-diffusion-equation"><span class="header-section-number">11.5</span> Stability of the Convection-Diffusion Equation</h2>
+<section id="stability-of-the-convection-diffusion-equation" class="level3" data-number="11.4.3">
+<h3 data-number="11.4.3" class="anchored" data-anchor-id="stability-of-the-convection-diffusion-equation"><span class="header-section-number">11.4.3</span> Stability of the Convection-Diffusion Equation</h3>
 <p>Now that it has been established that both the heat and advection equations are asymptotically stable and the stepsize bounds have been found, it is time to combine both cases to tackle the convection-diffusion equation.</p>
 <p>When discretised, the convection-diffusion equation can be written as <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where the matrix <span class="math inline">\(A\)</span> is given by <span class="math display">\[
 A=\frac{\alpha}{h_x^2}\begin{pmatrix}
@@ -812,6 +856,19 @@ A=
 \end{pmatrix}.
 \]</span> where <span class="math inline">\(\hat{\alpha}=\frac{\alpha}{h_x^2}\)</span> and <span class="math inline">\(\hat{v}=\frac{v}{h_x}\)</span>. By the Gershgorin theorem, the centres of the circles will be located at the diagonal terms, namely at <span class="math inline">\(-2\hat{\alpha}-\hat{v}\)</span> with the radii <span class="math inline">\(\hat{\alpha}\)</span>, <span class="math inline">\(\hat{\alpha}+\hat{v}\)</span> and <span class="math inline">\(2\hat{\alpha}+\hat{v}\)</span>. The largest radius is <span class="math inline">\(2\hat{\alpha}+\hat{v}\)</span> which means that all the eigenvalues will be negative as shown below. Therefore the convection-diffusion equation is asymptotically stable.</p>
 <p><img src="figures/Gersch.jpg" class="img-fluid"></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the convection-diffusion equation, the matrix <span class="math inline">\(A=\hat{\alpha}A_1+\hat{v}A_2\)</span>, using the formula given in <a href="#nte-TriDiagEvForm" class="quarto-xref">Note&nbsp;<span>11.1</span></a> will give the eigenvalues <span class="math display">\[\lambda_n=-2\hat{\alpha}-\hat{v}-2\sqrt{\hat{\alpha}\left( \hat{\alpha}+\hat{v} \right)}\cos\left( \frac{n\pi}{N+1} \right) \quad \text{for} \quad n=1,2, \dots, N\]</span> all of which are negative, meaning that <span class="math inline">\(A\)</span> is asymptotically stable.</p>
+</div>
+</div>
 <p>To find the bound for the stepsizes, consider the convection-diffusion equation after the discretisation <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where <span class="math inline">\(A=\frac{\alpha}{h_x^2}A_1+\frac{v}{h_x}A_2\)</span>. The Euler method is numerically stable if the time step <span class="math inline">\(h_t\)</span> satisfies <span class="math display">\[\left\| \mathcal{I}+h_t A \right\|_{\infty} \leq 1.\]</span> Calculating <span class="math inline">\(\mathcal{I}+h_t A\)</span>: <span class="math display">\[
 \mathcal{I}+h_t A=
 \begin{pmatrix}
@@ -841,10 +898,10 @@ A=
 <li><p>If <span class="math inline">\(1-2\tilde{\alpha}-\tilde{v}&lt;0\)</span>, then <span class="math inline">\(2\tilde{\alpha}+\tilde{v}&gt;1\)</span>: <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}=|1-2\tilde{\alpha}-\tilde{v}|+2\tilde{\alpha}+\tilde{v}=2\tilde{\alpha}+\tilde{v}-1+2\tilde{\alpha}+\tilde{v}=4\tilde{\alpha}+2\tilde{v}-1,\]</span> therefore in this case, if <span class="math inline">\(\left\| \mathcal{I}+h_tA \right\|_{\infty}\)</span> needs to be less than or equal to <span class="math inline">\(1\)</span>, then <span class="math display">\[\left\| \mathcal{I}+h_tA \right\|_{\infty}\leq 1 \quad \implies \quad 4\tilde{\alpha}+2\tilde{v}-1\leq 1 \quad \implies \quad 2\tilde{\alpha}+\tilde{v} \leq 1\]</span> which contradicts with the assumption that <span class="math inline">\(2\tilde{\alpha}+\tilde{v}&gt;1\)</span>.</p></li>
 </ol>
 <p>This means that the Euler method will produce a stable convergent solution if <span class="math display">\[2\tilde{\alpha}+\tilde{v} &lt; 1 \quad \implies \quad 2\alpha\frac{h_t}{h_x^2}+v\frac{h_t}{h_x}&lt;1.\]</span> This means that a choice can be made with regards to the bounds of the different components, for instance, the values of <span class="math inline">\(h_x\)</span> and <span class="math inline">\(h_t\)</span> can be chosen such that <span class="math display">\[\tilde{\alpha}&lt;\frac{1}{4} \quad \text{and} \quad \tilde{v}&lt;\frac{1}{2} \quad \text{or} \quad \tilde{\alpha}&lt;\frac{1}{3} \quad \text{and} \quad \tilde{v}&lt;\frac{1}{3}\]</span> or any combination thereof provided that the choices satisfy the inequality <span class="math inline">\(2\tilde{\alpha}+\tilde{v} &lt; 1\)</span>.</p>
-<div class="callout callout-style-default callout-caution callout-titled" title="Bound for Convection-Diffusion">
+<div class="callout callout-style-default callout-caution no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Bound for Convection-Diffusion
@@ -895,13 +952,19 @@ Bound for Convection-Diffusion
 \]</span> As yet, the value of <span class="math inline">\(N\)</span> has not been put forward since the stepsizes need to be established first. For a stable Euler method, the stepsizes <span class="math inline">\(h_t\)</span> and <span class="math inline">\(h_x\)</span> need to satisfy <span class="math display">\[2\alpha\frac{h_t}{h_x^2}+v\frac{h_t}{h_x} &lt; 1 \quad \implies \quad 2\frac{h_t}{h_x}+5\frac{h_t}{h_x^2}&lt;10.\]</span> If <span class="math inline">\(h_t=2.5\times 10^{-5}\)</span> and <span class="math inline">\(h_x=0.02\)</span> (which corresponds to <span class="math inline">\(N_t=40000\)</span> and <span class="math inline">\(N_x=100\)</span>), then the Euler method will be stable.</p>
 </div>
 </div>
+</section>
+</section>
+<section id="convection-diffusion-equation-with-centred-differencing" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="convection-diffusion-equation-with-centred-differencing"><span class="header-section-number">11.5</span> Convection-Diffusion Equation with Centred Differencing</h2>
+<p>The discretisation of the Convection-Diffusion equation was done using a hybrid approach; implementing the centred differencing for the second derivative and a backward differencing for the first derivative. This converted the convection-diffusion equation into the form <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where the matrix <span class="math inline">\(A\)</span> has <span class="math inline">\(-2\hat{\alpha}-\hat{v}\)</span> in the main diagonal, <span class="math inline">\(\hat{\alpha}\)</span> in the superdiagonal and <span class="math inline">\(\hat{\alpha}+\hat{v}\)</span> in the subdiagonal (where <span class="math inline">\(\hat{\alpha}=\frac{\alpha}{h_x^2}\)</span> and <span class="math inline">\(\hat{v}=\frac{v}{h_x}\)</span>). This approach guaranteed asymptotic stability.</p>
+<p>Suppose that the centred differencing scheme was used for both the first and second derivatives, this will convert the convection-diffusion equation into the matrix system <span class="math inline">\(\frac{\mathrm{d} \boldsymbol{U}}{\mathrm{d} t}=A\boldsymbol{U}+\boldsymbol{b}\)</span> where the matrix <span class="math inline">\(A\)</span> has <span class="math inline">\(-2\hat{\alpha}\)</span> in the main diagonal, <span class="math inline">\(\hat{\alpha}-\hat{v}\)</span> in the superdiagonal and <span class="math inline">\(\hat{\alpha}+\hat{v}\)</span> in the subdiagonal (where <span class="math inline">\(\hat{\alpha}=\frac{\alpha}{h_x^2}\)</span> and <span class="math inline">\(\hat{v}=\frac{v}{2h_x}\)</span>). Using the Gershgorin Circle Theorem, the matrix <span class="math inline">\(A\)</span> is asymptotically stable if <span class="math inline">\(\hat{v}&lt;\hat{\alpha}\)</span>, or <span class="math inline">\(h_x v&lt;2\alpha\)</span>, which results in a stability condition on the physical parameters of the system. If this condition holds, then the system is asymptotically stable, otherwise it will not be stable meaning that conditions on the stability with the space and time discretisations are not guaranteed.</p>
 
 
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>The thermal diffusivity will always be regarded as a constant and usually takes the form <span class="math inline">\(\alpha=\frac{k}{\rho Cp}\)</span> where <span class="math inline">\(k\)</span> is the thermal conductivity, <span class="math inline">\(\rho\)</span> is the density of the material and <span class="math inline">\(Cp\)</span> is the specific heat capacity.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>The thermal diffusivity will always be regarded as a constant and usually takes the form <span class="math inline">\(\alpha=\frac{k}{\rho C_p}\)</span> where <span class="math inline">\(k\)</span> is the thermal conductivity, <span class="math inline">\(\rho\)</span> is the density of the material and <span class="math inline">\(C_p\)</span> is the specific heat capacity.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1477,8 +1540,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Z_App_Basic.html" class="pagination-link" aria-label="MATLAB Basics">
-        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">MATLAB Basics</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./12_Wave.html" class="pagination-link" aria-label="Wave Equation">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Wave Equation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -2,15 +2,13 @@
 {{< include _macros.qmd >}}
 :::
 
-Ordinary differential equations have been the main focus of this course so far but this will now be extended to *partial differential equations*.  The differential equations that will be studied here are the *1-Dimensional Heat (or Diffusion) Equation* and the *1-Dimensional Advection (or Convection) Equation*.
-
-## Heat Equation
+# Heat Equation
 
 The 1-dimensional *heat* (or *diffusion*) *equation* is a partial differential equation that represents the heat transfer across a rod and is given by
 $$\pdiff{u}{t}=\alpha \Pdiff{u}{x}{2} \qtq{with} 0<x<L \qtq{and} t>0$$
 where $u=u(x,t)$ is the temperature at location $x$ at time $t$ and $\alpha$ is the thermal diffusivity[^alpha].  This equation represents the flow of heat along the length of a rod of length $L$.
 
-[^alpha]:  The thermal diffusivity will always be regarded as a constant and usually takes the form $\alpha=\frac{k}{\rho Cp}$ where $k$ is the thermal conductivity, $\rho$ is the density of the material and $Cp$ is the specific heat capacity.
+[^alpha]:  The thermal diffusivity will always be regarded as a constant and usually takes the form $\alpha=\frac{k}{\rho C_p}$ where $k$ is the thermal conductivity, $\rho$ is the density of the material and $C_p$ is the specific heat capacity.
 
 This partial differential equation has three derivatives in total, two derivatives in $x$ and one derivative in $t$, this means that three conditions are needed, two on $x$ and one on $t$:
 
@@ -30,7 +28,7 @@ The outline of the method of lines for the heat equation is as follows:
 
 2. **Left Hand Side**:  For each point $x_n$, define the approximation $U_n(t) \approx u(x_n,t)$.  Therefore the left hand side of the heat equation can be written as
 $$\pdiff{u}{t}(x_n,t) \approx \odiff{U_n}{t}(t)$$
-and this holds for $n=1, 2, \dots, N_x-1$ since $U_0(t) \approx u(0,t)=u_l(t)$ and $U_N(t) \approx u(L,t)=u_r(t)$ are already known from the boundary conditions.  Notice that the derivative of $U_n$ is an ordinary derivative since $U_n$ is a function of $t$ only.
+and this holds for $n=1, 2, \dots, N_x-1$ since $U_0(t) \approx u(0,t)=u_l(t)$ and $U_{N_x}(t) \approx u(L,t)=u_r(t)$ are already known from the boundary conditions.  Notice that the derivative of $U_n$ is an ordinary derivative since $U_n$ is a function of $t$ only.
 
 3. **Right Hand Side**:  Use the finite difference approximation to approximate the *spatial* derivative in the differential equation.  Here, the centred difference approximation for the second derivative will be used, namely
 $$\Pdiff{u}{x}{2}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.$$
@@ -339,6 +337,7 @@ $$|\lambda-a_{ii}| \leq R_i \qtq{for at least one } i=1,2,\dots,n.$$
 
 ::: {.callout-caution icon=false}
 ## Gershgorin Circle Theorem Exapmple
+
 Consider the matrix
 $$
 A=\begin{pmatrix}
@@ -382,6 +381,13 @@ $$
 ![](figures/Ger.jpg)
 :::
 
+:::{.callout-note #nte-TriDiagEvForm}
+## Explicit Formaula
+
+If a matrix $A$ of size $N \times N$ is tridiagonal with $m$ on the main diagonal, $r$ on the super diagonal and $l$ on the subdiagonal, then the matrix $A$ will have eigenvalues
+$$\lambda_n=m-2\sqrt{rl}\cos\nbr{\frac{n\pi}{N+1}} \qtq{for} n=1,2, \dots, N.$$
+:::
+
 ### Stability of the Euler Method for the Advection Equation
 
 Consider the matrix $A_2$ of size $N \times N$ from the advection equation
@@ -396,6 +402,10 @@ A_2=\begin{pmatrix}
 $$
 Following the steps of the Gershgorin theorem, the centres of all the circles on the complex plane will be located at the diagonal terms, all of which are $-1$.  The radii of these circles are the row sums of the matrix $A_2$ without the diagonal terms, which means that all the radii will be 1.  The figure below shows the circle that results on the complex plane.  Therefore regardless of what the eigenvalues might be, it is known that they will always have negative real parts and therefore the advection matrix forms an asymptotically stable system.
 ![](figures/Ger_Ad.jpg)
+
+:::{.callout-note}
+Using the formula given in @nte-TriDiagEvForm, the eigenvalues of the advection matrix $A_2$ are all equal to $-1$, which does indeed mean that the system is asymptotically stable.
+:::
 
 Since the advection equation is asymptotically stable, a bound for the temporal stepsize needs to be found.  Consider the advection equation after the discretisation $\Btdiff{U}=A\B{U}+\B{b}$ where $A=\frac{v}{h_x}A_2$.  The Euler method is numerically stable if the time step $h_t$ satisfies
 $$\INorm{\II+h_t A} \leq 1.$$
@@ -461,6 +471,12 @@ The steps of the Gershgorin theorem can be followed to produce the following fig
 ![](figures/Ger_Heat.jpg)
 Once again, this shows that all the eigenvalues will have negative real parts even though their explicit values are not known.
 
+:::{.callout-note}
+Using the formula given in @nte-TriDiagEvForm, the eigenvalues of the heat matrix $A_1$ are equal given by
+$$\lambda_n=-2-2\cos\nbr{\frac{n\pi}{N_x+1}} \qtq{for} n=1,2,\dots,N_x,$$
+all of which are negative real numbers, meaning that the system is asymptotically stable.
+:::
+
 To determine the bound on the stepsize, consider the heat equation after the discretisation, which is $\Btdiff{U}=A\B{U}+\B{b}$ where $A=\frac{\alpha}{h_x^2}A_1$.  The Euler method is numerically stable if the time step $h_t$ satisfies
 $$\INorm{\II+h_t A} \leq 1.$$
 First calculate $\II+h_t A$:
@@ -507,7 +523,7 @@ In terms of number of spatial and temporal points $N_x$ and $N_t$ respectively, 
 $$2 \alpha \frac{t_f-t_0}{(L-x_0)^2} \frac{N_x^2}{N_t} < 1$$
 So for a fixed diffusivity $\alpha$, if the time step $h_t$ is to be halved, then the spatial step would should be quartered.
 
-## Stability of the Convection-Diffusion Equation
+### Stability of the Convection-Diffusion Equation
 
 Now that it has been established that both the heat and advection equations are asymptotically stable and the stepsize bounds have been found, it is time to combine both cases to tackle the convection-diffusion equation.
 
@@ -542,6 +558,12 @@ $$
 where $\hat{\alpha}=\frac{\alpha}{h_x^2}$ and $\hat{v}=\frac{v}{h_x}$.  By the Gershgorin theorem, the centres of the circles will be located at the diagonal terms, namely at $-2\hat{\alpha}-\hat{v}$ with the radii $\hat{\alpha}$, $\hat{\alpha}+\hat{v}$ and $2\hat{\alpha}+\hat{v}$.  The largest radius is $2\hat{\alpha}+\hat{v}$ which means that all the eigenvalues will be negative as shown below.  Therefore the convection-diffusion equation is asymptotically stable.
 
 ![](figures/Gersch.jpg)
+
+:::{.callout-note}
+For the convection-diffusion equation, the matrix $A=\hat{\alpha}A_1+\hat{v}A_2$, using the formula given in @nte-TriDiagEvForm will give the eigenvalues
+$$\lambda_n=-2\hat{\alpha}-\hat{v}-2\sqrt{\hat{\alpha}\nbr{\hat{\alpha}+\hat{v}}}\cos\nbr{\frac{n\pi}{N+1}} \qtq{for} n=1,2, \dots, N$$
+all of which are negative, meaning that $A$ is asymptotically stable.
+:::
 
 To find the bound for the stepsizes, consider the convection-diffusion equation after the discretisation $\Btdiff{U}=A\B{U}+\B{b}$ where $A=\frac{\alpha}{h_x^2}A_1+\frac{v}{h_x}A_2$.  The Euler method is numerically stable if the time step $h_t$ satisfies
 $$\INorm{\II+h_t A} \leq 1.$$
@@ -592,7 +614,8 @@ This means that a choice can be made with regards to the bounds of the different
 $$\tilde{\alpha}<\frac{1}{4} \qtq{and} \tilde{v}<\frac{1}{2} \qtq{or} \tilde{\alpha}<\frac{1}{3} \qtq{and} \tilde{v}<\frac{1}{3}$$
 or any combination thereof provided that the choices satisfy the inequality $2\tilde{\alpha}+\tilde{v} < 1$.
 
-::: {.callout-caution title="Bound for Convection-Diffusion"}
+::: {.callout-caution icon=false}
+## Bound for Convection-Diffusion
 
 Consider the convection-diffusion equation
 $$
@@ -647,3 +670,10 @@ As yet, the value of $N$ has not been put forward since the stepsizes need to be
 $$2\alpha\frac{h_t}{h_x^2}+v\frac{h_t}{h_x} < 1 \quad \implies \quad 2\frac{h_t}{h_x}+5\frac{h_t}{h_x^2}<10.$$
 If $h_t=2.5\E{-5}$ and $h_x=0.02$ (which corresponds to $N_t=40000$ and $N_x=100$), then the Euler method will be stable.
 :::
+
+## Convection-Diffusion Equation with Centred Differencing
+
+The discretisation of the Convection-Diffusion equation was done using a hybrid approach; implementing the centred differencing for the second derivative and a backward differencing for the first derivative.  This converted the convection-diffusion equation into the form
+$\Btdiff{U}=A\B{U}+\B{b}$ where the matrix $A$ has $-2\hat{\alpha}-\hat{v}$ in the main diagonal, $\hat{\alpha}$ in the superdiagonal and $\hat{\alpha}+\hat{v}$ in the subdiagonal (where $\hat{\alpha}=\frac{\alpha}{h_x^2}$ and $\hat{v}=\frac{v}{h_x}$).  This approach guaranteed asymptotic stability.
+
+Suppose that the centred differencing scheme was used for both the first and second derivatives, this will convert the convection-diffusion equation into the matrix system $\Btdiff{U}=A\B{U}+\B{b}$ where the matrix $A$ has $-2\hat{\alpha}$ in the main diagonal, $\hat{\alpha}-\hat{v}$ in the superdiagonal and $\hat{\alpha}+\hat{v}$ in the subdiagonal (where $\hat{\alpha}=\frac{\alpha}{h_x^2}$ and $\hat{v}=\frac{v}{2h_x}$).  Using the Gershgorin Circle Theorem, the matrix $A$ is asymptotically stable if $\hat{v}<\hat{\alpha}$, or $h_x v<2\alpha$, which results in a stability condition on the physical parameters of the system.  If this condition holds, then the system is asymptotically stable, otherwise it will not be stable meaning that conditions on the stability with the space and time discretisations are not guaranteed.

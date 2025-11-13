@@ -1,0 +1,105 @@
+::: {.content-hidden}
+{{< include _macros.qmd >}}
+:::
+
+# Wave Equation
+
+The same method of lines can be extended to obtain a numerical solution to the wave equation, with some caveats.
+
+Consider a string of $L$, the 1-dimensional wave equation that describes the movement of waves in the string is given by
+$$\Pdiff{u}{t}{2}=c^2 \Pdiff{u}{x}{2} \qtq{with} 0<x<L \qtq{and} t>0$$
+where $u=u(x,t)$ is the vertical displacement of the string at location $x$ at time $t$ and $c$ is the wave speed.
+
+This partial differential equation has four derivatives in total, two derivatives in $x$ and two derivative in $t$, this means that four conditions are needed, two on $x$ and two on $t$:
+
+- $u(x,0)=u_{init}(x)$ for $x \in [0,L]$:  Initial wave profile of the string;
+- $\pdiff{u}{t}(x,0)=v_{init}(x)$ for $x \in [0,L]$:  Initial wave speed of the string;
+- $u(0,t)=u_l(t)$ for $t>0$:  Vertical displacement of the string at the left end;
+- $u(L,t)=u_r(t)$ for $t>0$:  Vertical displacement of the string at the right end.
+
+## The Method of Lines for the Wave Equation
+
+The outline of the method of lines for the wave equation is as follows:
+
+1. Divide the spatial interval $[0,L]$ into $N_x$ equally sized sections and label the points as $x_0, x_1, x_2, \dots, x_{N_x}$ where $x_n=nh_x$ and the spatial interval width is $h_x=\frac{L}{N_x}$.
+
+2. **Left Hand Side**:  For each point $x_n$, define the approximation $U_n(t) \approx u(x_n,t)$.  Therefore the left hand side of the wave equation can be written as
+$$\Pdiff{u}{t}{2}(x_n,t) \approx \Odiff{U_n}{t}{2}(t)$$
+and this holds for $n=1, 2, \dots, N_x-1$ since $U_0(t) \approx u(0,t)=u_l(t)$ and $U_{N_x}(t) \approx u(L,t)=u_r(t)$ are already known from the boundary conditions.  Notice that the derivative of $U_n$ is an ordinary derivative since $U_n$ is a function of $t$ only.
+
+3. **Right Hand Side**:  Use the finite difference approximation to approximate the *spatial* derivative in the differential equation.  Here, the centred difference approximation for the second derivative will be used, namely
+$$\Pdiff{u}{x}{2}(x_n,t) \approx \frac{U_{n+1}(t)-2U_{n}(t)+U_{n-1}(t)}{h_x^2}.$$
+Therefore the right hand side of the wave equation will become
+$$c^2 \Pdiff{u}{x}{2}(x_n,t) \approx \frac{\alpha}{h_x^2}\left[ U_{n-1}(t)-2U_n(t)+U_{n+1}(t) \right].$$
+This holds for $n=1, 2, \dots, N_x-1$ bearing in mind, once again, that $U_0(t) \approx u(0,t)=u_l(t)$ and $U_{N_x}(t) \approx u(L,t)=u_r(t)$ are known beforehand.
+
+4.  These can be combined to give the discretised form of the heat equation
+$$\Odiff{U_n}{t}{2}=\frac{c^2}{h_x^2}\left[ U_{n-1}-2U_n+U_{n+1} \right]$$
+for all $n=1,2,\dots,N_x-1$ where $U_n=U_n(t)$.  This means that the partial differential equation has been split into $N_x-1$ ordinary differential equations.
+
+5. This system has a second order derivative in $t$.  To reduce it to a single derivative in $t$, let
+$$\odiff{U_n}{t}=V_n,$$
+this means that
+$$\odiff{V_n}{t}=\hat{c}\left[ U_{n-1}-2U_n+U_{n+1} \right] \qtq{where} \hat{c}=\frac{c^2}{h_x^2}.$$
+This substitution can convert the the wave equation into $2(N_x-1)$ equations that can now be written in matrix form as $\Btdiff{U}=A\B{U}+\B{b}$ where
+$$\B{U}=\Mat{V_1 \\ V_2 \\ \vdots \\ V_{N_x-2} \\ V_{N_x-1} \\ U_1 \\ U_2 \\ \vdots \\ U_{N_x-2} \\ U_{N_x-1}} \qtq{and} \B{b}(t)=\Mat{\hat{c}u_l(t) \\ 0 \\ \vdots \\ 0 \\ \hat{c} u_r(t) \\ 0 \\ 0 \\ \vdots \\ 0 \\ 0}$$
+and $A$ is a block matrix of the form
+$$A=\BMat{\mathcal{O} & \hat{c}A_1 \\ \mathcal{I} & \mathcal{O}}$$
+where $\mathcal{O}$ is the zero matrix of size $N_x-1$, $\mathcal{I}$ is the identity matrix of size $N_x-1$ and $A_1$ is the same matrix as in the heat equation of size $N_x-1$ (namely the matrix with $-2$ on the diagonal and $1$ on the super- and sub diagonals).  This differential equation can be solved subject to the initial condition
+$$
+\B{U}_0=\begin{pmatrix}
+V_1(0) \\ V_2(0) \\ \vdots \\ V_{N_x-2}(0) \\ V_{N_x-1}(0) \\ U_1(0) \\ U_2(0) \\ \vdots \\ U_{N_x-2}(0) \\ U_{N_x-1}(0)
+\end{pmatrix}\approx\begin{pmatrix}
+\pdiff{u}{t}(x_1,0) \\ \pdiff{u}{t}(x_2,0) \\ \vdots \\ \pdiff{u}{t}(x_{N_x-2},0) \\ \pdiff{u}{t}(x_{N_x-1},0) \\ u(x_1,0) \\ u(x_2,0) \\ \vdots \\ u(x_{N_x-2},0) \\ u(x_{N_x-1},0)
+\end{pmatrix} =\begin{pmatrix}
+     v_{init}(x_1) \\
+	v_{init}(x_2) \\
+	\vdots \\
+	v_{init}(x_{N_x-2}) \\
+	v_{init}(x_{N_x-1}) \\
+	u_{init}(x_1) \\
+	u_{init}(x_2) \\
+	\vdots \\
+	u_{init}(x_{N_x-2}) \\
+	u_{init}(x_{N_x-1}) \\
+\end{pmatrix}.
+$$
+This system can now be solved using any of the IVP solvers with a temporal stepsize $h_t$.
+
+## Stability
+
+All the diagonal entries of the matrix $A$ are zero, this means that using the Gershgorin Circle Theorem will produce circles all centred at the origin which would not guarantee that all the eigenvalues have negative real parts.  Another approach is needed.
+
+All the eigenvalues $\lambda$ of the matrix $A$ must satisfy
+$$\mathrm{det}\nbr{A-\lambda \tilde{\mathcal{I}}}=0$$
+where $\tilde{\mathcal{I}}$ is the identity matrix of size $2(N_x-1) \times 2(N_x-1)$.  The matrices $A$ and $\tilde{\mathcal{I}}$ can be written in block form as
+$$A=\BMat{\mathcal{O} & \hat{c}A_1 \\ \mathcal{I} & \mathcal{O}} \qtq{and} \tilde{\mathcal{I}}=\BMat{\mathcal{I} & \mathcal{O} \\ \mathcal{O} & \mathcal{I}}$$
+where $\mathcal{O}$ is the zero matrix, $\mathcal{I}$ is the identity matrix and $A_1$ is the same as the heat matrix, all of which have size $(N_x-1) \times (N_x-1)$.  This means that the eigenvalues must satisfy
+$$\mathrm{det}\nbr{A-\lambda \tilde{\mathcal{I}}}=0 \qiq \mathrm{det} \BMat{-\lambda \mathcal{I} & \hat{c}A_1 \\ \mathcal{I} & -\lambda\mathcal{I}}=0.$$
+
+Since all the submatrices are commutative, then
+$$\mathrm{det} \BMat{-\lambda \mathcal{I} & \hat{c}A_1 \\ \mathcal{I} & -\lambda\mathcal{I}}=\mathrm{det}\nbr{\lambda^2 \mathcal{I}-\hat{c}A}.$$
+
+:::{.callout-note}
+## Detereminant of Block Matrices
+Consider the block matrix $M$ given by
+$$M=\BMat{A & B \\ C & D}$$
+where $A$ and $D$ are square submatrices.  There are multiple formulas for obtaining the determinant of such a matrix:
+
+- If the matrix $A$ is invertible, then
+$$\mathrm{det}\BMat{A & B \\ C & D}=\mathrm{det}\nbr{A}\mathrm{det}\nbr{D-CA^{-1}B}$$
+- If the matrix $D$ is invertible, then
+$$\mathrm{det}\BMat{A & B \\ C & D}=\mathrm{det}\nbr{D}\mathrm{det}\nbr{A-BD^{-1}C}$$
+- If all the submatrices are square and of the same size:
+
+     + if $CD=DC$
+     $$\mathrm{det}\BMat{A & B \\ C & D}=\mathrm{det}\nbr{AD-BC}$$
+     + if $CA=AC$
+     $$\mathrm{det}\BMat{A & B \\ C & D}=\mathrm{det}\nbr{AD-CB}$$
+     + if $BD=DB$
+     $$\mathrm{det}\BMat{A & B \\ C & D}=\mathrm{det}\nbr{DA-BC}$$
+     + if $AB=BA$
+     $$\mathrm{det}\BMat{A & B \\ C & D}=\mathrm{det}\nbr{DA-CB}$$
+     
+:::
+

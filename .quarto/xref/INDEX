@@ -196,5 +196,11 @@
   },
   "11_PDE.qmd": {
     "11_PDE.html": "0b72b362"
+  },
+  "11_Heat.qmd": {
+    "11_Heat.html": "8e4fa60c"
+  },
+  "12_Wave.qmd": {
+    "12_Wave.html": "72326f37"
   }
 }

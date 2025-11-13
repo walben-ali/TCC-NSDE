@@ -25,7 +25,8 @@ book:
                - 10_SBVP.qmd
           - part: Part_PDEs.qmd
             chapters:
-               - 11_PDE.qmd
+               - 11_Heat.qmd
+               - 12_Wave.qmd
      appendices:
           - Z_App_Basic.qmd
           - Z_App_Arrays.qmd
